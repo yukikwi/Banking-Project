@@ -5,7 +5,21 @@ module.exports = {
     node: true
   },
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: 'babel-eslint',
+      "rules":{
+        "indent": [2, "tab"],
+        "no-tabs": 0,
+        "trailing-comma": [true, {
+          "singleline": "never",
+          "multiline": {
+            "objects": "never", 
+            "arrays": "always",
+            "functions": "never",
+            "typeLiterals": "ignore"
+          }
+        }],
+        'no-console': 'off'
+    }
   },
   extends: [
     '@nuxtjs',

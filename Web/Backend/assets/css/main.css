@@ -1,0 +1,157 @@
+:root {
+    --main-color: #457B9D;
+    --white: #fff;
+}
+
+.container{
+    padding: 20px;
+}
+.background-main{
+    background-color: var(--main-color);
+}
+.background-register{
+    background: url('@/assets/img/background.jpg');
+    background-size: cover;
+}
+.background-white{
+    background-color: var(--white);
+}
+.child-center{
+    margin: auto;
+    display: block;
+}
+.verticle-middle{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+}
+
+/* Margin */
+.mt-1{
+    margin-top: 1rem;
+}
+.mt-2{
+    margin-top: 2rem;
+}
+.mt-3{
+    margin-top: 3rem;
+}
+.mt-4{
+    margin-top: 4rem;
+}
+.mt-5{
+    margin-top: 5rem;
+}
+
+/* Image */
+.img-fluid{
+    max-width: 100%;
+    max-height: 100%;
+}
+.img-rounded{
+    border-radius: 50%;
+}
+
+/* SIZE */
+.size-50-50{
+    width: 50px;
+    height: 50px;
+}
+.size-100-100{
+    width: 100px;
+    height: 100px;
+}
+.size-150-150{
+    width: 150px;
+    height: 150px;
+}
+
+/*Text*/
+.text-white{
+    color: var(--white);
+}
+.text-red{
+    color: red;
+}
+.text-left{
+    text-align: left;
+}
+.text-center{
+    text-align: center;
+}
+.font-header{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* Shaping */
+.rounded-m{
+    border-radius: 25px;
+}
+.rounded-bottom-m{
+    border-radius: 0px 0px 25px 25px;
+}
+.rounded-top-m{
+    border-radius: 25px 25px 0px 0px;
+}
+
+
+/* Animation */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.5s;
+}
+.page-enter,
+.page-leave-to {
+  opacity: 0;
+}
+
+.layout-enter-active,
+.layout-leave-active {
+  transition: opacity 0.5s;
+}
+.layout-enter,
+.layout-leave-to {
+  opacity: 0;
+}
+
+.slide-bottom-enter-active,
+.slide-bottom-leave-active {
+  transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+}
+.slide-bottom-enter,
+.slide-bottom-leave-to {
+  opacity: 0;
+  transform: translate3d(0, 15px, 0);
+}
+.bounce-enter-active {
+  transform-origin: top;
+  animation: bounce-in 0.8s;
+}
+.bounce-leave-active {
+  transform-origin: top;
+  animation: bounce-out 0.5s;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes bounce-out {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(0);
+  }
+}

@@ -1,22 +1,23 @@
 <template>
-  <div class="pages">
-    CapyBara
+  <div class="child-center text-center container">
+    <div>
+      <a-button type="primary" block @click="$router.replace('/login')">
+        Sign in
+      </a-button>
+      <a-button class="mt-1" block @click="$router.replace('/register')">
+        Sign up
+      </a-button>
+    </div>
   </div>
 </template>
+
 <script>
 export default {
-  layout: 'default',
-  head(){
-    return{
-      title: "Taituru"
+  layout: 'home',
+  head () {
+    return {
+      title: 'Banking App'
     }
   }
 }
 </script>
-
-<style scoped>
-.pages {
-  margin: 20px 20px;
-  background: red;
-}
-</style>
