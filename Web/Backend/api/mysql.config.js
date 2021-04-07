@@ -1,5 +1,6 @@
 //Mysql connection middleware
-var mysql      = require('mysql');
+const util = require('util')
+const mysql = require('mysql');
 var db = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -7,7 +8,7 @@ var db = mysql.createConnection({
   database: 'capybara'
 });
 
-db.connect(function(err) {
+db.connect(function(err, connection) {
     if (err) {
         console.error('error connecting: ' + err.stack);
         return false;
@@ -15,4 +16,6 @@ db.connect(function(err) {
     
     console.log('connected as id ' + db.threadId);
 });
+
+db.query = util.promisify(db.query)
 module.exports = db
