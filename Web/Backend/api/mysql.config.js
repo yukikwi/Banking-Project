@@ -11,13 +11,20 @@ var db = mysql.createPool({
 
 db.getConnection(function(err, connection) {
   if (err) {
-    console.error('error connecting: ' + err);
+    console.error('MySQL Connection Error: ' + err);
     return false;
   }
-  console.log('MySQL Connection Established: ', connection.threadId);
   if (connection) connection.release()
 
   return
+});
+
+db.on('acquire', function (connection) {
+  console.log('MySQL Connection Acquired: ', connection.threadId);
+});
+
+db.on('release', function (connection) {
+  console.log('MySQL Connection Released: ', connection.threadId);
 });
 
 db.query = util.promisify(db.query)

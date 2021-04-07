@@ -29,10 +29,19 @@ router.get('/get/id/:id', async (req, res) => {
 
     try{
         var db_data = await db.query('SELECT * FROM User WHERE User_ID = ?', [req.params.id])
-        result = {
-            status: 200,
-            data: db_data
+        if(db_data.length > 0){
+            result = {
+                status: 200,
+                data: db_data
+            }
         }
+        else{
+            result = {
+                status: 404,
+                comment: "not found"
+            }
+        }
+        
     }
     catch(err){
         console.log(err)
