@@ -18,7 +18,8 @@ module.exports = {
             "typeLiterals": "ignore"
           }
         }],
-        'no-console': 'off'
+        'no-console': 'off',
+        'eqeqeq': false
     }
   },
   extends: [
