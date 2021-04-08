@@ -1,10 +1,10 @@
 <template>
   <div class="child-center text-center container">
     <div>
-      <button class="sign-in-butt" @click="$router.push('/login')">
+      <button class="button" @click="$router.push('/login')">
         Sign in
       </button>
-      <button class="mt-1 sign-in-butt" @click="$router.push('/register')">
+      <button class="mt-1 button" @click="$router.push('/register')">
         Sign up
       </button>
     </div>
@@ -23,10 +23,12 @@ export default {
 </script>
 
 <style scoped>
-.sign-in-butt {
+.button {
   height: 60px;
   width: 240px;
   border-radius: 30px;
   background-color: #1D3557;
+  color: #fff;
+  font-size: 35px;
 }
 </style>
