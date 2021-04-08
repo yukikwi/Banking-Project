@@ -31,4 +31,8 @@ export default {
   color: #fff;
   font-size: 35px;
 }
+.button:focus {
+  outline: none;
+  box-shadow: none;
+}
 </style>
