@@ -25,7 +25,7 @@
     </a-input>
 
     <a-button type="primary" html-type="submit" block class="mt-2">
-      Log in
+      Sign in
     </a-button>
     <div class="text-center mt-1">
       <a class="text-white" href="#forget">
@@ -33,7 +33,7 @@
       </a>
       <br>
       <a class="text-white" @click="$router.replace('/register')">
-        Register
+        Sign up
       </a>
     </div>
   </a-form>
