@@ -28,7 +28,7 @@
       <a-form-item>
         <label><span class="text-red">*</span> Tel.</label>
         <a-input
-          v-decorator="['tel', { rules: [{ required: true, message: 'Please input your first name!' }] }]"
+          v-decorator="['tel', { rules: [{ required: true, message: 'Please input your mobile number!' }] }]"
           placeholder="0xx-xxx-xxxx"
         />
       </a-form-item>
@@ -48,7 +48,7 @@
       </a-form-item>
 
       <a-form-item>
-        <a-button type="primary" block>
+        <a-button type="primary" html-type="submit" block>
           Next
         </a-button>
       </a-form-item>
@@ -68,16 +68,20 @@ export default {
   },
   methods: {
     register (e) {
-      console.log('HOOK')
       // Prevent form action
       e.preventDefault()
+
       // Validating Data
-      this.form.validateFields((err) => {
+      this.form.validateFields((err, values) => {
         if (!err) {
           // If pass
           console.log('Pass')
-          // Validate here but soon
-          this.$router.replace('/home/')
+          values.subdistrict = this.subdistrict
+          values.district = this.district
+          values.province = this.province
+          values.zipcode = this.zipcode
+          this.$store.commit('register/addData', values)
+          this.$router.replace('/register/2')
         } else {
           console.log('Sth wrong')
         }
