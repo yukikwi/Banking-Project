@@ -44,8 +44,23 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    // Auth
+    '@nuxtjs/auth-next'
   ],
+
+  //Auth Config
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/api/user/login', method: 'post', propertyName: 'data.token' },
+          user: { url: 'me', method: 'get', propertyName: 'data' },
+          logout: false
+        }
+      }
+    }
+  },
 
   'nuxt-compress': {
     gzip: {

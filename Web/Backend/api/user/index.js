@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const db = require('../mysql.config')
+const crypto = require('crypto');
 
 //Get All users
 router.get('/get/all', async (req, res) => {
@@ -50,6 +51,17 @@ router.get('/get/id/:id', async (req, res) => {
             comment: "mysql error"
         }
     }
+    res.json(result)
+})
+
+//Get users by 
+router.post('/login', async (req, res) => {
+    var result = {}
+
+    // Hash Password
+    var hash = crypto.createHash('sha512')
+    var data = hash.update(req.body.password, 'utf-8')
+    var hash_password = data.digest('hex')
     res.json(result)
 })
 
