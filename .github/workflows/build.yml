@@ -29,7 +29,7 @@ jobs:
           cmd: install # will run `yarn install` command
       - uses: borales/actions-yarn@v2.3.0
         with:
-          cmd: build # will run `yarn build` command
+          cmd: run build # will run `yarn build` command
       - uses: actions/checkout@master
       - name: Archive Release
         uses: thedoctor0/zip-release@master
