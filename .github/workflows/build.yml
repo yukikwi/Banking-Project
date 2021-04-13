@@ -6,11 +6,10 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
+    
 defaults:
   run:
-    working-directory: Web/Backend
-
+    working-directory: ./Web/Backend
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -24,19 +23,16 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: install # will run `yarn install` command
-      - uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: run build # will run `yarn build` command
+      - run: npm install -g yarn
+      - run: yarn install
+      - run: yarn run build
       - uses: actions/checkout@master
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
           filename: 'release.zip'
           exclusions: '*.git* /*node_modules/* .editorconfig'
-          directory: '.nuxt'
+          directory: './Web/Backend/.nuxt'
       - name: Upload Release
         uses: ncipollo/release-action@v1
         with:
