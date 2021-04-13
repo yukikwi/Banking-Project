@@ -33,7 +33,6 @@ jobs:
         with:
           filename: 'release.zip'
           exclusions: '*.git* /*node_modules/* .editorconfig'
-          directory: '.nuxt'
       - name: Upload Release
         uses: ncipollo/release-action@v1
         with:
