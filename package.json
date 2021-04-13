@@ -1,8 +1,0 @@
-{
-  "devDependencies": {
-    "nuxt-compress": "^5.0.0"
-  },
-  "dependencies": {
-    "webpack": "^5.31.0"
-  }
-}
