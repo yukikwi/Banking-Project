@@ -10,6 +10,7 @@
 <script>
 export default {
   layout: 'register',
+  middleware: 'islogin',
   transition: 'page',
   head () {
     return {

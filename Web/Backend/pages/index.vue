@@ -14,10 +14,19 @@
 <script>
 export default {
   layout: 'home',
+  middleware: 'islogin',
   head () {
     return {
       title: 'Banking App'
     }
+  },
+  data () {
+    return ({
+      user: this.$auth.user
+    })
+  },
+  mounted () {
+    console.log(this.user)
   }
 }
 </script>

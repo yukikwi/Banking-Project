@@ -6,6 +6,7 @@
 
 <script>
 export default {
-  layout: 'homeLogin'
+  layout: 'homeLogin',
+  middleware: 'auth'
 }
 </script>

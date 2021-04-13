@@ -17,6 +17,7 @@
     "ant-design-vue": "^1.7.4",
     "core-js": "^3.9.1",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "nuxt": "^2.15.3",
     "vue-class-component": "^7.2.6",
