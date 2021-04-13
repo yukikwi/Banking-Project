@@ -32,7 +32,7 @@ jobs:
         with:
           filename: 'release.zip'
           exclusions: '*.git* /*node_modules/* .editorconfig'
-          directory: './Web/Backend/.nuxt'
+          directory: '.nuxt'
       - name: Upload Release
         uses: ncipollo/release-action@v1
         with:
