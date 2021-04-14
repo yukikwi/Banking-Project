@@ -29,6 +29,33 @@
     width: 100%;
 }
 
+/* THSPP */
+.thspp-button {
+  height: 60px;
+  width: 240px;
+  border-radius: 30px;
+  background-color: #1D3557;
+  color: #fff;
+  font-size: 35px;
+}
+.thspp-button-white{
+  box-sizing: border-box;
+  height: 62px;
+  width: 138px;
+  border-radius: 30px;
+  border: 1px solid #FFF;
+  background-color: rgba(0,0,0,0);
+  font-size: 20px;
+  color: #fff;
+  display: block;
+  margin: auto;
+  font-weight: bold;
+}
+.thspp-button:focus, .thspp-button-white:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 /* Margin */
 .mt-1{
     margin-top: 1rem;
@@ -44,6 +71,21 @@
 }
 .mt-5{
     margin-top: 5rem;
+}
+.mb-1{
+  margin-bottom: 1rem;
+}
+.mb-2{
+  margin-bottom: 2rem;
+}
+.mb-3{
+  margin-bottom: 3rem;
+}
+.mb-4{
+  margin-bottom: 4rem;
+}
+.mb-5{
+  margin-bottom: 5rem;
 }
 
 /* Image */
@@ -79,6 +121,9 @@
 .text-left{
     text-align: left;
 }
+.text-right{
+  text-align: right;
+}
 .text-center{
     text-align: center;
 }
@@ -98,6 +143,10 @@
     border-radius: 25px 25px 0px 0px;
 }
 
+/* Position */
+.float-right{
+  float: right;
+}
 
 /* Animation */
 .page-enter-active,
