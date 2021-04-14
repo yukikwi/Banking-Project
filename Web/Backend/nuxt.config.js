@@ -54,7 +54,8 @@ export default {
     strategies: {
       local: {
         token: {
-          property: 'data.token'
+          property: 'data.token',
+          maxAge: 3153600000
           // required: true,
           // type: 'Bearer'
         },
