@@ -1,12 +1,14 @@
 <template>
   <div>
-    A
+    <NuxtLink to="/home/creditcard">
+      Creditcard
+    </NuxtLink>
   </div>
 </template>
 
 <script>
 export default {
-  layout: 'homeLogin',
+  layout: 'User/homeLogin',
   middleware: 'auth'
 }
 </script>
