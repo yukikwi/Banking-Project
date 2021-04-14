@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
         if(db_data.length > 0){
             //Create Token
             const token = makeid(128)
-            db.query('INSERT INTO `JWT` (`accessToken`, `User_ID`, `Expire_IN`) VALUES (?, ?, ?)', [token, db_data[0].User_ID, new Date().toISOString().slice(0, 19).replace('T', ' ')])
+            db.query('INSERT INTO `JWT` (`accessToken`, `User_ID`) VALUES (?, ?)', [token, db_data[0].User_ID])
             var data = {
                 firstname: db_data[0].User_FName,
                 lastname: db_data[0].User_LName,
