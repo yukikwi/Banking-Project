@@ -4,6 +4,7 @@ const db = require('../mysql.config')
 const crypto = require('crypto');
 const config = require('../config')
 const jwt = require('jsonwebtoken');
+const app = express()
 
 //REF: https://stackoverflow.com/a/1349426
 function makeid(length) {
@@ -16,16 +17,30 @@ function makeid(length) {
    }
    return result.join('');
 }
-
+router.post('/signup', async (req, res) => {
+    var address = req.body.address +' '+ req.body.subdistrict +' '+ req.body.district +' '+ req.body.province +' '+ req.body.zipcode
+    var hash = crypto.createHash('sha512')
+    var data = hash.update(config["hash_salt"]+req.body.password, 'utf-8')
+    var hash_password = data.digest('hex')
+    try{
+        console.log(req.body)
+        db.query('INSERT INTO `USER` (`User_FName`, `User_LName`, `User_Tel`, `User_DOB`, `User_Email`, `User_Address`, `User_NationalID`, `User_App_Password` ) VALUES (?,?,?,?,?,?,?,?)'
+        ,[req.body.fname,req.body.lname,req.body.tel,"?",req.body.email,address,req.body.national_id,hash_password])
+        console.log('Regsiter Done')
+    }
+    catch(e){
+        //console.log(e)
+        console.log('error')
+    }
+    
+})
 //login
 router.post('/login', async (req, res) => {
     var result = {}
-
     // Hash Password
     var hash = crypto.createHash('sha512')
     var data = hash.update(config["hash_salt"]+req.body.password, 'utf-8')
     var hash_password = data.digest('hex')
-
     console.log("Try to login User: "+req.body.username)
     // Get User Data from credential
     try{
@@ -68,7 +83,7 @@ router.post('/login', async (req, res) => {
 // Get user info from token
 router.get('/me', async (req, res) => {
     var result = {}
-    
+    console.log('/me')
     //Split Token from Authorization header
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]

@@ -76,6 +76,7 @@ export default {
         if (!err) {
           // If pass
           console.log('Pass')
+          values.datebirth = this.dob
           values.subdistrict = this.subdistrict
           values.district = this.district
           values.province = this.province
@@ -88,7 +89,7 @@ export default {
       })
     },
     dateofbirth (date, dateString) {
-      console.log(date, dateString)
+      this.form.dob = dateString
     }
   }
 }
