@@ -25,7 +25,7 @@ router.post('/signup', async (req, res) => {
     try{
         console.log(req.body)
         db.query('INSERT INTO `USER` (`User_FName`, `User_LName`, `User_Tel`, `User_DOB`, `User_Email`, `User_Address`, `User_NationalID`, `User_App_Password` ) VALUES (?,?,?,?,?,?,?,?)'
-        ,[req.body.fname,req.body.lname,req.body.tel,"?",req.body.email,address,req.body.national_id,hash_password])
+        ,[req.body.fname,req.body.lname,req.body.tel,address,req.body.email,address,req.body.national_id,hash_password])
         console.log('Regsiter Done')
     }
     catch(e){
