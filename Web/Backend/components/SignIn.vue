@@ -36,7 +36,7 @@
           Forgot password
         </a>
         <br>
-        <a class="text-white" @click="$router.replace('/register')">
+        <a class="text-white" @click="$router.push('/register')">
           Sign up
         </a>
       </div>
