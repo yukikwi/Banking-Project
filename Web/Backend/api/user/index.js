@@ -47,7 +47,11 @@ router.post('/login', async (req, res) => {
         var db_data = await db.query('SELECT User_ID, User_FName, User_LName FROM User WHERE User_Email = ? AND User_App_Password = ?', [req.body.username, hash_password])
         if(db_data.length > 0){
             //Create Token
-            const token = makeid(128)
+            do{
+                var token = makeid(128)
+                var is_token_exist = await db.query('SELECT accessToken FROM JWT WHERE accessToken = ? ', [token])
+            }
+            while(is_token_exist.length != 0)
             db.query('INSERT INTO `JWT` (`accessToken`, `User_ID`) VALUES (?, ?)', [token, db_data[0].User_ID])
             var data = {
                 firstname: db_data[0].User_FName,
@@ -112,6 +116,39 @@ router.get('/me', async (req, res) => {
         }
         catch(err){
             console.log(err)
+            result = {
+                status: 500,
+                comment: "mysql error"
+            }
+        }
+    })
+    res.json(result)
+})
+
+//logout
+router.post('/logout', async (req, res) => {
+    var result = {}
+    
+    //Split Token from Authorization header
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+
+    //If not login
+    if (token == null) return res.sendStatus(401)
+
+    await jwt.verify(token, config["jwtSecret"] , async (err, data) => {
+        if (err) return res.sendStatus(403)
+        console.log(data)
+        try{
+            await db.query('DELETE FROM JWT WHERE accessToken = ? ', [data.token])
+            if(!err){
+                result = {
+                    status: 200,
+                    data: 'Token removed'
+                }
+            }
+        }
+        catch(err){
             result = {
                 status: 500,
                 comment: "mysql error"
