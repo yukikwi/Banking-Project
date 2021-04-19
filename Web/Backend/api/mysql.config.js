@@ -5,8 +5,8 @@ var db = mysql.createPool({
   connectionLimit: 10,
   host     : 'localhost',
   user     : 'root',
-  password : 'root',
-  database: 'capybara'
+  password : '',
+  database: 'capybara_database'
 });
 
 db.getConnection(function(err, connection) {
