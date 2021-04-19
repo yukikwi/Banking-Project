@@ -70,10 +70,19 @@ export default {
               province: this.$store.state.register.form.province,
               subdistrict: this.$store.state.register.form.subdistrict,
               tel: this.$store.state.register.form.tel,
-              zipcode: this.$store.state.register.form.zipcode
+              zipcode: this.$store.state.register.form.zipcode,
+              dob: this.$store.state.register.form.dob
             })
-            console.log('res :', res)
-            // this.$router.replace('/home')
+            console.log(res)
+            if (res.data.status === 200) {
+              alert('Register Success')
+              this.$store.commit('register/clear')
+              // this.$router.replace('/home')
+            } else if (res.data.status === 403) {
+              alert('Some field duplicate')
+            } else {
+              alert('Register Fail')
+            }
           }
         } else {
           console.log('Sth wrong')

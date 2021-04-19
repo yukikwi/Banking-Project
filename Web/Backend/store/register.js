@@ -9,5 +9,8 @@ export const mutations = {
       state.form[key] = formVal[key]
     }
     console.log(state.form)
+  },
+  clear (state) {
+    state.form = {}
   }
 }
