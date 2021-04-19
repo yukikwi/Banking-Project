@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require('../mysql.config')
 const crypto = require('crypto');
 const config = require('../config')
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken')
 const app = express()
 
 //REF: https://stackoverflow.com/a/1349426
@@ -17,23 +17,55 @@ function makeid(length) {
    }
    return result.join('');
 }
+
+//Register
 router.post('/signup', async (req, res) => {
+    //Initial
+    var result = {}
+    
+    //Build address
     var address = req.body.address +' '+ req.body.subdistrict +' '+ req.body.district +' '+ req.body.province +' '+ req.body.zipcode
+
+    //Hash password
     var hash = crypto.createHash('sha512')
     var data = hash.update(config["hash_salt"]+req.body.password, 'utf-8')
     var hash_password = data.digest('hex')
-    try{
-        console.log(req.body)
-        db.query('INSERT INTO `USER` (`User_FName`, `User_LName`, `User_Tel`, `User_DOB`, `User_Email`, `User_Address`, `User_NationalID`, `User_App_Password` ) VALUES (?,?,?,?,?,?,?,?)'
-        ,[req.body.fname,req.body.lname,req.body.tel,address,req.body.email,address,req.body.national_id,hash_password])
-        console.log('Regsiter Done')
-    }
-    catch(e){
-        //console.log(e)
-        console.log('error')
-    }
     
+    //Duplicate check
+    var duplicate_name = await db.query('SELECT User_ID FROM User WHERE User_FName = ? AND User_LName = ?', [req.body.fname, req.body.lname])
+    var duplicate_mail = await db.query('SELECT User_ID FROM User WHERE User_Email = ? ', [req.body.email])
+    var duplicate_national_id = await db.query('SELECT User_ID FROM User WHERE User_NationalID = ? ', [req.body.national_id])
+    if(duplicate_name.length > 0 || duplicate_mail.length > 0 || duplicate_national_id.length > 0){
+        result = {
+            status: 403,
+            data: 'Duplicate data',
+            duplicate: {
+                name: (duplicate_name.length > 0)? true: false,
+                mail: (duplicate_mail.length > 0)? true: false,
+                national_id: (duplicate_national_id.length > 0)? true: false
+            }
+        }
+    }
+    else{
+        try{
+            await db.query('INSERT INTO `USER` (`User_FName`, `User_LName`, `User_Tel`, `User_DOB`, `User_Email`, `User_Address`, `User_NationalID`, `User_App_Password` ) VALUES (?,?,?,?,?,?,?,?)'
+            ,[req.body.fname, req.body.lname, req.body.tel, req.body.dob, req.body.email, address, req.body.national_id, hash_password])
+            result = {
+                status: 200,
+                data: 'Register success'
+            }
+        }
+        catch(err){
+            console.log(err)
+            result = {
+                status: 500,
+                comment: "mysql error"
+            }
+        }
+    }
+    res.json(result)
 })
+
 //login
 router.post('/login', async (req, res) => {
     var result = {}
@@ -141,11 +173,9 @@ router.post('/logout', async (req, res) => {
         console.log(data)
         try{
             await db.query('DELETE FROM JWT WHERE accessToken = ? ', [data.token])
-            if(!err){
-                result = {
-                    status: 200,
-                    data: 'Token removed'
-                }
+            result = {
+                status: 200,
+                data: 'Token removed'
             }
         }
         catch(err){
