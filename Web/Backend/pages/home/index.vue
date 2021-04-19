@@ -3,7 +3,9 @@
     <NuxtLink to="/home/creditcard">
       Creditcard
     </NuxtLink>
-    <button @click="logout()"> Logout </button>
+    <button @click="logout()">
+      Logout
+    </button>
   </div>
 </template>
 

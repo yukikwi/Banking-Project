@@ -2,11 +2,11 @@
   <div class="background-main full-height">
     <Header :showlogo="false" class="text-white text-large width-100p text-right">
       <a-icon type="user" />
-      <br />
+      <br>
       Hello, {{ $auth.user.User_FName }}
     </Header>
     <Nuxt />
-    <Footer bgColor="white">
+    <Footer bg-color="white">
       <a-row type="flex" justify="space-around" align="middle">
         <a-col :span="10">
           <button class="thspp-button w-100p">

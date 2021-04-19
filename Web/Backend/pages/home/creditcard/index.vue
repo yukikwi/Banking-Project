@@ -1,6 +1,6 @@
 <template>
   <div class="cc-container">
-    <CreditcardV1 :cNo="creditcardNumber" @click.native="$router.push('/home/creditcard/'+creditcardNumber)" />
+    <CreditcardV1 :c-no="creditcardNumber" @click.native="$router.push('/home/creditcard/'+creditcardNumber)" />
   </div>
 </template>
 

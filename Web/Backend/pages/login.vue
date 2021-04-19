@@ -10,7 +10,6 @@
 export default {
   layout: 'home',
   middleware: 'islogin',
-  transition: 'page',
   head () {
     return {
       title: 'Sign in'
