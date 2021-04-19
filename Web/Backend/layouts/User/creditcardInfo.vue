@@ -7,13 +7,13 @@
         </a-col>
         <a-col class="text-right" :span="12">
           <span class="small">Credit limit</span>
-          <br />
+          <br>
           ฿{{ Number(25000).toLocaleString() }}
         </a-col>
       </a-row>
     </Header>
     <Nuxt />
-    <Footer bgColor="white">
+    <Footer bg-color="white">
       <DarkRectangle />
       <TransactionCard />
       <TransactionCard />

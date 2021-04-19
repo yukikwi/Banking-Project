@@ -19,15 +19,12 @@
 <script>
 export default {
   layout: 'User/creditcardInfo',
-  middleware: 'auth',
-  mounted () {
-    console.log(this.$auth.user)
-  }
+  middleware: 'auth'
 }
 </script>
 
 <style scoped>
-.center{
+.center {
   margin: auto;
 }
 </style>
