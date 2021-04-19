@@ -158,6 +158,11 @@
   opacity: 0;
 }
 
+.delay-enter,
+.delay-leave-to{
+  transition: none 2s;
+}
+
 .layout-enter-active,
 .layout-leave-active {
   transition: opacity 0.5s;

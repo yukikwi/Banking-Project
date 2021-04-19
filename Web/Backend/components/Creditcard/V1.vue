@@ -1,7 +1,9 @@
 <template>
-  <div :class="['background-dark', 'cc' ,rotate, size, middle? 'middle':'unmiddle']">
-    <h3 class="cardName">G credit</h3>
-    <h3 class="name">{{ creditcardNumber }}</h3>
+  <div :class="[($store.state.animate.cc_animate === true)? 'animated': '', middle? 'middle':'unmiddle', rotate]">
+    <div :class="['background-dark', 'cc', size]">
+      <h3 class="cardName">G credit</h3>
+      <h3 class="name">{{ creditcardNumber }}</h3>
+    </div>
   </div>
 </template>
 
@@ -42,9 +44,8 @@ export default {
   padding: 20px 20px;
 }
 .middle{
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  margin-top: 30%;
+  margin: auto;
 }
 .unmiddle{
   position: relative;
@@ -59,14 +60,12 @@ export default {
   width: calc( 500px / 1.5 );
   border-radius: 10px;
 }
-.middle.landspace{
-  transform: translateY(-50%) translateX(-50%);
-}
-.middle.portrait{
-  transform: translateY(-50%) translateX(-50%) rotate(270deg);
-}
 .portrait{
-  transform: rotate(270deg);
+  transform: rotate(270deg) translateX(-50%);
+  transform-origin: left;
+  position: absolute;
+  left: 50%;
+  top: 25%;
 }
 .normal .name{
   color: #fff;
@@ -85,15 +84,28 @@ export default {
 .small .name{
   color: #fff;
   position: absolute;
-  left: 17.5px;
-  bottom: 12.5px;
+  font-size: calc(1.17em / 1.5);
+  left: calc(35px / 1.5 );
+  bottom: calc(25px / 1.5 );
 }
 .small .cardName{
   color: #fff;
   position: absolute;
-  font-size: 20px;
+  font-size: calc(35px / 1.5);
   font-weight: 700;
-  left: 17.5px;
-  top: 12.5px;
+  left: calc(35px / 1.5 );
+  top: calc(25px / 1.5 );
+}
+.animated{
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name:spin;
+  animation-fill-mode: forwards;
+}
+
+@keyframes spin {
+  100% {
+    transform:rotate(0deg) scale(0.67,0.67) translateY(-100%) translateX(-50%);
+  }
 }
 </style>
