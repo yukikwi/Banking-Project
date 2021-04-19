@@ -4,31 +4,55 @@
       <a-form-item>
         <label><span class="text-red">*</span> Name</label>
         <a-input
-          v-decorator="['fname', { rules: [{ required: true, message: 'Please input your first name!' }] }]"
+          v-decorator="[
+            'fname',
+            {
+              rules: [{ required: true, message: 'Please input your first name!' }],
+              initialValue: (typeof ($store.state.register.form.fname) === 'undefined') ? '' : $store.state.register.form.fname
+            }
+          ]"
           placeholder="Firstname"
         />
         <a-input
-          v-decorator="['lname', { rules: [{ required: true, message: 'Please input your last name!' }] }]"
-          placeholder="Firstname"
+          v-decorator="[
+            'lname',
+            {
+              rules: [{ required: true, message: 'Please input your last name!' }],
+              initialValue: (typeof ($store.state.register.form.lname) === 'undefined') ? '' : $store.state.register.form.lname
+            }
+          ]"
+          placeholder="Lastname"
         />
       </a-form-item>
 
       <a-form-item>
         <label><span class="text-red">*</span> Address</label>
         <a-input
-          v-decorator="['address', { rules: [{ required: true, message: 'Please input your Address!' }] }]"
+          v-decorator="[
+            'address',
+            {
+              rules: [{ required: true, message: 'Please input your Address!' }],
+              initialValue: (typeof ($store.state.register.form.address) === 'undefined') ? '' : $store.state.register.form.address
+            }
+          ]"
           placeholder="Adress"
         />
-        <addressinput-subdistrict v-model="subdistrict" />
-        <addressinput-district v-model="district" />
-        <addressinput-province v-model="province" />
-        <addressinput-zipcode v-model="zipcode" />
+        <addressinput-subdistrict v-model="subdistrict" required />
+        <addressinput-district v-model="district" required />
+        <addressinput-province v-model="province" required />
+        <addressinput-zipcode v-model="zipcode" required />
       </a-form-item>
 
       <a-form-item>
         <label><span class="text-red">*</span> Tel.</label>
         <a-input
-          v-decorator="['tel', { rules: [{ required: true, message: 'Please input your mobile number!' }] }]"
+          v-decorator="[
+            'tel',
+            {
+              rules: [{ required: true, message: 'Please input your mobile number!' }],
+              initialValue: (typeof ($store.state.register.form.tel) === 'undefined') ? '' : $store.state.register.form.tel
+            }
+          ]"
           placeholder="0xx-xxx-xxxx"
         />
       </a-form-item>
@@ -36,7 +60,13 @@
       <a-form-item>
         <label><span class="text-red">*</span> National ID</label>
         <a-input
-          v-decorator="['national_id', { rules: [{ required: true, message: 'Please input your National ID!' }] }]"
+          v-decorator="[
+            'national_id',
+            {
+              rules: [{ required: true, message: 'Please input your National ID!' }],
+              initialValue: (typeof ($store.state.register.form.national_id) === 'undefined') ? '' : $store.state.register.form.national_id
+            }
+          ]"
           placeholder="x-xxxx-xxxxx-xx-x"
         />
       </a-form-item>
@@ -44,7 +74,18 @@
       <a-form-item>
         <label><span class="text-red">*</span> Date of birth</label>
         <br>
-        <a-date-picker class="w-100p" @change="dateofbirth" />
+        <a-date-picker
+          v-decorator="[
+            'dob',
+            {
+              rules: [{ required: true, message: 'Please input your Date of birth!' }],
+              initialValue: (typeof ($store.state.register.form.dob) === 'undefined') ? '' : $store.state.register.form.dob
+            }
+          ]"
+          format="YYYY-MM-DD"
+          class="w-100p"
+          @change="dateofbirth"
+        />
       </a-form-item>
 
       <a-form-item>
@@ -60,10 +101,11 @@ export default {
   data () {
     return {
       form: this.$form.createForm(this, { name: 'register' }),
-      subdistrict: '',
-      district: '',
-      province: '',
-      zipcode: ''
+      subdistrict: (typeof (this.$store.state.register.form.subdistrict) === 'undefined') ? '' : this.$store.state.register.form.subdistrict,
+      district: (typeof (this.$store.state.register.form.district) === 'undefined') ? '' : this.$store.state.register.form.district,
+      province: (typeof (this.$store.state.register.form.province) === 'undefined') ? '' : this.$store.state.register.form.province,
+      zipcode: (typeof (this.$store.state.register.form.zipcode) === 'undefined') ? '' : this.$store.state.register.form.zipcode,
+      dob: (typeof (this.$store.state.register.form.dob) === 'undefined') ? '' : this.$store.state.register.form.dob
     }
   },
   methods: {
@@ -81,8 +123,9 @@ export default {
           values.district = this.district
           values.province = this.province
           values.zipcode = this.zipcode
+          values.dob = this.dob
           this.$store.commit('register/addData', values)
-          this.$router.replace('/register/2')
+          this.$router.push('/register/2')
         } else {
           console.log('Sth wrong')
         }
@@ -98,6 +141,10 @@ export default {
 <style>
 .th-address .label-text{
   margin-bottom: 0px !important;
+}
+.th-address .label-text::before{
+  content: '* ';
+  color: red;
 }
 input.th-address-input{
   box-sizing: border-box !important;
