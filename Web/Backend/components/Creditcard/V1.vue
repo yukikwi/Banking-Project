@@ -1,8 +1,12 @@
 <template>
   <div :class="[($store.state.animate.cc_animate === true)? 'animated': '', middle? 'middle':'unmiddle', rotate]">
     <div :class="['background-dark', 'cc', size]">
-      <h3 class="cardName">G credit</h3>
-      <h3 class="name">{{ creditcardNumber }}</h3>
+      <h3 class="cardName">
+        G credit
+      </h3>
+      <h3 class="name">
+        {{ creditcardNumber }}
+      </h3>
     </div>
   </div>
 </template>
