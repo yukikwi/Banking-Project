@@ -30,7 +30,7 @@
 <script>
 export default {
   layout: 'User/creditcard',
-  middleware: 'auth',
+  middleware: ['auth', 'isuserapprove'],
   data () {
     return ({
       creditcardNumber: 'xxxx xxxx xxxx xxxx'

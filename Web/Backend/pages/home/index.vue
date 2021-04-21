@@ -12,7 +12,7 @@
 <script>
 export default {
   layout: 'User/homeLogin',
-  middleware: 'auth',
+  middleware: ['auth', 'isuserapprove'],
   methods: {
     async logout () {
       await this.$auth.logout()

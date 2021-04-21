@@ -12,8 +12,7 @@ function makeid(length) {
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
     for ( var i = 0; i < length; i++ ) {
-      result.push(characters.charAt(Math.floor(Math.random() * 
- charactersLength)));
+      result.push(characters.charAt(Math.floor(Math.random() * charactersLength)));
    }
    return result.join('');
 }
@@ -22,7 +21,7 @@ function makeid(length) {
 router.post('/signup', async (req, res) => {
     //Initial
     var result = {}
-    
+
     //Build address
     var address = req.body.address +' '+ req.body.subdistrict +' '+ req.body.district +' '+ req.body.province +' '+ req.body.zipcode
 
@@ -30,7 +29,7 @@ router.post('/signup', async (req, res) => {
     var hash = crypto.createHash('sha512')
     var data = hash.update(config["hash_salt"]+req.body.password, 'utf-8')
     var hash_password = data.digest('hex')
-    
+
     //Duplicate check
     var duplicate_name = await db.query('SELECT User_ID FROM User WHERE User_FName = ? AND User_LName = ?', [req.body.fname, req.body.lname])
     var duplicate_mail = await db.query('SELECT User_ID FROM User WHERE User_Email = ? ', [req.body.email])
@@ -131,7 +130,7 @@ router.get('/me', async (req, res) => {
         if (err) return res.sendStatus(403)
         console.log(data)
         try{
-            var db_data = await db.query('SELECT User_FName, User_LName, User_Email FROM User RIGHT JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ?', [data.token, data.firstname, data.lastname])
+            var db_data = await db.query('SELECT User_FName, User_LName, User_Email, User_Active_Status FROM User RIGHT JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ?', [data.token, data.firstname, data.lastname])
             if(db_data.length > 0){
                 result = {
                     status: 200,
@@ -144,7 +143,7 @@ router.get('/me', async (req, res) => {
                     comment: "not found"
                 }
             }
-            
+
         }
         catch(err){
             console.log(err)
@@ -160,7 +159,7 @@ router.get('/me', async (req, res) => {
 //logout
 router.post('/logout', async (req, res) => {
     var result = {}
-    
+
     //Split Token from Authorization header
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
