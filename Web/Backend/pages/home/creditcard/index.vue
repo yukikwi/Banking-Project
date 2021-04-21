@@ -36,6 +36,11 @@ export default {
       creditcardNumber: 'xxxx xxxx xxxx xxxx'
     })
   },
+  async mounted () {
+    console.log('Home mounted')
+    const res = await this.$axios.get('api/user/cc/list')
+    console.log(res.data)
+  },
   methods: {
     ccClick () {
       this.$store.commit('animate/trigger', 'cc_animate')
