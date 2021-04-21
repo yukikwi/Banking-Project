@@ -1,11 +1,11 @@
 <template>
   <div :class="[($store.state.animate.cc_animate === true)? 'animated': '', middle? 'middle':'unmiddle', rotate]">
-    <div :class="['background-dark', 'cc', size]">
+    <div :class="['background-dark', 'cc', size, shadow? 'shadow':'']">
       <h3 class="cardName">
         G credit
       </h3>
-      <h3 class="name">
-        {{ creditcardNumber }}
+      <h3 :class="['name']">
+        {{ cNo }}
       </h3>
     </div>
   </div>
@@ -27,8 +27,12 @@ export default {
       type: Boolean
     },
     cNo: {
-      default: 'xxxx xxxx xxxx xxxx',
+      default: 'xxxx-xxxx-xxxx-xxxx',
       type: String
+    },
+    shadow: {
+      default: false,
+      type: Boolean
     }
   },
   data () {
