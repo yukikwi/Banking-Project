@@ -38,9 +38,9 @@
               v-model="form.cc"
               :max-length="20"
               style="width: 100%;"
-              @change="cardNumber"
               placeholder="XXXX-XXXX-XXXX-XXXX"
               required
+              @change="cardNumber"
             />
           </a-form-item>
 

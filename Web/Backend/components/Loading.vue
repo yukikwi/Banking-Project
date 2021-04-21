@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="loading-state" v-if="showLoading">
+    <div v-if="showLoading" class="loading-state">
       <a-spin class="loading-icon">
         <a-icon slot="indicator" type="loading" style="font-size: 50px" spin />
       </a-spin>
