@@ -1,72 +1,80 @@
 <template>
-  <div class="main">
-    <CreditcardV1 class="card" rotate="landspace" size="normal" :shadow="true" :c-no="form.cc" />
-    <a-card class="pay-container">
-      <a-form-model
-        :model="form"
-        class="mt-1"
-        @submit="handleSubmit"
-      >
-        <a-form-item
-          label="Firstname"
-          :label-col="{span: 9}"
-          :wrapper-col="{span: 15}"
+  <div>
+    <Loading />
+    <div class="main">
+      <CreditcardV1 class="card" rotate="landspace" size="normal" :shadow="true" :c-no="form.cc" />
+      <a-card class="pay-container">
+        <a-form-model
+          :model="form"
+          class="mt-1"
+          @submit="handleSubmit"
         >
-          <a-input
-            v-model="form.fname"
-          />
-        </a-form-item>
-        <a-form-item
-          label="Lastname"
-          :label-col="{span: 9}"
-          :wrapper-col="{span: 15}"
-        >
-          <a-input
-            v-model="form.lname"
-          />
-        </a-form-item>
-        <a-form-item
-          label="CreditCard ID"
-          :label-col="{span: 9}"
-          :wrapper-col="{span: 15}"
-        >
-          <a-input
-            v-model="form.cc"
-            :max-length="20"
-            style="width: 100%;"
-            @change="cardNumber"
-            placeholder="XXXX-XXXX-XXXX-XXXX"
-          />
-        </a-form-item>
+          <a-form-item
+            label="Firstname"
+            :label-col="{span: 9}"
+            :wrapper-col="{span: 15}"
+          >
+            <a-input
+              v-model="form.fname"
+              required
+            />
+          </a-form-item>
+          <a-form-item
+            label="Lastname"
+            :label-col="{span: 9}"
+            :wrapper-col="{span: 15}"
+          >
+            <a-input
+              v-model="form.lname"
+              required
+            />
+          </a-form-item>
+          <a-form-item
+            label="CreditCard ID"
+            :label-col="{span: 9}"
+            :wrapper-col="{span: 15}"
+          >
+            <a-input
+              v-model="form.cc"
+              :max-length="20"
+              style="width: 100%;"
+              @change="cardNumber"
+              placeholder="XXXX-XXXX-XXXX-XXXX"
+              required
+            />
+          </a-form-item>
 
-        <a-form-item
-          label="Expire"
-          :label-col="{span: 9}"
-          :wrapper-col="{span: 15}"
-        >
-          <a-month-picker
-            v-model="form.expire"
-            format="MM/YYYY"
-            style="width: 100%;"
-          />
-        </a-form-item>
+          <a-form-item
+            label="Expire"
+            :label-col="{span: 9}"
+            :wrapper-col="{span: 15}"
+          >
+            <a-month-picker
+              v-model="form.expire"
+              format="MM/YYYY"
+              style="width: 100%;"
+              required
+            />
+          </a-form-item>
 
-        <a-form-item
-          label="Price"
-          :label-col="{span: 9}"
-          :wrapper-col="{span: 15}"
-        >
-          <a-input
-            v-model="form.price"
-            style="width: 100%;"
-          />
-        </a-form-item>
+          <a-form-item
+            label="Price"
+            :label-col="{span: 9}"
+            :wrapper-col="{span: 15}"
+          >
+            <a-input
+              v-model="form.price"
+              style="width: 100%;"
+              required
+            />
+          </a-form-item>
 
-        <a-button class="w-100p" html-type="submit" type="primary">
-          Submit
-        </a-button>
-      </a-form-model>
-    </a-card>
+          <a-button class="w-100p" html-type="submit" type="primary">
+            Submit
+          </a-button>
+        </a-form-model>
+      </a-card>
+    </div>
   </div>
 </template>
 
@@ -112,13 +120,11 @@ export default {
     handleSubmit (e) {
       // Prevent form action
       e.preventDefault()
-
-      // Validating Data
-      this.form.validateFields((err, values) => {
-        if (!err) {
-          // Call api here
-        }
-      })
+      // Show loading
+      this.$store.commit('trigger', 'loading')
+      // Validate card
+      // Update card balance
+      // Show result
     },
     cardNumber () {
       // CC format

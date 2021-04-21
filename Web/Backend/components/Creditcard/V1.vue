@@ -5,7 +5,7 @@
         G credit
       </h3>
       <h3 :class="['name']">
-        {{ cNo }}
+        {{ (cNo == '')? 'xxxx-xxxx-xxxx-xxxx': cNo }}
       </h3>
     </div>
   </div>
