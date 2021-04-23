@@ -1,5 +1,5 @@
 <template>
-  <div :class="['footer', 'rounded-top-m', 'container', 'background-'+bgColor]">
+  <div :class="['footer', sticky? 'sticky':'', rounded? 'rounded-top-m':'', container? 'container':'', 'background-'+bgColor]">
     <slot />
   </div>
 </template>
@@ -10,6 +10,22 @@ export default {
     bgColor: {
       type: String,
       default: 'main'
+    },
+    border: {
+      type: Boolean,
+      default: false
+    },
+    rounded: {
+      type: Boolean,
+      default: true
+    },
+    container: {
+      type: Boolean,
+      default: true
+    },
+    sticky: {
+      type: Boolean,
+      default: false
     }
   }
 }
@@ -17,8 +33,11 @@ export default {
 
 <style scoped>
 .footer{
-    position: absolute;
-    bottom: 0px;
-    width: 100%;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
+.sticky{
+  position: fixed;
 }
 </style>

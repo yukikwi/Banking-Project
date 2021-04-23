@@ -18,6 +18,9 @@
 .background-white{
     background-color: var(--white);
 }
+.background-transparent{
+  background-color: rgba(0,0,0,0);
+}
 .child-center{
     margin: auto;
     display: block;
@@ -87,6 +90,9 @@
 .mb-5{
   margin-bottom: 5rem;
 }
+.ml-1{
+  margin-left: 1rem;
+}
 
 /* Image */
 .img-fluid{
@@ -117,6 +123,9 @@
 }
 .text-red{
     color: red;
+}
+.text-main{
+    color: var(--main-color);
 }
 .text-left{
     text-align: left;

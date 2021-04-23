@@ -1,5 +1,5 @@
 <template>
-  <div :class="['rounded-bottom-m', 'container', 'background-'+bgColor]">
+  <div :class="[border? 'rounded-bottom-m' : '', 'container', 'background-'+bgColor]">
     <Logo v-if="showlogo" size="small" />
     <slot />
   </div>
@@ -13,6 +13,10 @@ export default {
       default: 'main'
     },
     showlogo: {
+      type: Boolean,
+      default: true
+    },
+    border: {
       type: Boolean,
       default: true
     }
