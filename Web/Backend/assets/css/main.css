@@ -1,6 +1,7 @@
 :root {
     --main-color: #457B9D;
     --white: #fff;
+    --black: #000;
 }
 
 .container{
@@ -75,6 +76,9 @@
 .mt-5{
     margin-top: 5rem;
 }
+.mb-0 {
+  margin-bottom: 0rem;
+}
 .mb-1{
   margin-bottom: 1rem;
 }
@@ -118,6 +122,9 @@
 }
 
 /*Text*/
+.text-black{
+  color: var(--black);
+}
 .text-white{
     color: var(--white);
 }
@@ -139,6 +146,12 @@
 .font-header{
     font-size: 30px;
     font-weight: bold;
+}
+.text-large{
+  font-size: 25px;
+}
+.text-small{
+  font-size: 11px;
 }
 
 /* Shaping */

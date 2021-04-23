@@ -11,6 +11,7 @@
     "lint": "yarn lint:js"
   },
   "dependencies": {
+    "@egjs/vue-flicking": "^3.7.2",
     "@nuxtjs/auth-next": "5.0.0-1617968180.f699074",
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/pwa": "^3.3.5",

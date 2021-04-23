@@ -1,8 +1,8 @@
 <template>
-  <div :class="[($store.state.animate.cc_animate === true)? 'animated': '', middle? 'middle':'unmiddle', rotate]"  @click="$router.push('/home/creditcard/xxxxxxxxxxxxxxxx')">
-    <div :class="['background-dark', 'cc', size, shadow? 'shadow':'']">
+  <div :class="[($store.state.animate.cc_animate === true)? 'animated': '', middle? 'middle':'unmiddle', rotate]"  @click="$router.push('/home/deditcard/xxxxxxxxxxxxxxxx')">
+    <div :class="['background-main', 'cc', size, shadow? 'shadow':'']">
       <h3 class="cardName">
-        G credit
+        Bara dedit
       </h3>
       <h3 :class="['name']">
         {{ (cNo == '')? 'xxxx-xxxx-xxxx-xxxx': cNo }}

@@ -1,11 +1,43 @@
 <template>
   <div>
-    <NuxtLink to="/home/creditcard">
-      Creditcard
-    </NuxtLink>
-    <button @click="logout()">
-      Logout
-    </button>
+    <div class="container text-white text-large width-100p">
+      <a-row>
+        <a-col :span="6" @click.native="logout()">
+          <a-icon type="logout" />
+        </a-col>
+        <a-col class="text-right" :span="18">
+          <span>Hi, Capybara</span>
+          <a-icon type="user" />
+        </a-col>
+      </a-row>
+      <div class="mt-2">
+        <h2 class="mb-0 text-white balance">
+          1,000.00 ฿
+        </h2>
+        <span class="text-small display-block">Your balance</span>
+      </div>
+    </div>
+
+    <div class="rounded-top-m container background-white pb-50px fit-height">
+      <h2 class="text-black">
+        Cards
+      </h2>
+
+      <flicking
+        :options="{ gap: 10, autoResize: true, resizeOnContentsReady: true}"
+        :tag="'div'"
+        :viewportTag="'div'"
+        :cameraTag="'div'"
+        @change="cardchange"
+      >
+        <div v-for="(item, index) in card" :key="index">
+          <DebitcardV1 v-if="item.type == 'debit'" rotate="landspace" size="auto" :middle="false" />
+          <CreditcardV1 v-if="item.type == 'credit'" rotate="landspace" size="auto" :middle="false" />
+        </div>
+      </flicking>
+
+      <CardMenu />
+    </div>
   </div>
 </template>
 
@@ -13,10 +45,37 @@
 export default {
   layout: 'User/homeLogin',
   middleware: ['auth', 'isuserapprove'],
+  data () {
+    return ({
+      card: [
+        {
+          type: 'debit'
+        },
+        {
+          type: 'credit'
+        }
+      ]
+    })
+  },
   methods: {
     async logout () {
       await this.$auth.logout()
+    },
+    cardchange (e) {
+      this.$store.commit('animate/set', { stateName: 'cc_menu', value: this.card[e.index].type })
     }
   }
 }
 </script>
+
+<style scoped>
+.display-block{
+  display: block;
+}
+.balance{
+  line-height: 1;
+}
+.fit-height{
+  height: calc(100vh - 162px);
+}
+</style>

@@ -21,7 +21,8 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '@/plugins/antd-ui',
-    '@/plugins/vue-thailand-address'
+    '@/plugins/vue-thailand-address',
+    '@/plugins/vue-carousel'
   ],
 
   //Middleware
