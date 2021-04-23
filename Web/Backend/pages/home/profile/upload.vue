@@ -40,10 +40,6 @@ export default {
       url: ''
     })
   },
-  mounted () {
-    document.body.classList = ''
-    document.body.classList.add('background-main')
-  },
   methods: {
     submit () {
       this.file = this.$refs.file.files[0]
@@ -75,9 +71,6 @@ export default {
 </script>
 
 <style scoped>
-.text-large{
-  font-size: 25px;
-}
 .upload-area{
   border-radius: 25px;
   border: 2px var(--main-color) solid;
