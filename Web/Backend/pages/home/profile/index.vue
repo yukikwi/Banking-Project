@@ -80,10 +80,6 @@ export default {
     return ({
       data
     })
-  },
-  mounted () {
-    document.body.classList = ''
-    document.body.classList.add('background-main')
   }
 }
 </script>
@@ -92,13 +88,15 @@ export default {
 .w-100p{
   width: 100%;
 }
-.text-large{
-  font-size: 25px;
-}
 .text-muted{
   color: #aaa;
 }
 .pb-50px{
   padding-bottom: 50px;
+}
+.center{
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
