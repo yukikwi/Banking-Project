@@ -1,5 +1,5 @@
 <template>
-  <div :class="[($store.state.animate.cc_animate === true)? 'animated': '', middle? 'middle':'unmiddle', rotate]"  @click="$router.push('/home/deditcard/xxxxxxxxxxxxxxxx')">
+  <div :class="[($store.state.animate.cc_animate === true)? 'animated': '', middle? 'middle':'unmiddle', rotate]" @click="$router.push('/home/deditcard/xxxxxxxxxxxxxxxx/transaction')">
     <div :class="['background-main', 'cc', size, shadow? 'shadow':'']">
       <h3 class="cardName">
         Bara dedit

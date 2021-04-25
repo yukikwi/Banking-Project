@@ -2,7 +2,7 @@
   <div class="mt-2">
     <transition name="slide-bottom">
       <a-row v-if="card_type === 'debit'" type="flex" justify="center" align="middle" class="text-center">
-        <a-col :span="12" key="transfer">
+        <a-col :span="12">
           <NuxtLink to="/home/transfer">
             <div class="btn-rounded">
               <a-icon type="swap" />
@@ -10,11 +10,11 @@
             <span class="text-black">Transfer</span>
           </NuxtLink>
         </a-col>
-        <a-col :span="12" key="bill">
+        <a-col :span="12">
           <NuxtLink to="/home/bill">
             <div class="btn-rounded">
               <a-icon type="wallet" />
-              </div>
+            </div>
             <span class="text-black">Bill</span>
           </NuxtLink>
         </a-col>
@@ -25,15 +25,15 @@
         <NuxtLink to="/home/transaction">
           <div class="btn-rounded">
             <a-icon type="file-text" />
-            </div>
+          </div>
           <span class="text-black">Transaction</span>
         </NuxtLink>
       </a-col>
       <a-col class="mt-2" :span="12">
-        <NuxtLink to="/home/setting">
+        <NuxtLink :to="(card_type === 'debit')? '/home/Deditcard/xxxxxxxxxxxxxxxx' : '/home/Creditcard/xxxxxxxxxxxxxxxx'">
           <div class="btn-rounded">
             <a-icon type="setting" />
-            </div>
+          </div>
           <span class="text-black">Setting</span>
         </NuxtLink>
       </a-col>

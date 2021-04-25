@@ -36,7 +36,7 @@
         </div>
       </flicking>
 
-      <client-only placeholder="Loading...">
+      <client-only>
         <CardMenu />
       </client-only>
     </div>
