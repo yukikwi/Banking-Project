@@ -31,10 +31,9 @@ router.post('/signup', async (req, res) => {
     var hash_password = data.digest('hex')
 
     //Duplicate check
-    var duplicate_name = await db.query('SELECT User_ID FROM User WHERE User_FName = ? AND User_LName = ?', [req.body.fname, req.body.lname])
     var duplicate_mail = await db.query('SELECT User_ID FROM User WHERE User_Email = ? ', [req.body.email])
     var duplicate_national_id = await db.query('SELECT User_ID FROM User WHERE User_NationalID = ? ', [req.body.national_id])
-    if(duplicate_name.length > 0 || duplicate_mail.length > 0 || duplicate_national_id.length > 0){
+    if(duplicate_mail.length > 0 || duplicate_national_id.length > 0){
         result = {
             status: 403,
             data: 'Duplicate data',
