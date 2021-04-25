@@ -26,8 +26,8 @@
       <flicking
         :options="{ gap: 10, autoResize: true, resizeOnContentsReady: true}"
         :tag="'div'"
-        :viewportTag="'div'"
-        :cameraTag="'div'"
+        :viewport-tag="'div'"
+        :camera-tag="'div'"
         @change="cardchange"
       >
         <div v-for="(item, index) in card" :key="index">
@@ -36,7 +36,9 @@
         </div>
       </flicking>
 
-      <CardMenu />
+      <client-only placeholder="Loading...">
+        <CardMenu />
+      </client-only>
     </div>
   </div>
 </template>
@@ -56,6 +58,9 @@ export default {
         }
       ]
     })
+  },
+  mounted () {
+    this.$store.commit('animate/set', { stateName: 'cc_menu', value: this.card[0].type })
   },
   methods: {
     async logout () {
