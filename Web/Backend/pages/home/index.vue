@@ -6,7 +6,7 @@
           <a-icon type="logout" />
         </a-col>
         <a-col class="text-right" :span="18">
-          <span>Hi, Capybara</span>
+          <span>Hi, {{ $auth.user.User_FName }}</span>
           <a-icon type="user" />
         </a-col>
       </a-row>
