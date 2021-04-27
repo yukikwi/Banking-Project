@@ -129,7 +129,7 @@ router.get('/me', async (req, res) => {
         if (err) return res.sendStatus(403)
         console.log(data)
         try{
-            var db_data = await db.query('SELECT User_FName, User_LName, User_Email, User_Active_Status FROM User \
+            var db_data = await db.query('SELECT User_FName, User_LName, User_Email, User_Tel, User_Email, User_Active_Status FROM User \
             LEFT JOIN JWT ON User.User_ID = JWT.User_ID \
             WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ?', [data.token, data.firstname, data.lastname])
             if(db_data.length > 0){
