@@ -214,10 +214,17 @@ router.get('/list', async (req, res) => {
             cc_data = cc_data.map(v => ({...v, type: 'credit'}))
 
             // Get account data
-            var acc_data = await db.query('SELECT UserAccount.*, (SUM(income.Trans_Amount) - SUM(outcome.Trans_Amount)) balance, UserAccount.Account_ID address FROM User \
+            var acc_data = await db.query(' \
+            SELECT \
+            UserAccount.*, \
+            (\
+                SUM( case when !(TransactionsHistory.User_Target_Internal_AccountID IS NULL) then TransactionsHistory.Trans_Amount else 0 end ) \
+                - \
+                SUM( case when !(TransactionsHistory.User_Sender_Internal_AccountID IS NULL) then TransactionsHistory.Trans_Amount else 0 end ) \
+            ) balance, \
+            UserAccount.Account_ID address FROM User \
             INNER JOIN UserAccount ON User.User_ID = UserAccount.User_ID \
-            LEFT JOIN TransactionsHistory income ON UserAccount.Account_ID = income.User_Target_Internal_AccountID \
-            LEFT JOIN TransactionsHistory outcome ON UserAccount.Account_ID = outcome.User_Sender_Internal_AccountID \
+            LEFT JOIN TransactionsHistory ON UserAccount.Account_ID = TransactionsHistory.User_Target_Internal_AccountID OR UserAccount.Account_ID = TransactionsHistory.User_Sender_Internal_AccountID \
             LEFT JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? GROUP BY UserAccount.Account_ID',
             [data.token, data.firstname, data.lastname])
             acc_data = acc_data.map(v => ({...v, type: 'debit'}))
