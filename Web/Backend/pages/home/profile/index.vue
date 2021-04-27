@@ -24,11 +24,17 @@
           <span v-if="item.type === 'file' && item.value === 'fail'" class="ml-1" @click="$router.push('/home/profile/upload')">
             {{ item.label }}: <a-icon type="close" :style="{ color: 'red', fontWeight: 'bold', fontSize: '25px' }" />
           </span>
+          <span v-if="item.type === 'file' && item.value === 'not_upload'" class="ml-1" @click="$router.push('/home/profile/upload')">
+            {{ item.label }}: <a-icon type="upload" :style="{ color: 'gray', fontWeight: 'bold', fontSize: '25px' }" />
+          </span>
           <span v-if="item.type === 'file' && item.value === 'success'" class="ml-1">
             {{ item.label }}: <a-icon type="check" :style="{ color: 'green', fontWeight: 'bold', fontSize: '25px' }" />
           </span>
           <span v-if="item.type === 'file' && item.value === 'wait'" class="ml-1">
-            {{ item.label }}: <a-icon type="clock-circle" :style="{ color: 'yellow', fontWeight: 'bold', fontSize: '25px' }" />
+            {{ item.label }}: <a-icon type="clock-circle" :style="{ color: '#faad14', fontWeight: 'bold', fontSize: '25px' }" />
+          </span>
+          <span v-if="item.type === 'file' && item.value === 'blacklist'" class="ml-1">
+            {{ item.label }}: <a-icon type="stop" :style="{ color: 'black', fontWeight: 'bold', fontSize: '25px' }" />
           </span>
           <span v-if="item.type === 'text' && item.editable === true" class="float-right text-muted">Edit</span>
         </a-list-item>
@@ -46,40 +52,42 @@
 </template>
 
 <script>
-const data = [
-  {
-    label: 'Name',
-    value: 'Capybara barabara',
-    type: 'text',
-    editable: true
-  },
-  {
-    label: 'Phone',
-    value: '087-000-0000',
-    type: 'text',
-    editable: true
-  },
-  {
-    label: 'Mail',
-    value: 'Bara@brrr',
-    type: 'text',
-    editable: true
-  },
-  {
-    label: 'Validation file',
-    value: 'fail',
-    type: 'file',
-    editable: true
-  }
-]
 
 export default {
   layout: 'User/homeLogin',
   middleware: ['auth'],
   data () {
     return ({
-      data
+      data: [
+        {
+          label: 'Name',
+          value: this.$auth.user.User_FName + ' ' + this.$auth.user.User_LName,
+          type: 'text',
+          editable: true
+        },
+        {
+          label: 'Phone',
+          value: this.$auth.user.User_Tel,
+          type: 'text',
+          editable: true
+        },
+        {
+          label: 'Mail',
+          value: this.$auth.user.User_Email,
+          type: 'text',
+          editable: true
+        },
+        {
+          label: 'Validation file',
+          value: (this.$auth.user.User_Active_Status === '00') ? 'success' : (this.$auth.user.User_Active_Status === '01') ? 'not_upload' : (this.$auth.user.User_Active_Status === '02') ? 'wait' : (this.$auth.user.User_Active_Status === '03') ? 'fail' : 'blacklist',
+          type: 'file',
+          editable: true
+        }
+      ]
     })
+  },
+  mounted () {
+    // this.$axios.get
   }
 }
 </script>
