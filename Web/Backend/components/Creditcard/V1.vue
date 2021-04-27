@@ -1,5 +1,5 @@
 <template>
-  <div :class="[($store.state.animate.cc_animate === true)? 'animated': '', middle? 'middle':'unmiddle', rotate]" @click="$router.push('/home/creditcard/xxxxxxxxxxxxxxxx/transaction')">
+  <div :class="[($store.state.animate.cc_animate === true)? 'animated': '', middle? 'middle':'unmiddle', rotate]" @click="$router.push('/home/creditcard/'+cNo+'/transaction')">
     <div :class="['background-dark', 'cc', size, shadow? 'shadow':'']">
       <h3 class="cardName">
         G credit

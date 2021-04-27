@@ -57,7 +57,7 @@
         />
       </a-form-item>
 
-      <a-form-item>
+      <a-form-item :validate-status="national_id_status">
         <label><span class="text-red">*</span> National ID</label>
         <a-input
           v-decorator="[
@@ -67,6 +67,7 @@
               initialValue: (typeof ($store.state.register.form.national_id) === 'undefined') ? '' : $store.state.register.form.national_id
             }
           ]"
+          @change="validateNationalID"
           placeholder="x-xxxx-xxxxx-xx-x"
         />
       </a-form-item>
@@ -97,6 +98,7 @@
   </div>
 </template>
 <script>
+
 export default {
   data () {
     return {
@@ -105,7 +107,8 @@ export default {
       district: (typeof (this.$store.state.register.form.district) === 'undefined') ? '' : this.$store.state.register.form.district,
       province: (typeof (this.$store.state.register.form.province) === 'undefined') ? '' : this.$store.state.register.form.province,
       zipcode: (typeof (this.$store.state.register.form.zipcode) === 'undefined') ? '' : this.$store.state.register.form.zipcode,
-      dob: (typeof (this.$store.state.register.form.dob) === 'undefined') ? '' : this.$store.state.register.form.dob
+      dob: (typeof (this.$store.state.register.form.dob) === 'undefined') ? '' : this.$store.state.register.form.dob,
+      national_id_status: ''
     }
   },
   methods: {
@@ -133,6 +136,28 @@ export default {
     },
     dateofbirth (date, dateString) {
       this.form.dob = dateString
+    },
+    validateNationalID (id) {
+      console.log(id)
+      if (id.length !== 13) {
+        return false
+      }
+      // STEP 1 - get only first 12 digits
+      let sum = 0
+      for (let i = 0; i < 12; i++) {
+        // STEP 2 - multiply each digit with each index (reverse)
+        // STEP 3 - sum multiply value together
+        sum = sum + (parseInt(id.charAt(i)) * (13 - i))
+      }
+      // STEP 4 - mod sum with 11
+      const mod = sum % 11
+      // STEP 5 - subtract 11 with mod, then mod 10 to get unit
+      const check = (11 - mod) % 10
+      // STEP 6 - if check is match the digit 13th is correct
+      if (check === parseInt(id.charAt(12))) {
+        return true
+      }
+      return false
     }
   }
 }

@@ -22,7 +22,7 @@
     </transition>
     <a-row type="flex" justify="center" align="middle" class="text-center">
       <a-col class="mt-2" :span="12">
-        <NuxtLink to="/home/transaction">
+        <NuxtLink :to="(card_type === 'debit')? '/home/deditcard/'+cNo+'/transaction' : '/home/creditcard/'+cNo+'/transaction'">
           <div class="btn-rounded">
             <a-icon type="file-text" />
           </div>
@@ -30,7 +30,7 @@
         </NuxtLink>
       </a-col>
       <a-col class="mt-2" :span="12">
-        <NuxtLink :to="(card_type === 'debit')? '/home/Deditcard/xxxxxxxxxxxxxxxx' : '/home/Creditcard/xxxxxxxxxxxxxxxx'">
+        <NuxtLink :to="(card_type === 'debit')? '/home/deditcard/'+cNo : '/home/creditcard/'+cNo">
           <div class="btn-rounded">
             <a-icon type="setting" />
           </div>
@@ -43,6 +43,12 @@
 
 <script>
 export default {
+  props: {
+    cNo: {
+      type: String,
+      default: ''
+    }
+  },
   computed: {
     card_type () {
       return this.$store.state.animate.cc_menu

@@ -12,33 +12,49 @@
       </a-row>
       <div class="mt-2">
         <h2 class="mb-0 text-white balance">
-          1,000.00 ฿
+          <div v-if="loading" class="spinner">
+            <a-spin>
+              <a-icon slot="indicator" type="loading" style="font-size: 36px" spin />
+            </a-spin>
+          </div>
+          <div v-else>
+            {{ (balance === null)? 0 : balance.toLocaleString() }} ฿
+          </div>
         </h2>
         <span class="text-small display-block">Your balance</span>
       </div>
     </div>
 
     <div class="rounded-top-m container background-white pb-50px fit-height">
-      <h2 class="text-black">
-        Cards
-      </h2>
+      <div v-if="loading" class="spinner">
+        <a-spin>
+          <a-icon slot="indicator" type="loading" style="font-size: 36px" spin />
+        </a-spin>
+      </div>
 
-      <flicking
-        :options="{ gap: 10, autoResize: true, resizeOnContentsReady: true}"
-        :tag="'div'"
-        :viewport-tag="'div'"
-        :camera-tag="'div'"
-        @change="cardchange"
-      >
-        <div v-for="(item, index) in card" :key="index">
-          <DebitcardV1 v-if="item.type == 'debit'" rotate="landspace" size="auto" :middle="false" />
-          <CreditcardV1 v-if="item.type == 'credit'" rotate="landspace" size="auto" :middle="false" />
-        </div>
-      </flicking>
+      <div v-else>
+        <h2 class="text-black">
+          Cards
+        </h2>
 
-      <client-only>
-        <CardMenu />
-      </client-only>
+        <flicking
+          ref="cardslide"
+          :options="{ gap: 10, autoResize: true, resizeOnContentsReady: true}"
+          :tag="'div'"
+          :viewport-tag="'div'"
+          :camera-tag="'div'"
+          @change="cardchange"
+        >
+          <div v-for="(item, index) in card" :key="index">
+            <DebitcardV1 v-if="item.type == 'debit'" rotate="landspace" size="auto" :middle="false" :c-no="item.address" />
+            <CreditcardV1 v-if="item.type == 'credit'" rotate="landspace" size="auto" :middle="false" :c-no="item.address" />
+          </div>
+        </flicking>
+
+        <client-only>
+          <CardMenu :c-no="card_addr" />
+        </client-only>
+      </div>
     </div>
   </div>
 </template>
@@ -49,18 +65,25 @@ export default {
   middleware: ['auth', 'isuserapprove'],
   data () {
     return ({
-      card: [
-        {
-          type: 'debit'
-        },
-        {
-          type: 'credit'
-        }
-      ]
+      card: [],
+      loading: true,
+      balance: 0,
+      card_addr: ''
     })
   },
-  mounted () {
-    this.$store.commit('animate/set', { stateName: 'cc_menu', value: this.card[0].type })
+  async mounted () {
+    const carddata = await this.$axios.get('api/user/list')
+    if (carddata.data.status === 200) {
+      this.card = carddata.data.data
+      console.log(this.card)
+      this.$store.commit('animate/set', { stateName: 'cc_menu', value: this.card[0].type })
+      this.balance = this.card[0].balance
+      this.card_addr = this.card[0].address
+      this.loading = false
+    }
+  },
+  updated () {
+    this.$refs.cardslide.resize()
   },
   methods: {
     async logout () {
@@ -68,6 +91,8 @@ export default {
     },
     cardchange (e) {
       this.$store.commit('animate/set', { stateName: 'cc_menu', value: this.card[e.index].type })
+      this.card_addr = this.card[e.index].address
+      this.balance = this.card[e.index].balance
     }
   }
 }
@@ -82,5 +107,9 @@ export default {
 }
 .fit-height{
   height: calc(100vh - 162px);
+}
+.spinner{
+  width: fit-content;
+  margin: auto;
 }
 </style>
