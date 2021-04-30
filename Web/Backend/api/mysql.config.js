@@ -3,9 +3,9 @@ const util = require('util')
 const mysql = require('mysql');
 var db = mysql.createPool({
   connectionLimit: 10,
-  host     : 'localhost',
+  host     : '165.232.161.150',
   user     : 'root',
-  password : 'root',
+  password : 'KOJ(i9kJUH!',
   database: 'capybara'
 });
 
