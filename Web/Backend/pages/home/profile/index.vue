@@ -11,7 +11,7 @@
       </a-row>
     </div>
 
-    <div class="rounded-top-m container background-white pb-50px">
+    <div class="rounded-top-m container background-white pb-80px">
       <h2 class="text-main">
         Personal Information
       </h2>
@@ -44,9 +44,30 @@
         Bank Account
       </h2>
 
-      <CreditcardV1 rotate="landspace" size="small" :middle="false" class="center" />
-      <CreditcardV1 rotate="landspace" size="small" :middle="false" class="center mt-1" />
-      <CreditcardV1 rotate="landspace" size="small" :middle="false" class="center mt-1" />
+      <div v-if="loading === true" class="spinner center">
+        <a-spin>
+          <a-icon slot="indicator" type="loading" style="font-size: 36px" spin />
+        </a-spin>
+      </div>
+
+      <div v-for="(item, index) in card" v-else :key="index">
+        <DebitcardV1
+          v-if="item.type == 'debit'"
+          class="center mt-1"
+          rotate="landspace"
+          size="auto"
+          :middle="false"
+          :c-no="item.address"
+        />
+        <CreditcardV1
+          v-if="item.type == 'credit'"
+          class="center mt-1"
+          rotate="landspace"
+          size="auto"
+          :middle="false"
+          :c-no="item.address"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -83,11 +104,18 @@ export default {
           type: 'file',
           editable: true
         }
-      ]
+      ],
+      card: [],
+      loading: true
     })
   },
-  mounted () {
-    // this.$axios.get
+  async mounted () {
+    const carddata = await this.$axios.get('api/user/list')
+    if (carddata.data.status === 200) {
+      this.card = carddata.data.data
+      this.loading = false
+    }
+    console.log(this.loading)
   }
 }
 </script>
@@ -99,8 +127,8 @@ export default {
 .text-muted{
   color: #aaa;
 }
-.pb-50px{
-  padding-bottom: 50px;
+.pb-80px{
+  padding-bottom: 80px;
 }
 .center{
   width: fit-content;
