@@ -126,7 +126,6 @@ export default {
           values.district = this.district
           values.province = this.province
           values.zipcode = this.zipcode
-          values.dob = this.dob
           this.$store.commit('register/addData', values)
           this.$router.push('/register/2')
         } else {
