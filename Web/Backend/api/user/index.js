@@ -38,7 +38,6 @@ router.post('/signup', async (req, res) => {
             status: 403,
             data: 'Duplicate data',
             duplicate: {
-                name: (duplicate_name.length > 0)? true: false,
                 mail: (duplicate_mail.length > 0)? true: false,
                 national_id: (duplicate_national_id.length > 0)? true: false
             }
@@ -46,8 +45,10 @@ router.post('/signup', async (req, res) => {
     }
     else{
         try{
-            await db.query('INSERT INTO `USER` (`User_FName`, `User_LName`, `User_Tel`, `User_DOB`, `User_Email`, `User_Address`, `User_NationalID`, `User_App_Password` ) VALUES (?,?,?,?,?,?,?,?)'
-            ,[req.body.fname, req.body.lname, req.body.tel, req.body.dob, req.body.email, address, req.body.national_id, hash_password])
+            date = new Date(req.body.dob)
+            const dob = date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate()
+            await db.query('INSERT INTO `User` (`User_FName`, `User_LName`, `User_Tel`, `User_DOB`, `User_Email`, `User_Address`, `User_NationalID`, `User_App_Password` ) VALUES (?,?,?,?,?,?,?,?)'
+            ,[req.body.fname, req.body.lname, req.body.tel, dob, req.body.email, address, req.body.national_id, hash_password])
             result = {
                 status: 200,
                 data: 'Register success'
@@ -205,7 +206,7 @@ router.get('/list', async (req, res) => {
         const date = new Date()
         try{
             // Get creditcard data
-            var cc_data = await db.query('SELECT UserCreditCard.*, UserCreditCard.Card_MaxAmount - SUM(CreditCardHistory.CardHistory_Amount + CreditCardHistory.CardHistory_Fee) balance, UserCreditCard.Card_ID address FROM User \
+            var cc_data = await db.query('SELECT UserCreditCard.*, UserCreditCard.Card_MaxAmount - COALESCE(SUM(CreditCardHistory.CardHistory_Amount + CreditCardHistory.CardHistory_Fee),0) balance, UserCreditCard.Card_ID address FROM User \
             INNER JOIN UserCreditCard ON User.User_ID = UserCreditCard.User_ID \
             LEFT JOIN CreditCardHistory ON UserCreditCard.Card_ID = CreditCardHistory.Card_ID AND CreditCardHistory.CardHistory_Datetime LIKE ?\
             LEFT JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? \
@@ -218,9 +219,9 @@ router.get('/list', async (req, res) => {
             SELECT \
             UserAccount.*, \
             (\
-                SUM( case when !(TransactionsHistory.User_Target_Internal_AccountID IS NULL) then TransactionsHistory.Trans_Amount else 0 end ) \
+                SUM( case when (TransactionsHistory.User_Target_Internal_AccountID LIKE UserAccount.Account_ID) then TransactionsHistory.Trans_Amount else 0 end ) \
                 - \
-                SUM( case when !(TransactionsHistory.User_Sender_Internal_AccountID IS NULL) then TransactionsHistory.Trans_Amount else 0 end ) \
+                SUM( case when (TransactionsHistory.User_Sender_Internal_AccountID LIKE UserAccount.Account_ID) then TransactionsHistory.Trans_Amount else 0 end ) \
             ) balance, \
             UserAccount.Account_ID address FROM User \
             INNER JOIN UserAccount ON User.User_ID = UserAccount.User_ID \
@@ -255,6 +256,8 @@ router.get('/list', async (req, res) => {
 
 //Extends other under /user
 const creditcard = require('./creditcard.js')
-router.use('/cc/', creditcard)
+const debitcard = require('./debitcard.js')
+router.use('/creditcard/', creditcard)
+router.use('/debitcard/', debitcard)
 
 module.exports = router
