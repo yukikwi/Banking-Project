@@ -61,17 +61,36 @@ router.post('/info', async (req, res) => {
         if (err) return res.sendStatus(403)
         console.log(data)
         try{
-            var db_data = await db.query('SELECT UserCreditCard.*, UserCreditCard.Card_MaxAmount - COALESCE(SUM(CreditCardHistory.CardHistory_Amount + CreditCardHistory.CardHistory_Fee),0) balance, UserCreditCard.Card_ID address FROM User \
-            INNER JOIN UserCreditCard ON User.User_ID = UserCreditCard.User_ID \
-            LEFT JOIN CreditCardHistory ON UserCreditCard.Card_ID = CreditCardHistory.Card_ID AND CreditCardHistory.CardHistory_Datetime LIKE ?\
-            LEFT JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserCreditCard.Card_ID = ? \
-            GROUP BY UserCreditCard.Card_ID',
-            [ date.getFullYear()+"-"+(('0' + (date.getMonth()+1)).slice(-2))+"%", data.token, data.firstname, data.lastname, req.body.card_id ])
+            // Get account data
+            var db_data = await db.query(' \
+            SELECT \
+            UserAccount.*, \
+            SUM( case when (TransactionsHistory.User_Target_Internal_AccountID LIKE UserAccount.Account_ID) then TransactionsHistory.Trans_Amount else 0 end ) account_in, \
+            SUM( case when (TransactionsHistory.User_Sender_Internal_AccountID LIKE UserAccount.Account_ID) then TransactionsHistory.Trans_Amount else 0 end ) account_out, \
+            (\
+                SUM( case when (TransactionsHistory.User_Target_Internal_AccountID LIKE UserAccount.Account_ID) then TransactionsHistory.Trans_Amount else 0 end ) \
+                - \
+                SUM( case when (TransactionsHistory.User_Sender_Internal_AccountID LIKE UserAccount.Account_ID) then TransactionsHistory.Trans_Amount else 0 end ) \
+            ) balance, \
+            UserAccount.Account_ID address FROM User \
+            INNER JOIN UserAccount ON User.User_ID = UserAccount.User_ID \
+            LEFT JOIN TransactionsHistory ON UserAccount.Account_ID = TransactionsHistory.User_Target_Internal_AccountID OR UserAccount.Account_ID = TransactionsHistory.User_Sender_Internal_AccountID \
+            INNER JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserAccount.Account_ID = ?',
+            [data.token, data.firstname, data.lastname, req.body.card_id])
 
-            if(db_data.length == 1){
+            if(db_data.length > 0){
+                var transactiondata = await db.query(' \
+                SELECT \
+                TransactionsHistory.* \
+                FROM User \
+                INNER JOIN UserAccount ON User.User_ID = UserAccount.User_ID \
+                LEFT JOIN TransactionsHistory ON UserAccount.Account_ID = TransactionsHistory.User_Target_Internal_AccountID OR UserAccount.Account_ID = TransactionsHistory.User_Sender_Internal_AccountID \
+                INNER JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserAccount.Account_ID = ? ORDER BY TransactionsHistory.Trans_ID DESC',
+                [data.token, data.firstname, data.lastname, req.body.card_id])
                 result = {
                     status: 200,
-                    data: db_data[0]
+                    data: db_data[0],
+                    transaction: transactiondata
                 }
             }
             else{
