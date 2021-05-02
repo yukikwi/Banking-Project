@@ -37,8 +37,14 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
+    '@nuxtjs/moment',
     'nuxt-compress'
   ],
+
+  moment: {
+    defaultLocale: 'th',
+    locales: ['th']
+  },
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [

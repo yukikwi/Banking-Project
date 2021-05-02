@@ -1,7 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@100;300;700&display=swap');
+
 :root {
     --main-color: #457B9D;
     --white: #fff;
     --black: #000;
+}
+
+body{
+  font-family: 'Kanit', sans-serif;
 }
 
 .container{
@@ -58,6 +64,23 @@
 .thspp-button:focus, .thspp-button-white:focus {
   outline: none;
   box-shadow: none;
+}
+
+/* Padding */
+.p-1{
+  padding: 1rem;
+}
+.pt-1{
+  padding-top: 1rem;
+}
+.pb-1{
+  padding-bottom: 1rem;
+}
+.pl-1{
+  padding-left: 1rem;
+}
+.pr-1{
+  padding-right: 1rem;
 }
 
 /* Margin */

@@ -11,11 +11,18 @@
       </a-row>
     </div>
 
-    <div class="rounded-top-m container background-white pb-80px">
+    <div class="rounded-top-m container background-white pb-80px full-height">
       <div class="w-60p">
-        <ChartDoughnut :text="doughnuttext" />
+        <ChartDoughnut v-if="carddata !== null" :text="doughnuttext" :income="carddata.data.account_in" :outcome="carddata.data.account_out" />
       </div>
       <h2>Transaction</h2>
+
+      <div v-for="item in date" :key="item">
+        <h3>{{ $moment(item).fromNow() }}</h3>
+        <div v-for="card_data in carddata.transaction.filter(data => data.Date.match(item))" :key="card_data.Trans_ID">
+          <TransactionCardV2 :transaction-data="card_data" :card-id="$route.params.card" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -25,8 +32,9 @@ export default {
   layout: 'User/homeLogin',
   data () {
     return ({
-      carddata: {},
-      doughnuttext: ''
+      carddata: null,
+      doughnuttext: '',
+      date: []
     })
   },
   async mounted () {
@@ -37,7 +45,13 @@ export default {
     if (carddata.data.status === 200) {
       this.carddata = carddata.data
       this.doughnuttext = this.carddata.data.balance + '฿'
-      console.log(this.doughnuttext)
+      for (let i = 0; i < carddata.data.transaction.length; i++) {
+        const item = carddata.data.transaction[i]
+        if (this.date.includes(item.Date) === false) {
+          this.date.push(item.Date)
+        }
+      }
+      console.log(this.date)
     }
   }
 }
@@ -48,5 +62,8 @@ export default {
   width: 60%;
   height: fit-content;
   margin: auto;
+}
+.full-height{
+  min-height: calc(100vh - 77px);
 }
 </style>

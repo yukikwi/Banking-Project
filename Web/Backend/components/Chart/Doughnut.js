@@ -8,24 +8,28 @@ export default {
       type: String,
       default: ''
     },
-    text2: {
-      type: String,
-      default: ''
+    income: {
+      type: Number,
+      default: 0
+    },
+    outcome: {
+      type: Number,
+      default: 0
     }
   },
   data () {
     return ({
       data: {
         datasets: [{
-          data: [40, 20],
+          data: [this.income, this.outcome],
           backgroundColor: [
             'rgb(255, 99, 132)',
             '#D4EBEC'
           ]
         }],
         labels: [
-          'Red',
-          'Yellow'
+          'Income',
+          'Outcome'
         ]
       },
       options: {
@@ -42,15 +46,9 @@ export default {
   mounted () {
     this.renderChart(this.data, this.options)
     this.textCenter(this.text)
-    console.log(this.text)
-  },
-  watch: {
-    text () {
-      this.textCenter(this.text)
-      const m = new Date()
-      const dateString = m.getUTCFullYear() + '-' + (m.getUTCMonth() + 1) + '-' + m.getUTCDate() + ' | ' + m.getUTCHours() + ':' + m.getUTCMinutes() + ':' + m.getUTCSeconds()
-      this.textCenter2(dateString)
-    }
+    const m = new Date()
+    const dateString = m.getUTCFullYear() + '-' + (m.getUTCMonth() + 1) + '-' + m.getUTCDate() + ' | ' + m.getUTCHours() + ':' + m.getUTCMinutes() + ':' + m.getUTCSeconds()
+    this.textCenter2(dateString)
   },
   methods: {
     textCenter (val) {
@@ -62,7 +60,7 @@ export default {
 
           ctx.restore()
           const fontSize = 3
-          ctx.font = fontSize + 'em sans-serif'
+          ctx.font = fontSize + 'em Kanit sans-serif'
           ctx.textBaseline = 'middle'
 
           const text = val
@@ -85,7 +83,7 @@ export default {
 
           ctx.restore()
           const fontSize = 0.7
-          ctx.font = fontSize + 'em sans-serif'
+          ctx.font = fontSize + 'em Kanit sans-serif'
           ctx.textBaseline = 'middle'
 
           const text = val

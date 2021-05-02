@@ -81,7 +81,9 @@ router.post('/info', async (req, res) => {
             if(db_data.length > 0){
                 var transactiondata = await db.query(' \
                 SELECT \
-                TransactionsHistory.* \
+                TransactionsHistory.*, \
+                DATE(TransactionsHistory.Trans_DateTime) Date, \
+                TIME(TransactionsHistory.Trans_DateTime) Time \
                 FROM User \
                 INNER JOIN UserAccount ON User.User_ID = UserAccount.User_ID \
                 LEFT JOIN TransactionsHistory ON UserAccount.Account_ID = TransactionsHistory.User_Target_Internal_AccountID OR UserAccount.Account_ID = TransactionsHistory.User_Sender_Internal_AccountID \

@@ -6,7 +6,8 @@ var db = mysql.createPool({
   host     : '165.232.161.150',
   user     : 'root',
   password : 'KOJ(i9kJUH!',
-  database: 'capybara'
+  database: 'capybara',
+  dateStrings: true
 });
 
 db.getConnection(function(err, connection) {
