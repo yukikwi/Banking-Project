@@ -1,15 +1,6 @@
 <template>
   <div>
-    <div class="container text-white text-large width-100p">
-      <a-row>
-        <a-col :span="12" @click.native="$router.back()">
-          <a-icon type="left" />
-        </a-col>
-        <a-col class="text-right" :span="12">
-          My profile
-        </a-col>
-      </a-row>
-    </div>
+    <HomeHeader title="My Profile" />
 
     <div class="rounded-top-m container background-white pb-80px">
       <h2 class="text-main">

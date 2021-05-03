@@ -1,26 +1,17 @@
 <template>
   <div>
-    <div class="container text-white text-large width-100p">
-      <a-row>
-        <a-col :span="12" @click.native="$router.back()">
-          <a-icon type="left" />
-        </a-col>
-        <a-col class="text-right" :span="12">
-          Transaction
-        </a-col>
-      </a-row>
-    </div>
+    <HomeHeader title="Transaction" />
 
     <div class="rounded-top-m container background-white pb-80px full-height">
       <div class="w-60p">
         <ChartDoughnut v-if="carddata !== null" :text="doughnuttext" :income="carddata.data.account_in" :outcome="carddata.data.account_out" />
       </div>
-      <h2>Transaction</h2>
+      <h2 class="text-bold">Transaction</h2>
 
       <div v-for="item in date" :key="item">
         <h3>{{ $moment(item).fromNow() }}</h3>
         <div v-for="card_data in carddata.transaction.filter(data => data.Date.match(item))" :key="card_data.Trans_ID">
-          <TransactionCardV2 :transaction-data="card_data" :card-id="$route.params.card" />
+          <TransactionCardDebit :transaction-data="card_data" :card-id="$route.params.card" />
         </div>
       </div>
     </div>
@@ -58,6 +49,9 @@ export default {
 </script>
 
 <style scoped>
+.text-bold{
+  font-weight: bold;
+}
 .w-60p{
   width: 60%;
   height: fit-content;
