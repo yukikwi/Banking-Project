@@ -61,17 +61,23 @@ router.post('/info', async (req, res) => {
         if (err) return res.sendStatus(403)
         console.log(data)
         try{
-            var db_data = await db.query('SELECT UserCreditCard.*, UserCreditCard.Card_MaxAmount - COALESCE(SUM(CreditCardHistory.CardHistory_Amount + CreditCardHistory.CardHistory_Fee),0) balance, UserCreditCard.Card_ID address FROM User \
+            var card_data = await db.query('SELECT UserCreditCard.*, MAX(CreditCardHistory.CardHistory_Amount) highest, MIN(CreditCardHistory.CardHistory_Amount) lowest, DATE(CardHistory_Datetime) date  FROM User \
             INNER JOIN UserCreditCard ON User.User_ID = UserCreditCard.User_ID \
-            LEFT JOIN CreditCardHistory ON UserCreditCard.Card_ID = CreditCardHistory.Card_ID AND CreditCardHistory.CardHistory_Datetime LIKE ?\
-            LEFT JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserCreditCard.Card_ID = ? \
-            GROUP BY UserCreditCard.Card_ID',
-            [ date.getFullYear()+"-"+(('0' + (date.getMonth()+1)).slice(-2))+"%", data.token, data.firstname, data.lastname, req.body.card_id ])
+            LEFT JOIN CreditCardHistory ON UserCreditCard.Card_ID = CreditCardHistory.Card_ID \
+            LEFT JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserCreditCard.Card_ID = ?',
+            [data.token, data.firstname, data.lastname, req.body.card_id ])
 
-            if(db_data.length == 1){
+            var trans_data = await db.query('SELECT CreditCardHistory.*, Target.Target_Name, DATE(CreditCardHistory.CardHistory_Datetime) date, TIME(CreditCardHistory.CardHistory_Datetime) time FROM User \
+            INNER JOIN UserCreditCard ON User.User_ID = UserCreditCard.User_ID \
+            LEFT JOIN CreditCardHistory ON UserCreditCard.Card_ID = CreditCardHistory.Card_ID \
+            INNER JOIN Target ON CreditCardHistory.Target_ID = Target.Target_ID \
+            LEFT JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserCreditCard.Card_ID = ? ORDER BY CreditCardHistory.CardHistory_ID DESC',
+            [data.token, data.firstname, data.lastname, req.body.card_id ])
+            if(card_data.length == 1){
                 result = {
                     status: 200,
-                    data: db_data[0]
+                    data: card_data[0],
+                    transaction: trans_data
                 }
             }
             else{

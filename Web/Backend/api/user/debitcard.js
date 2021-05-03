@@ -78,7 +78,7 @@ router.post('/info', async (req, res) => {
             INNER JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserAccount.Account_ID = ?',
             [data.token, data.firstname, data.lastname, req.body.card_id])
 
-            if(db_data.length > 0){
+            if(db_data.length == 1){
                 var transactiondata = await db.query(' \
                 SELECT \
                 TransactionsHistory.*, \
