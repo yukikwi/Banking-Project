@@ -3,7 +3,7 @@
     <transition name="slide-bottom">
       <a-row v-if="card_type === 'debit'" type="flex" justify="center" align="middle" class="text-center">
         <a-col :span="12">
-          <NuxtLink to="/home/transfer">
+          <NuxtLink :to="'/home/debitcard/'+cNo+'/transfer/select'">
             <div class="btn-rounded">
               <a-icon type="swap" />
             </div>

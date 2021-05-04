@@ -4,7 +4,6 @@ const db = require('../mysql.config')
 const crypto = require('crypto')
 const config = require('../config')
 const jwt = require('jsonwebtoken')
-const app = express()
 
 //REF: https://stackoverflow.com/a/1349426
 function makeid(length) {

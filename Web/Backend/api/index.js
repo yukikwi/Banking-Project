@@ -1,6 +1,7 @@
 import express from 'express'
 const Welcome = require('./welcome')
-const user = require('./user')
+const User = require('./user')
+const Bank = require('./bank')
 const config = require('./config')
 const app = express()
 
@@ -15,8 +16,9 @@ app.all('*', function (req, res, next) {
 })
 
 app.use('/welcome', Welcome)
-app.use('/user', user)
-/** 
+app.use('/user', User)
+app.use('/bank', Bank)
+/*
 * logic for our api will go here
 */
 export default {
