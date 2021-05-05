@@ -75,6 +75,7 @@ export default {
     const carddata = await this.$axios.get('api/user/list')
     if (carddata.data.status === 200) {
       this.card = carddata.data.data
+      console.log('this card')
       console.log(this.card)
       this.$store.commit('animate/set', { stateName: 'cc_menu', value: this.card[0].type })
       this.balance = this.card[0].balance
