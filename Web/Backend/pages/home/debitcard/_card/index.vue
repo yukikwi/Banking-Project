@@ -15,23 +15,8 @@
 
     <DebitcardV1 rotate="landspace" size="small" :middle="false" class="center" />
 
-    <a-row class="mt-1 animated" type="flex" justify="space-around" align="middle">
-      <a-col :span="10">
-        <button class="thspp-button-white w-100p">
-          Overview
-        </button>
-      </a-col>
-      <a-col :span="10">
-        <button class="thspp-button-white w-100p">
-          Overdue Balance
-        </button>
-      </a-col>
-    </a-row>
-
     <Footer class="animated" bg-color="white">
-      <DarkRectangle />
-      <TransactionCard />
-      <TransactionCard />
+      <InfoCard />
     </Footer>
   </div>
 </template>

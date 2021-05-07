@@ -1,8 +1,8 @@
 <template>
-  <div :class="[($store.state.animate.cc_animate === true)? 'animated': '', middle? 'middle':'unmiddle', rotate]" @click="$router.push('/home/deditcard/'+cNo+'/transaction')">
-    <div :class="['background-main', 'cc', size, shadow? 'shadow':'']">
+  <div :class="[($store.state.animate.cc_animate === true)? 'animated': '', middle? 'middle':'unmiddle', rotate]" >
+    <div :class="['background-blue', 'cc', size, shadow? 'shadow':'']">
       <h3 class="cardName">
-        Bara dedit
+        O dedit
       </h3>
       <h3 :class="['name']">
         {{ (cNo == '')? 'xxxx-xxxx-xxxx-xxxx': cNo }}
@@ -45,8 +45,8 @@ export default {
 </script>
 
 <style scoped>
-.background-dark{
-  background: #333;
+.background-blue{
+  background: rgb(29,53,88);
 }
 .cc{
   padding: 20px 20px;
