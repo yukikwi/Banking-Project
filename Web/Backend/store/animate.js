@@ -1,6 +1,7 @@
 export const state = () => ({
   cc_animate: false,
-  cc_menu: ''
+  cc_menu: '',
+  card_index: 0
 })
 export const mutations = {
   trigger (state, stateName) {

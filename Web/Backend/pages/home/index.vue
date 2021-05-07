@@ -39,7 +39,7 @@
 
         <flicking
           ref="cardslide"
-          :options="{ gap: 10, autoResize: true, resizeOnContentsReady: true}"
+          :options="{ gap: 10, autoResize: true, resizeOnContentsReady: true, defaultIndex: card_index}"
           :tag="'div'"
           :viewport-tag="'div'"
           :camera-tag="'div'"
@@ -72,25 +72,32 @@ export default {
     })
   },
   async mounted () {
+    console.log(this.card_index)
     const carddata = await this.$axios.get('api/user/list')
     if (carddata.data.status === 200) {
       this.card = carddata.data.data
       console.log('this card')
       console.log(this.card)
-      this.$store.commit('animate/set', { stateName: 'cc_menu', value: this.card[0].type })
-      this.balance = this.card[0].balance
-      this.card_addr = this.card[0].address
+      this.$store.commit('animate/set', { stateName: 'cc_menu', value: this.card[this.card_index].type })
+      this.balance = this.card[this.card_index].balance
+      this.card_addr = this.card[this.card_index].address
       this.loading = false
     }
   },
   updated () {
     this.$refs.cardslide.resize()
   },
+  computed: {
+    card_index () {
+      return this.$store.state.animate.card_index
+    }
+  },
   methods: {
     async logout () {
       await this.$auth.logout()
     },
     cardchange (e) {
+      this.$store.commit('animate/set', { stateName: 'card_index', value: e.index })
       this.$store.commit('animate/set', { stateName: 'cc_menu', value: this.card[e.index].type })
       this.card_addr = this.card[e.index].address
       this.balance = this.card[e.index].balance
