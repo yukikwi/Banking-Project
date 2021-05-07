@@ -68,7 +68,7 @@
           v-model="value"
           placeholder="Enter note"
           :auto-size="{ minRows: 5, maxRows: 5 }"
-          :maxLength="50"
+          :max-length="50"
         />
       </h2>
       <a-divider class="mt-1 mb-1" />
