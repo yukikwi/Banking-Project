@@ -74,10 +74,27 @@ router.post('/info', async (req, res) => {
             LEFT JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserCreditCard.Card_ID = ? ORDER BY CreditCardHistory.CardHistory_ID DESC',
             [data.token, data.firstname, data.lastname, req.body.card_id ])
             if(card_data.length == 1){
+                let stat = {
+                    label: [],
+                    data: []
+                }
+                for(let days = 6; days >= 0; days --){
+                    const date = new Date()
+                    const last = new Date(date.getTime() - (days * 24 * 60 * 60 * 1000))
+                    let day = last.getDate()
+                    day = ("0" + day).slice(-2)
+                    let month = last.getMonth()+1
+                    month = ("0" + month).slice(-2)
+                    let year = last.getFullYear()
+                    const data = await db.query('SELECT SUM(CardHistory_Amount) FROM CreditCardHistory WHERE DATE(CardHistory_Datetime) LIKE ?', [year+'-'+month+'-'+day])
+                    stat.label.push(year+'-'+month+'-'+day)
+                    stat.data.push((data[0]["SUM(CardHistory_Amount)"] === null)? 0:data[0]["SUM(CardHistory_Amount)"])
+                }
                 result = {
                     status: 200,
                     data: card_data[0],
-                    transaction: trans_data
+                    transaction: trans_data,
+                    stat: stat
                 }
             }
             else{

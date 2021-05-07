@@ -20,7 +20,7 @@
         </a-col>
       </a-row>
       <div class="w-60p">
-        <ChartBar />
+        <ChartBar v-if="carddata !== null" :label="carddata.stat.label" :chartdata="carddata.stat.data" />
       </div>
       <h2 class="text-bold">Transaction</h2>
 
@@ -56,7 +56,7 @@ export default {
           this.date.push(item.date)
         }
       }
-      console.log(this.date)
+      console.log(this.carddata)
     }
   }
 }

@@ -2,14 +2,24 @@ import { Bar } from 'vue-chartjs'
 
 export default {
   extends: Bar,
+  props: {
+    chartdata: {
+      type: Array,
+      default: []
+    },
+    label: {
+      type: Array,
+      default: []
+    }
+  },
   data () {
     return ({
       data: {
-        labels: ['Jan 1', 'Jan 2', 'Jan 3', 'Jan 4', 'Jan 5', 'Jan 6', 'Jan 7'],
+        labels: this.label,
         datasets: [{
           label: '',
           borderRadius: 5,
-          data: [10, 20, 30, 40, 50, 40, 20],
+          data: this.chartdata,
           fill: false,
           backgroundColor: '#457B9D'
         }]
@@ -30,11 +40,23 @@ export default {
               beginAtZero: true
             }
           }]
+        },
+        tooltips: {
+          callbacks: {
+            label (tooltipItem, data) {
+              let value = data.datasets[0].data[tooltipItem.index]
+              value = value.toString()
+              value = value.split(/(?=(?:...)*$)/)
+              value = value.join(',')
+              return value
+            }
+          }
         }
       }
     })
   },
   mounted () {
     this.renderChart(this.data, this.options)
+    console.log(this.label)
   }
 }
