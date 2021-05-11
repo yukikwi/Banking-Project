@@ -27,7 +27,7 @@ router.get('/info/:shortname', async (req, res) => {
   let result = {}
 
   try{
-    const bankdata = await db.query('SELECT External_BankShortName shortname, External_BankName title FROM ExternalBank WHERE External_BankShortName = ?', [req.params.shortname])
+    const bankdata = await db.query('SELECT External_BankID id, External_BankShortName shortname, External_BankName title FROM ExternalBank WHERE External_BankShortName = ?', [req.params.shortname])
     result = {
       status: 200,
       data: bankdata[0]
