@@ -63,11 +63,13 @@
           v-decorator="[
             'national_id',
             {
-              rules: [{ required: true, message: 'Please input your National ID!' }],
+              rules: [
+                { required: true, message: 'Please input your National ID!' },
+                {validator: validateNationalID, message: 'Please input correct National ID!'}
+              ],
               initialValue: (typeof ($store.state.register.form.national_id) === 'undefined') ? '' : $store.state.register.form.national_id
             }
           ]"
-          @change="validateNationalID"
           placeholder="x-xxxx-xxxxx-xx-x"
         />
       </a-form-item>
@@ -136,26 +138,24 @@ export default {
     dateofbirth (date, dateString) {
       this.form.dob = dateString
     },
-    validateNationalID (id) {
-      console.log(id)
-      if (id.length !== 13) {
-        return false
-      }
+    validateNationalID (rule, value, callback) {
+      console.log(value)
       // STEP 1 - get only first 12 digits
       let sum = 0
       for (let i = 0; i < 12; i++) {
         // STEP 2 - multiply each digit with each index (reverse)
         // STEP 3 - sum multiply value together
-        sum = sum + (parseInt(id.charAt(i)) * (13 - i))
+        sum = sum + (parseInt(value.charAt(i)) * (13 - i))
       }
       // STEP 4 - mod sum with 11
       const mod = sum % 11
       // STEP 5 - subtract 11 with mod, then mod 10 to get unit
       const check = (11 - mod) % 10
       // STEP 6 - if check is match the digit 13th is correct
-      if (check === parseInt(id.charAt(12))) {
+      if (check === parseInt(value.charAt(12))) {
         return true
       }
+      callback(new Error('error'))
       return false
     }
   }
