@@ -43,7 +43,8 @@ export default {
 
   moment: {
     defaultLocale: 'th',
-    locales: ['th']
+    locales: ['th'],
+    defaultTimezone: 'Asia/Bangkok'
   },
 
   // Modules: https://go.nuxtjs.dev/config-modules
