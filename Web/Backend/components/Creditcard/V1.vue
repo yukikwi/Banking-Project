@@ -5,7 +5,7 @@
         Bara Credit
       </h3>
       <h3 :class="['name']">
-        {{ (cNo == '')? 'xxxx-xxxx-xxxx-xxxx': cNo }}
+        {{ (cNo == '')? 'xxx-x-xxxxx-x': cNo }}
       </h3>
     </div>
   </div>
