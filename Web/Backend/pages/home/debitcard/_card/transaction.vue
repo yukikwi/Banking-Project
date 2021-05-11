@@ -6,10 +6,14 @@
       <div class="w-60p">
         <ChartDoughnut v-if="carddata !== null" :text="doughnuttext" :income="carddata.data.account_in" :outcome="carddata.data.account_out" />
       </div>
-      <h2 class="text-bold">Transaction</h2>
+      <h2 class="text-bold">
+        Transaction
+      </h2>
 
       <div v-for="item in date" :key="item">
-        <h3>{{ $moment(item).fromNow() }}</h3>
+        <h3>
+          {{ $moment(item).fromNow() }}
+        </h3>
         <div v-for="card_data in carddata.transaction.filter(data => data.Date.match(item))" :key="card_data.Trans_ID">
           <TransactionCardDebit :transaction-data="card_data" :card-id="$route.params.card" />
         </div>
@@ -21,6 +25,7 @@
 <script>
 export default {
   layout: 'User/homeLogin',
+  middleware: ['auth', 'isuserapprove', 'is_debitcard_exist'],
   data () {
     return ({
       carddata: null,
