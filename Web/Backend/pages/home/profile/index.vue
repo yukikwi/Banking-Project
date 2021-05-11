@@ -106,6 +106,9 @@ export default {
       this.card = carddata.data.data
       this.loading = false
     }
+    if (carddata.data.status === 404) {
+      this.loading = false
+    }
     console.log(this.loading)
   }
 }
