@@ -24,7 +24,7 @@
               {{ $route.params.card }}
             </h2>
             <h2 class="mb-0">
-              {{ carddata.data.balance }} ฿
+              {{ carddata.data.balance.toLocaleString() }} ฿
             </h2>
           </a-col>
         </a-row>

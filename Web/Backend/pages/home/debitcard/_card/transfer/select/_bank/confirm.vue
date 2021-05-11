@@ -24,7 +24,7 @@
             />
           </a-col>
           <a-col :span="17">
-            <span class="text-muted">Saving account</span>
+            <span class="text-muted">{{ carddata.data.Account_Type_Name }}</span>
             <h2 class="text-bold mb-0">
               {{ $route.params.card }}
             </h2>
@@ -54,7 +54,7 @@
             <span class="text-bold text-medium">Amount</span>
           </a-col>
           <a-col class="text-right" :span="17">
-            <span class="text-large text-bold">{{ $store.state.transaction.amount }} THB</span>
+            <span class="text-large text-bold">{{ $store.state.transaction.amount.toLocaleString() }} THB</span>
           </a-col>
         </a-row>
         <a-row>

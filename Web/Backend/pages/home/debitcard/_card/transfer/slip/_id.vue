@@ -48,7 +48,8 @@
                 </a-avatar>
               </a-col>
               <a-col :span="17">
-                <span class="text-muted">Saving account</span>
+                <span v-if="slipdata.data.User_Sender_Internal_AccountID !== null" class="text-muted">Bara Bank</span>
+                <span v-else-if="slipdata.data.User_Sender_External_AccountID !== null" class="text-muted">{{ slipdata.data.Account_Type_Name }}</span>
                 <h2 v-if="slipdata.data.User_Sender_Internal_AccountID !== null" class="text-bold mb-0">
                   {{ slipdata.data.User_Sender_Internal_AccountID }}
                 </h2>
@@ -60,7 +61,7 @@
                 </h2>
               </a-col>
             </a-row>
-            <a-row>
+            <a-row class="mt-1">
               <a-col :span="4">
                 <span class="text-bold text-medium">To</span>
               </a-col>
@@ -79,7 +80,7 @@
               </a-col>
               <a-col :span="17">
                 <span v-if="slipdata.data.User_Target_Internal_AccountID !== null" class="text-muted">Bara Bank</span>
-                <span v-else class="text-muted">{{ slipdata.data.External_BankName }}</span>
+                <span v-else-if="slipdata.data.User_Target_External_AccountID !== null" class="text-muted">{{ slipdata.data.External_BankName }}</span>
                 <h2 v-if="slipdata.data.User_Target_Internal_AccountID !== null" class="text-bold mb-0">
                   {{ slipdata.data.User_Target_Internal_AccountID }}
                 </h2>
