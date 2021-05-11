@@ -1,5 +1,5 @@
 <template>
-  <div class="card mb-1 pl-1 pr-1 rounded-m">
+  <div class="card mb-1 pl-1 pr-1 rounded-m" @click="$router.push('transfer/slip/'+transactionData['Trans_ID'])">
     <div v-if="transactionData['User_Sender_Internal_AccountID'] === cardId">
       <a-row>
         <a-col :span="12">
