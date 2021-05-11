@@ -2,17 +2,15 @@
   <div class="center">
     <h1 class="bold">Account information</h1>
     <a-Divider class="divider" />
-    <h2 class="color_blue bold m-25">O debit</h2>
-    <h4>Card Name</h4>
-    <a-Divider class="divider" />
-    <h2 class="color_blue bold m-25">Saving account</h2>
-    <h4>Account Type</h4>
-    <a-Divider class="divider" />
-    <h2 class="color_blue bold m-25">{{ (cNo == '')? 'xxxx-xxxx-xxxx-xxxx': cNo }}</h2>
-    <h4>Account ID</h4>
-    <a-Divider class="divider" />
-    <h2 class="color_blue bold m-25">882</h2>
-    <h4>CCV</h4>
+    <a-list size="small" item-layout="horizontal" :data-source="data">
+        <a-list-item slot="renderItem" slot-scope="item">
+          <a-list-item-meta
+            :description="item.description"
+          >
+            <h2 class="color_blue bold m-25" slot="title">{{ item.title }}</h2>
+          </a-list-item-meta>
+        </a-list-item>
+      </a-list>
     <a-row class="mb-1" type="flex" justify="space-between">
       <a-col :span="8">
         <h2>Enable/Disable</h2>
@@ -37,6 +35,24 @@ export default {
   },
   data () {
     return ({
+      data: [
+        {
+          description: 'Card Name',
+          title: 'O Debit'
+        },
+        {
+          description: 'Account Type',
+          title: 'Saving account'
+        },
+        {
+          description: 'Account ID',
+          title: this.cNo
+        },
+        {
+          description: 'CCV',
+          title: 882
+        }
+      ],
       creditcardNumber: this.cNo,
       expire: 'xx/xx'
     })
