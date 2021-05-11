@@ -13,10 +13,10 @@
       </a-row>
     </Header>
 
-    <DebitcardV1 rotate="landspace" size="small" :middle="false" class="center" />
+    <DebitcardV1 :c-no="card_addr" rotate="landspace" size="small" :middle="false" class="center" />
 
-    <Footer class="animated" bg-color="white">
-      <InfoCard />
+    <Footer class="animated" bg-color="white" >
+      <InfoCard :c-no="card_addr"/>
     </Footer>
   </div>
 </template>
@@ -25,15 +25,23 @@
 export default {
   layout: 'User/creditcard',
   middleware: ['auth', 'isuserapprove'],
-  transition (to, from) {
-    if (from.name === 'home-creditcard') {
-      return 'delay'
-    } else {
-      return 'page'
-    }
+  data () {
+    return ({
+      card_addr: '',
+      carddata: null
+    })
   },
-  beforeMount () {
-    this.$store.commit('animate/disable', 'cc_animate')
+  async mounted () {
+    const carddata = await this.$axios.post('api/user/debitcard/info', {
+      card_id: this.$route.params.card
+    })
+    if (carddata.data.status === 200) {
+      this.carddata = carddata.data.data
+      console.log('========== carddata =============')
+      console.log(this.carddata)
+      this.card_addr = this.carddata.Account_ID
+      console.log(this.card_addr)
+    }
   }
 }
 </script>
