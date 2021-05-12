@@ -133,7 +133,7 @@ export default {
         target_addr: this.$store.state.transaction.account_no,
         amount: this.$store.state.transaction.amount,
         note: this.$store.state.transaction.note,
-        target_bank: this.bankdata.data.id
+        target_bank: (this.mode === 'internal') ? null : this.bankdata.data.id
       })
       if (result.data.status === 200) {
         this.$router.push('/home/debitcard/' + this.$route.params.card + '/transfer/slip/' + result.data.data.insertId)
@@ -164,5 +164,8 @@ export default {
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+.pb-80px{
+  padding-bottom: 80px;
 }
 </style>
