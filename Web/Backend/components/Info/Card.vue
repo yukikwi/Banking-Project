@@ -46,14 +46,14 @@ export default {
         },
         {
           description: 'Account ID',
-          title: this.cNo
+          title: this.$route.params.card
         },
         {
           description: 'CCV',
           title: 882
         }
       ],
-      creditcardNumber: this.cNo,
+      creditcardNumber: this.$route.params.card,
       expire: 'xx/xx'
     })
   }
