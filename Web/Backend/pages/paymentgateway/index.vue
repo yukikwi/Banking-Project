@@ -4,6 +4,14 @@
     <div class="main">
       <CreditcardV1 class="card" rotate="landspace" size="normal" :shadow="true" :c-no="form.cc" />
       <a-card class="pay-container">
+        <a-alert
+          v-if="error !== false"
+          class="mt-1 mb-1"
+          message="Error"
+          :description="error"
+          type="error"
+          show-icon
+        />
         <a-form-model
           :model="form"
           class="mt-1"
@@ -72,6 +80,7 @@
           <a-button class="w-100p" html-type="submit" type="primary">
             Submit
           </a-button>
+
         </a-form-model>
       </a-card>
     </div>
@@ -113,18 +122,30 @@ export default {
         expire: '',
         price: 0
       },
-      cNo: 'xxxxxxxxxxxxxxxx'
+      cNo: 'xxxxxxxxxxxxxxxx',
+      error: false
     })
   },
   methods: {
-    handleSubmit (e) {
+    async handleSubmit (e) {
       // Prevent form action
       e.preventDefault()
       // Show loading
       this.$store.commit('trigger', 'loading')
       // Validate card
-      // Update card balance
-      // Show result
+      const validatestatus = await this.$axios.post('api/gateway/validate', {
+        cardNumber: this.form.cc,
+        expire: this.form.expire,
+        fname: this.form.fname,
+        lname: this.form.lname
+      })
+      if (validatestatus.data.status === 200) {
+        // Update card balance
+      } else {
+        // Show result
+        this.$store.commit('trigger', 'loading')
+        this.error = 'Please check your creditcard info'
+      }
     },
     cardNumber () {
       // CC format
