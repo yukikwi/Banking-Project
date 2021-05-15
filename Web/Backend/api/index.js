@@ -2,6 +2,7 @@ import express from 'express'
 const Welcome = require('./welcome')
 const User = require('./user')
 const Bank = require('./bank')
+const Gateway = require('./gateway')
 const config = require('./config')
 const app = express()
 
@@ -18,6 +19,7 @@ app.all('*', function (req, res, next) {
 app.use('/welcome', Welcome)
 app.use('/user', User)
 app.use('/bank', Bank)
+app.use('/gateway', Gateway)
 /*
 * logic for our api will go here
 */
