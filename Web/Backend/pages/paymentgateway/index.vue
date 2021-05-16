@@ -12,6 +12,14 @@
           type="error"
           show-icon
         />
+        <a-alert
+          v-if="success !== false"
+          class="mt-1 mb-1"
+          message="Success"
+          :description="success"
+          type="success"
+          show-icon
+        />
         <a-form-model
           :model="form"
           class="mt-1"
@@ -123,11 +131,15 @@ export default {
         price: 0
       },
       cNo: 'xxxxxxxxxxxxxxxx',
-      error: false
+      error: false,
+      success: false
     })
   },
   methods: {
     async handleSubmit (e) {
+      // Clean
+      this.success = false
+      this.error = false
       // Prevent form action
       e.preventDefault()
       // Show loading
@@ -140,12 +152,33 @@ export default {
         lname: this.form.lname
       })
       if (validatestatus.data.status === 200) {
-        // Update card balance
+        // Create transaction
+        const checkout = await this.$axios.post('api/gateway/pay', {
+          cardNumber: this.form.cc,
+          expire: this.form.expire,
+          fname: this.form.fname,
+          lname: this.form.lname,
+          amount: Number(this.form.price),
+          target: 0
+        })
+        if (checkout.data.status === 200) {
+          this.success = 'Transaction Success'
+        }
+        if (checkout.data.status === 403) {
+          this.error = 'Your credit is not enough'
+        }
+        if (checkout.data.status === 404) {
+          this.error = 'Please check your creditcard info'
+        }
+        if (checkout.data.status === 500) {
+          this.error = 'Database error'
+        }
+        console.log(checkout)
       } else {
         // Show result
-        this.$store.commit('trigger', 'loading')
         this.error = 'Please check your creditcard info'
       }
+      this.$store.commit('trigger', 'loading')
     },
     cardNumber () {
       // CC format
