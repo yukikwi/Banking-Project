@@ -121,9 +121,6 @@ export default {
 .text-muted{
   color: #aaa;
 }
-.pb-80px{
-  padding-bottom: 80px;
-}
 .center{
   width: fit-content;
   margin-left: auto;
