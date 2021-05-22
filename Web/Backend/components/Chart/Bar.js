@@ -1,4 +1,5 @@
 import { Bar } from 'vue-chartjs'
+import Chart from 'chart.js'
 
 export default {
   extends: Bar,
@@ -56,6 +57,13 @@ export default {
     })
   },
   mounted () {
+    Chart.pluginService.register({
+      beforeDraw (chart) {
+        const ctx = chart.chart.ctx
+        console.log(chart.chart.width)
+        ctx.clearRect(0, 0, chart.chart.width, chart.chart.height)
+      }
+    })
     this.renderChart(this.data, this.options)
     console.log(this.label)
   }

@@ -23,8 +23,8 @@ export default {
         datasets: [{
           data: [this.income, this.outcome],
           backgroundColor: [
-            'rgb(255, 99, 132)',
-            '#D4EBEC'
+            '#A40000',
+            '#26A400'
           ]
         }],
         labels: [
