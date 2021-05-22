@@ -61,6 +61,18 @@
           </a-form-item>
 
           <a-form-item
+            label="Shop"
+            :label-col="{span: 9}"
+            :wrapper-col="{span: 15}"
+          >
+            <a-select :default-value="shopList[0]" @change="setShopID" style="width: 120px" >
+              <a-select-option v-for="data in shopList" :key="data.Target_ID" :value="data.Target_ID">
+                {{ data.Target_Name }}
+              </a-select-option>
+            </a-select>
+          </a-form-item>
+
+          <a-form-item
             label="Expire"
             :label-col="{span: 9}"
             :wrapper-col="{span: 15}"
@@ -128,12 +140,22 @@ export default {
         lname: '',
         cc: '',
         expire: '',
-        price: 0
+        price: 0,
+        shop: null
       },
       cNo: 'xxxxxxxxxxxxxxxx',
       error: false,
-      success: false
+      success: false,
+      shopList: []
     })
+  },
+  async mounted () {
+    const shopList = await this.$axios.get('api/gateway/target/list')
+    if (shopList.data.status === 200) {
+      this.shopList = shopList.data.list
+    } else {
+      this.error = 'Payment gateway not found any shop'
+    }
   },
   methods: {
     async handleSubmit (e) {
@@ -153,13 +175,14 @@ export default {
       })
       if (validatestatus.data.status === 200) {
         // Create transaction
+        console.log(this.form.shop)
         const checkout = await this.$axios.post('api/gateway/pay', {
           cardNumber: this.form.cc,
           expire: this.form.expire,
           fname: this.form.fname,
           lname: this.form.lname,
           amount: Number(this.form.price),
-          target: 0
+          target: this.form.shop
         })
         if (checkout.data.status === 200) {
           this.success = 'Transaction Success'
@@ -186,6 +209,10 @@ export default {
       if (temp !== this.form.cc) {
         this.form.cc = temp
       }
+    },
+    setShopID (value) {
+      console.log(value)
+      this.form.shop = value
     }
   }
 }
