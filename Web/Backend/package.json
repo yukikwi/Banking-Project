@@ -22,6 +22,7 @@
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "nuxt": "^2.15.3",
+    "redis": "^3.1.2",
     "thai-id-validator": "^1.1.0",
     "vue-chartjs": "^3.5.1",
     "vue-class-component": "^7.2.6",

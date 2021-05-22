@@ -4,6 +4,7 @@ const db = require('../mysql.config')
 const crypto = require('crypto')
 const config = require('../config')
 const jwt = require('jsonwebtoken')
+const redisClient = require('../redis.config')
 
 //REF: https://stackoverflow.com/a/1349426
 function makeid(length) {
@@ -116,44 +117,68 @@ router.post('/login', async (req, res) => {
 
 // Get user info from token
 router.get('/me', async (req, res) => {
-    var result = {}
     console.log('/me')
-    //Split Token from Authorization header
+    // Split Token from Authorization header
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
 
-    //If not login
+    // If not login
     if (token == null) return res.sendStatus(401)
+
+    let result = {
+        status: 500,
+        comment: "internal error"
+    }
 
     await jwt.verify(token, config["jwtSecret"] , async (err, data) => {
         if (err) return res.sendStatus(403)
-        console.log(data)
-        try{
-            var db_data = await db.query('SELECT User_FName, User_LName, User_Email, User_Tel, User_Email, User_Active_Status FROM User \
-            LEFT JOIN JWT ON User.User_ID = JWT.User_ID \
-            WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ?', [data.token, data.firstname, data.lastname])
-            if(db_data.length > 0){
-                result = {
-                    status: 200,
-                    data: db_data[0]
-                }
+
+        // Cache
+        let cache_hit = false
+        if(redisClient != false){
+            result = await redisClient.get('me.'+data.token+'.'+data.firstname+'.'+data.lastname)
+            if(result){
+                cache_hit = true
+                console.log("Redis: Cache Hit")
+                res.json(JSON.parse(result))
             }
             else{
-                result = {
-                    status: 404,
-                    comment: "not found"
+                console.log("Redis: Cache Miss")
+            }
+        }
+        if (cache_hit === false) {
+            try{
+                console.log("Redis: Cache Building...")
+                var db_data = await db.query('SELECT User_FName, User_LName, User_Email, User_Tel, User_Email, User_Active_Status FROM User \
+                LEFT JOIN JWT ON User.User_ID = JWT.User_ID \
+                WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ?', [data.token, data.firstname, data.lastname])
+                if(db_data.length > 0){
+                    result = {
+                        status: 200,
+                        data: db_data[0]
+                    }
+                }
+                else{
+                    result = {
+                        status: 404,
+                        comment: "not found"
+                    }
+                }
+                if(redisClient != false){
+                    console.log("Redis: Cache Set")
+                    redisClient.setex('me.'+data.token+'.'+data.firstname+'.'+data.lastname, 5, JSON.stringify(result))
                 }
             }
-        }
-        catch(err){
-            console.log(err)
-            result = {
-                status: 500,
-                comment: "mysql error"
+            catch(err){
+                console.log(err)
+                result = {
+                    status: 500,
+                    comment: "mysql error"
+                }
             }
+            res.json(result)
         }
     })
-    res.json(result)
 })
 
 //logout
