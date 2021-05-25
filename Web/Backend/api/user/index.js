@@ -4,7 +4,8 @@ const db = require('../mysql.config')
 const crypto = require('crypto')
 const config = require('../config')
 const jwt = require('jsonwebtoken')
-const redisClient = require('../redis.config')
+const CapyCache = require('../capycache/index')
+const cache = new CapyCache()
 
 //REF: https://stackoverflow.com/a/1349426
 function makeid(length) {
@@ -134,19 +135,10 @@ router.get('/me', async (req, res) => {
         if (err) return res.sendStatus(403)
 
         // Cache
-        let cache_hit = false
-        if(redisClient != false){
-            result = await redisClient.get('me.'+data.token+'.'+data.firstname+'.'+data.lastname)
-            if(result){
-                cache_hit = true
-                console.log("Redis: Cache Hit")
-                res.json(JSON.parse(result))
-            }
-            else{
-                console.log("Redis: Cache Miss")
-            }
-        }
-        if (cache_hit === false) {
+        const getcache = await cache.get('me.'+data.token+'.'+data.firstname+'.'+data.lastname)
+        if(getcache != false){
+            res.json(getcache)
+        } else {
             try{
                 console.log("Redis: Cache Building...")
                 var db_data = await db.query('SELECT User_FName, User_LName, User_Email, User_Tel, User_Email, User_Active_Status FROM User \
@@ -164,10 +156,7 @@ router.get('/me', async (req, res) => {
                         comment: "not found"
                     }
                 }
-                if(redisClient != false){
-                    console.log("Redis: Cache Set")
-                    redisClient.setex('me.'+data.token+'.'+data.firstname+'.'+data.lastname, 5, JSON.stringify(result))
-                }
+                cache.set('me.'+data.token+'.'+data.firstname+'.'+data.lastname, 5, JSON.stringify(result))
             }
             catch(err){
                 console.log(err)
