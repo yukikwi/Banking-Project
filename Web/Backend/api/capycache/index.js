@@ -32,4 +32,11 @@ module.exports = class CapyCache {
             return false
         }
     }
+
+    async del (name){
+        if(this.redis === true){
+            await this.redis.del(name)
+        }
+        return true
+    }
 }

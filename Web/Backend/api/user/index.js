@@ -140,7 +140,6 @@ router.get('/me', async (req, res) => {
             res.json(getcache)
         } else {
             try{
-                console.log("Redis: Cache Building...")
                 var db_data = await db.query('SELECT User_FName, User_LName, User_Email, User_Tel, User_Email, User_Active_Status FROM User \
                 LEFT JOIN JWT ON User.User_ID = JWT.User_ID \
                 WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ?', [data.token, data.firstname, data.lastname])
@@ -159,7 +158,6 @@ router.get('/me', async (req, res) => {
                 cache.set('me.'+data.token+'.'+data.firstname+'.'+data.lastname, 5, JSON.stringify(result))
             }
             catch(err){
-                console.log(err)
                 result = {
                     status: 500,
                     comment: "mysql error"
@@ -265,6 +263,77 @@ router.get('/list', async (req, res) => {
         }
     })
     res.json(result)
+})
+
+router.post('/update', async (req, res) => {
+    // Split Token from Authorization header
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+
+    // If not login
+    if (token == null) return res.sendStatus(401)
+
+    let result = {
+        status: 500,
+        comment: "internal error"
+    }
+
+    await jwt.verify(token, config["jwtSecret"] , async (err, data) => {
+        if (err) return res.sendStatus(403)
+        try{
+            var db_data = ''
+            var is_exist = await db.query('SELECT User.User_ID FROM User \
+            LEFT JOIN JWT ON User.User_ID = JWT.User_ID \
+            WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ?', [data.token, data.firstname, data.lastname])
+            if(is_exist.length === 1){
+                if(req.body.User_Tel){
+                    db_data = await db.query('UPDATE User SET \
+                    User_Tel = ?\
+                    WHERE User_ID = ?', [req.body.User_Tel, is_exist[0].User_ID])
+                }
+                if(req.body.User_Email){
+                    db_data = await db.query('UPDATE User SET \
+                    User_Email = ?\
+                    WHERE User_ID = ?', [req.body.User_Email, is_exist[0].User_ID])
+                }
+
+                //Clear Old cache
+                await cache.del('me.'+data.token+'.'+data.firstname+'.'+data.lastname)
+                //Refresh data
+                db_data = await db.query('SELECT User_FName, User_LName, User_Email, User_Tel, User_Email, User_Active_Status FROM User \
+                LEFT JOIN JWT ON User.User_ID = JWT.User_ID \
+                WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ?', [data.token, data.firstname, data.lastname])
+
+
+                if(db_data.length > 0){
+                    result = {
+                        status: 200,
+                        data: db_data[0]
+                    }
+                }
+                else{
+                    result = {
+                        status: 404,
+                        comment: "not found"
+                    }
+                }
+            }
+            else{
+                result = {
+                    status: 404,
+                    comment: "not found"
+                }
+            }
+            cache.set('me.'+data.token+'.'+data.firstname+'.'+data.lastname, 5, JSON.stringify(result))
+        } catch(err) {
+            console.log(err)
+            result = {
+                status: 500,
+                comment: "mysql error"
+            }
+        }
+        res.json(result)
+    })
 })
 
 //Extends other under /user

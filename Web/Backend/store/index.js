@@ -1,8 +1,14 @@
 export const state = () => ({
-  loading: false
+  loading: false,
+  select_card: {
+    no: ''
+  }
 })
 export const mutations = {
   trigger (state, stateName) {
     state[stateName] = !state[stateName]
+  },
+  set_select_card (state, data) {
+    state.select_card[data.stateName] = data.value
   }
 }
