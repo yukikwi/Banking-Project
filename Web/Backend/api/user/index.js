@@ -18,6 +18,27 @@ function makeid(length) {
    return result.join('');
 }
 
+//BillPrice
+router.get('/billprice', async (req, res) => {
+    //Initial
+    var result = {}
+    //Duplicate check
+    var duplicate_bill_price = await db.query('SELECT Bill_Price FROM Bill WHERE Bill_ID LIKE ? ', [req.body.transaction_id])
+    if(duplicate_bill_price.length > 0){
+        result = {
+            status: true,//match
+            data : duplicate_bill_price
+        }
+    }
+    else{
+        result = {
+            status: false
+        }
+    }
+    res.json(result)
+    res.json(result)
+})
+
 //transactionID
 router.post('/tracsactionbill', async (req, res) => {
     //Initial

@@ -108,7 +108,7 @@ export default {
     }
   },
   async mounted () {
-    const carddata = await this.$axios.post('api/user/debitcard/info', {
+    const carddata = await this.$axios.post('api/user/debitcard/history', {
       card_id: this.$route.params.card
     })
     if (carddata.data.status === 200) {
@@ -122,10 +122,10 @@ export default {
     submit () {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
-          this.$store.commit('transaction/submit', this.form)
-          this.$router.push({
-            path: this.$route.path + '/reviewBill'
-          })
+          this.$store.commit('bill/submit', this.form)
+          console.log('ytyutyu', this.form)
+          console.log('bara', this.$store.state.bill)
+          this.$router.push(this.$route.path + '/reviewBill')
         } else {
           return false
         }
