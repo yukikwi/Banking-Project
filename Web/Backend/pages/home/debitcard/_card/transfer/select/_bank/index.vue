@@ -139,7 +139,7 @@ export default {
     }
   },
   async mounted () {
-    const carddata = await this.$axios.post('api/user/debitcard/info', {
+    const carddata = await this.$axios.post('api/user/debitcard/history', {
       card_id: this.$route.params.card
     })
     if (carddata.data.status === 200) {
