@@ -5,7 +5,10 @@
       <a-form-item>
         <label><span class="text-red">*</span> Email Address</label>
         <a-input
-          v-decorator="['email', { rules: [{ required: true, message: 'Please input your Email!' }] }]"
+          v-decorator="['email', { rules: [
+            { required: true, message: 'Please input your Email!' },
+            { validator: validateEmail, message: 'Please input correct Email'}
+          ] }]"
           placeholder="xxx@xxxxx.xx"
         />
       </a-form-item>
@@ -88,6 +91,21 @@ export default {
           console.log('Sth wrong')
         }
       })
+    },
+    async validateEmail (rule, value, callback) {
+      console.log(value.length)
+      const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      if (reg.test(this.value)) {
+        const res = await this.$axios.post('api/user/validateEmail', {
+          email: value
+        })
+        if (res.data.status === true) {
+          return true
+        }
+        callback(new Error('error'))
+      }
+      callback(new Error('error'))
+      return false
     },
     dateofbirth (date, dateString) {
       console.log(date, dateString)

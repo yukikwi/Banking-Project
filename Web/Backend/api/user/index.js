@@ -18,6 +18,44 @@ function makeid(length) {
    return result.join('');
 }
 
+//Validate National ID
+router.post('/validate', async (req, res) => {
+    //Initial
+    var result = {}
+    //Duplicate check
+    var duplicate_national_id = await db.query('SELECT User_ID FROM User WHERE User_NationalID LIKE ? ', [req.body.national_id])
+    if(duplicate_national_id.length > 0){
+        result = {
+            status: false
+        }
+    }
+    else{
+        result = {
+            status: true
+        }
+    }
+    res.json(result)
+})
+
+//Validate Email
+router.post('/validateEmail', async (req, res) => {
+    //Initial
+    var result = {}
+    //Duplicate check
+    var duplicate_email = await db.query('SELECT User_ID FROM User WHERE User_Email LIKE ? ', [req.body.email])
+    if(duplicate_email.length > 0){
+        result = {
+            status: false
+        }
+    }
+    else{
+        result = {
+            status: true
+        }
+    }
+    res.json(result)
+})
+
 //Register
 router.post('/signup', async (req, res) => {
     //Initial
