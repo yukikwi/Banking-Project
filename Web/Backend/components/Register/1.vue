@@ -49,7 +49,10 @@
           v-decorator="[
             'tel',
             {
-              rules: [{ required: true, message: 'Please input your mobile number!' }],
+              rules: [
+                { required: true, message: 'Please input your mobile number!' },
+                {validator: validateTel, message: 'Please input correct mobile number!'}
+              ],
               initialValue: (typeof ($store.state.register.form.tel) === 'undefined') ? '' : $store.state.register.form.tel
             }
           ]"
@@ -65,7 +68,7 @@
             {
               rules: [
                 { required: true, message: 'Please input your National ID!' },
-                {validator: validateNationalID, message: 'Please input correct National ID!'}
+                {validator: validateNationalID, message: 'This National ID already registred'}
               ],
               initialValue: (typeof ($store.state.register.form.national_id) === 'undefined') ? '' : $store.state.register.form.national_id
             }
@@ -138,21 +141,23 @@ export default {
     dateofbirth (date, dateString) {
       this.form.dob = dateString
     },
-    validateNationalID (rule, value, callback) {
-      console.log(value)
-      // STEP 1 - get only first 12 digits
-      let sum = 0
-      for (let i = 0; i < 12; i++) {
-        // STEP 2 - multiply each digit with each index (reverse)
-        // STEP 3 - sum multiply value together
-        sum = sum + (parseInt(value.charAt(i)) * (13 - i))
+    async validateNationalID (rule, value, callback) {
+      console.log(value.length)
+      if (value.length === 13) {
+        const res = await this.$axios.post('api/user/validate', {
+          national_id: value
+        })
+        if (res.data.status === true) {
+          return true
+        }
+        callback(new Error('error'))
       }
-      // STEP 4 - mod sum with 11
-      const mod = sum % 11
-      // STEP 5 - subtract 11 with mod, then mod 10 to get unit
-      const check = (11 - mod) % 10
-      // STEP 6 - if check is match the digit 13th is correct
-      if (check === parseInt(value.charAt(12))) {
+      callback(new Error('error'))
+      return false
+    },
+    validateTel (rule, value, callback) {
+      console.log(value.length)
+      if (value.length === 10) {
         return true
       }
       callback(new Error('error'))
