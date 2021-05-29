@@ -45,7 +45,7 @@ export default {
     })
   },
   async mounted () {
-    const carddata = await this.$axios.post('api/user/creditcard/info', {
+    const carddata = await this.$axios.post('api/user/creditcard/history', {
       card_id: this.$route.params.card
     })
     if (carddata.data.status === 200) {

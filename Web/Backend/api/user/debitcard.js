@@ -86,7 +86,7 @@ router.post('/exist', async (req, res) => {
     })
 })
 
-router.post('/info', async (req, res) => {
+router.post('/history', async (req, res) => {
     //Get user
     var result = {}
 

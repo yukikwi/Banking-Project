@@ -46,7 +46,7 @@ router.get('/list', async (req, res) => {
     res.json(result)
 })
 
-router.post('/info', async (req, res) => {
+router.post('/history', async (req, res) => {
     //Get user
     var result = {}
 
