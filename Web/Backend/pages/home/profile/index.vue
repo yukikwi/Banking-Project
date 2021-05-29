@@ -118,6 +118,8 @@ export default {
     })
   },
   async mounted () {
+    await this.$auth.fetchUser()
+    this.data[3].value = (this.$auth.user.User_Active_Status === '00') ? 'success' : (this.$auth.user.User_Active_Status === '01') ? 'not_upload' : (this.$auth.user.User_Active_Status === '02') ? 'wait' : (this.$auth.user.User_Active_Status === '03') ? 'fail' : 'blacklist'
     const carddata = await this.$axios.get('api/user/list')
     if (carddata.data.status === 200) {
       this.card = carddata.data.data
