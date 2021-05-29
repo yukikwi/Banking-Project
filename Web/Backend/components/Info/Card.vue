@@ -1,16 +1,20 @@
 <template>
   <div class="center">
-    <h1 class="bold">Account information</h1>
+    <h1 class="bold">
+      Account information
+    </h1>
     <a-Divider class="divider" />
     <a-list size="small" item-layout="horizontal" :data-source="data">
-        <a-list-item slot="renderItem" slot-scope="item">
-          <a-list-item-meta
-            :description="item.description"
-          >
-            <h2 class="color_blue bold m-25" slot="title">{{ item.title }}</h2>
-          </a-list-item-meta>
-        </a-list-item>
-      </a-list>
+      <a-list-item slot="renderItem" slot-scope="item">
+        <a-list-item-meta
+          :description="item.description"
+        >
+          <h2 slot="title" class="color_blue bold m-25">
+            {{ item.title }}
+          </h2>
+        </a-list-item-meta>
+      </a-list-item>
+    </a-list>
     <a-row class="mb-1" type="flex" justify="space-between">
       <a-col :span="8">
         <h2>Enable/Disable</h2>
@@ -50,6 +54,17 @@ export default {
       ]
     })
   },
+  async mounted () {
+    const res = await this.$axios.get('api/user/debitcard/accountInfo')
+    this.data[1].title = res.data.data[0].Account_Type_Name
+    this.accType = res.data.data[0].Account_Type_Name
+    const accStatus = res.data.data[0].Account_Status
+    if (accStatus === '01') {
+      this.check = true
+    } else if (accStatus === '00') {
+      this.check = false
+    }
+  },
   methods: {
     async onChange (checked) {
       this.checked = checked
@@ -61,20 +76,6 @@ export default {
         this.check = false
       }
     }
-  },
-  async mounted () {
-    const res = await this.$axios.get('api/user/debitcard/accountInfo')
-    console.log(res.data)
-    console.log('Account_Status : ', res.data.data[0].Account_Type_Name)
-    console.log('Account_Type : ', res.data.data[0].Account_Type)
-    this.accType = res.data.data[0].Account_Type_Name
-    const accStatus = res.data.data[0].Account_Status
-    if (accStatus === '01') {
-      this.check = true
-    } else if (accStatus === '00') {
-      this.check = false
-    }
-    console.log(this.accType)
   }
 }
 </script>
