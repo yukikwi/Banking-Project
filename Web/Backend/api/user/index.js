@@ -179,7 +179,7 @@ router.get('/me', async (req, res) => {
         } else {
             try{
                 var db_data = await db.query('SELECT User_FName, User_LName, User_Email, User_Tel, User_Email, User_Active_Status FROM User \
-                LEFT JOIN JWT ON User.User_ID = JWT.User_ID \
+                INNER JOIN JWT ON User.User_ID = JWT.User_ID \
                 WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ?', [data.token, data.firstname, data.lastname])
                 if(db_data.length > 0){
                     result = {
@@ -258,7 +258,7 @@ router.get('/list', async (req, res) => {
             var cc_data = await db.query('SELECT UserCreditCard.*, UserCreditCard.Card_MaxAmount - COALESCE(SUM(CreditCardHistory.CardHistory_Amount + CreditCardHistory.CardHistory_Fee),0) balance, UserCreditCard.Card_ID address FROM User \
             INNER JOIN UserCreditCard ON User.User_ID = UserCreditCard.User_ID \
             LEFT JOIN CreditCardHistory ON UserCreditCard.Card_ID = CreditCardHistory.Card_ID AND CreditCardHistory.CardHistory_Datetime LIKE ?\
-            LEFT JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? \
+            INNER JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? \
             GROUP BY UserCreditCard.Card_ID',
             [ date.getFullYear()+"-"+(('0' + (date.getMonth()+1)).slice(-2))+"%", data.token, data.firstname, data.lastname ])
             cc_data = cc_data.map(v => ({...v, type: 'credit'}))
@@ -275,7 +275,7 @@ router.get('/list', async (req, res) => {
             UserAccount.Account_ID address FROM User \
             INNER JOIN UserAccount ON User.User_ID = UserAccount.User_ID \
             LEFT JOIN TransactionsHistory ON UserAccount.Account_ID = TransactionsHistory.User_Target_Internal_AccountID OR UserAccount.Account_ID = TransactionsHistory.User_Sender_Internal_AccountID \
-            LEFT JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? GROUP BY UserAccount.Account_ID',
+            INNER JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? GROUP BY UserAccount.Account_ID',
             [data.token, data.firstname, data.lastname])
             acc_data = acc_data.map(v => ({...v, type: 'debit'}))
             // Merge
@@ -321,7 +321,7 @@ router.post('/update', async (req, res) => {
         try{
             var db_data = ''
             var is_exist = await db.query('SELECT User.User_ID FROM User \
-            LEFT JOIN JWT ON User.User_ID = JWT.User_ID \
+            INNER JOIN JWT ON User.User_ID = JWT.User_ID \
             WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ?', [data.token, data.firstname, data.lastname])
             if(is_exist.length === 1){
                 if(req.body.User_Tel){
@@ -339,7 +339,7 @@ router.post('/update', async (req, res) => {
                 await cache.del('me.'+data.token+'.'+data.firstname+'.'+data.lastname)
                 //Refresh data
                 db_data = await db.query('SELECT User_FName, User_LName, User_Email, User_Tel, User_Email, User_Active_Status FROM User \
-                LEFT JOIN JWT ON User.User_ID = JWT.User_ID \
+                INNER JOIN JWT ON User.User_ID = JWT.User_ID \
                 WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ?', [data.token, data.firstname, data.lastname])
 
 

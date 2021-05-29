@@ -20,8 +20,8 @@ router.get('/list', async (req, res) => {
         console.log(data)
         try{
             var db_data = await db.query('SELECT UserCreditCard.* FROM UserCreditCard \
-            LEFT JOIN User ON UserCreditCard.User_ID = User.User_ID \
-            LEFT JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ?',
+            INNER JOIN User ON UserCreditCard.User_ID = User.User_ID \
+            INNER JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ?',
             [data.token, data.firstname, data.lastname])
             if(db_data.length > 0){
                 result = {
@@ -47,26 +47,43 @@ router.get('/list', async (req, res) => {
 })
 
 router.post('/exist', async (req, res) => {
-    var result = {}
-    try{
-        var db_data = await db.query('SELECT * FROM UserAccount WHERE Account_ID = ?', [req.body.card_id])
-        if(db_data.length > 0){
-            result = {
-                status: true
+    // Split Token from Authorization header
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+
+    // If not login
+    if (token == null) return res.sendStatus(401)
+
+    let result = {
+        status: 500,
+        comment: "internal error"
+    }
+
+    await jwt.verify(token, config["jwtSecret"] , async (err, data) => {
+        if (err) return res.sendStatus(403)
+        try{
+            var db_data = await db.query('SELECT * FROM UserAccount \
+            INNER JOIN User ON UserAccount.User_ID = User.User_ID \
+            INNER JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserAccount.Account_ID = ?'
+            , [data.token, data.firstname, data.lastname, req.body.card_id])
+            if(db_data.length > 0){
+                result = {
+                    status: true
+                }
             }
-        }
-        else{
+            else{
+                result = {
+                    status: false
+                }
+            }
+        } catch(err) {
+            console.log(err)
             result = {
                 status: false
             }
         }
-    } catch(err) {
-        console.log(err)
-        result = {
-            status: false
-        }
-    }
-    res.json(result)
+        res.json(result)
+    })
 })
 
 router.post('/info', async (req, res) => {

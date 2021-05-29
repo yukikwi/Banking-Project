@@ -20,8 +20,8 @@ router.get('/list', async (req, res) => {
         console.log(data)
         try{
             var db_data = await db.query('SELECT UserCreditCard.* FROM UserCreditCard \
-            LEFT JOIN User ON UserCreditCard.User_ID = User.User_ID \
-            LEFT JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ?',
+            INNER JOIN User ON UserCreditCard.User_ID = User.User_ID \
+            INNER JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ?',
             [data.token, data.firstname, data.lastname])
             if(db_data.length > 0){
                 result = {
@@ -64,14 +64,14 @@ router.post('/info', async (req, res) => {
             var card_data = await db.query('SELECT UserCreditCard.*, MAX(CreditCardHistory.CardHistory_Amount) highest, MIN(CreditCardHistory.CardHistory_Amount) lowest, DATE(CardHistory_Datetime) date  FROM User \
             INNER JOIN UserCreditCard ON User.User_ID = UserCreditCard.User_ID \
             LEFT JOIN CreditCardHistory ON UserCreditCard.Card_ID = CreditCardHistory.Card_ID \
-            LEFT JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserCreditCard.Card_ID = ?',
+            INNER JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserCreditCard.Card_ID = ?',
             [data.token, data.firstname, data.lastname, req.body.card_id ])
 
             var trans_data = await db.query('SELECT CreditCardHistory.*, Target.Target_Name, DATE(CreditCardHistory.CardHistory_Datetime) date, TIME(CreditCardHistory.CardHistory_Datetime) time FROM User \
             INNER JOIN UserCreditCard ON User.User_ID = UserCreditCard.User_ID \
             LEFT JOIN CreditCardHistory ON UserCreditCard.Card_ID = CreditCardHistory.Card_ID \
             INNER JOIN Target ON CreditCardHistory.Target_ID = Target.Target_ID \
-            LEFT JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserCreditCard.Card_ID = ? ORDER BY CreditCardHistory.CardHistory_ID DESC',
+            INNER JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserCreditCard.Card_ID = ? ORDER BY CreditCardHistory.CardHistory_ID DESC',
             [data.token, data.firstname, data.lastname, req.body.card_id ])
             if(card_data.length == 1){
                 let stat = {
