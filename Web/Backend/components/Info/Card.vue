@@ -16,12 +16,9 @@
         <h2>Enable/Disable</h2>
       </a-col>
       <a-col :span="8">
-        <a-Switch defaultChecked />
+        <a-Switch :checked="checked" @change="onChange" />
       </a-col>
     </a-row>
-    <button class="thspp-button">
-      SAVE
-    </button>
   </div>
 </template>
 
@@ -47,16 +44,25 @@ export default {
         {
           description: 'Account ID',
           title: this.$route.params.card
-        },
-        {
-          description: 'CCV',
-          title: 882
         }
       ],
       creditcardNumber: this.$route.params.card,
-      expire: 'xx/xx'
+      expire: 'xx/xx',
+      checked: true
     })
+  },
+  methods: {
+    async onChange (checked) {
+      this.checked = checked
+      console.log(`a-switch to ${checked}`)
+      await this.$axios.post('api/user/debitcard/status', { checked })
+    }
   }
+  // ,
+  // async mounted () {
+  //   const res = await this.$axios.get('api/user/debitcard/info')
+  //   console.log(res)
+  // }
 }
 </script>
 
