@@ -16,7 +16,7 @@
         <h2>Enable/Disable</h2>
       </a-col>
       <a-col :span="8">
-        <a-Switch :checked="checked" @change="onChange" />
+        <a-Switch :checked="check" @change="onChange" />
       </a-col>
     </a-row>
   </div>
@@ -32,6 +32,8 @@ export default {
   },
   data () {
     return ({
+      check: true,
+      accType: 'loading',
       data: [
         {
           description: 'Card Name',
@@ -39,16 +41,13 @@ export default {
         },
         {
           description: 'Account Type',
-          title: 'Saving account'
+          title: this.accType
         },
         {
           description: 'Account ID',
           title: this.$route.params.card
         }
-      ],
-      creditcardNumber: this.$route.params.card,
-      expire: 'xx/xx',
-      checked: true
+      ]
     })
   },
   methods: {
@@ -56,13 +55,27 @@ export default {
       this.checked = checked
       console.log(`a-switch to ${checked}`)
       await this.$axios.post('api/user/debitcard/status', { checked })
+      if (checked) {
+        this.check = true
+      } else {
+        this.check = false
+      }
     }
+  },
+  async mounted () {
+    const res = await this.$axios.get('api/user/debitcard/accountInfo')
+    console.log(res.data)
+    console.log('Account_Status : ', res.data.data[0].Account_Type_Name)
+    console.log('Account_Type : ', res.data.data[0].Account_Type)
+    this.accType = res.data.data[0].Account_Type_Name
+    const accStatus = res.data.data[0].Account_Status
+    if (accStatus === '01') {
+      this.check = true
+    } else if (accStatus === '00') {
+      this.check = false
+    }
+    console.log(this.accType)
   }
-  // ,
-  // async mounted () {
-  //   const res = await this.$axios.get('api/user/debitcard/info')
-  //   console.log(res)
-  // }
 }
 </script>
 
