@@ -3,6 +3,7 @@ const Welcome = require('./welcome')
 const User = require('./user')
 const Bank = require('./bank')
 const Gateway = require('./gateway')
+const TransferDebit = require('./transfer/debit')
 const config = require('./config')
 const app = express()
 
@@ -20,6 +21,7 @@ app.use('/welcome', Welcome)
 app.use('/user', User)
 app.use('/bank', Bank)
 app.use('/gateway', Gateway)
+app.use('/transfer/debit', TransferDebit)
 /*
 * logic for our api will go here
 */

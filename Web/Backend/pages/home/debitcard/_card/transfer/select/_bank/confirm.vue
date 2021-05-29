@@ -76,9 +76,10 @@
           {{ $store.state.transaction.note }}
         </div>
 
-        <button class="mt-1 v-center thspp-button" @click="submit">
+        <button v-if="error === false" class="mt-1 v-center thspp-button" @click="submit">
           Confirm
         </button>
+        <a-alert v-else class="mt-1" message="Target account not found" type="error" show-icon />
       </div>
     </div>
   </div>
@@ -94,10 +95,18 @@ export default {
       carddata: {},
       bankdata: {},
       fee: 0,
-      mode: ''
+      mode: '',
+      error: false
     }
   },
   async mounted () {
+    if (this.$route.params.bank === 'BRB') {
+      console.log('DOGE')
+      const internalTargetExist = await this.$axios.post('api/transfer/debit/exist', {
+        card_id: this.$store.state.transaction.account_no
+      })
+      this.error = (internalTargetExist.data.status === 404)
+    }
     const carddata = await this.$axios.post('api/user/debitcard/info', {
       card_id: this.$route.params.card
     })
