@@ -11,7 +11,7 @@
           </NuxtLink>
         </a-col>
         <a-col :span="12">
-          <NuxtLink to="/home/bill">
+          <NuxtLink :to="'/home/debitcard/'+cNo+'/bill'">
             <div class="btn-rounded">
               <a-icon type="wallet" />
             </div>
