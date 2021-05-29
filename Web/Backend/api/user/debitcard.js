@@ -162,7 +162,18 @@ router.post('/transfer', async (req, res) => {
             INNER JOIN User ON UserAccount.User_ID = User.User_ID \
             INNER JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserAccount.Account_ID LIKE ?',
             [data.token, data.firstname, data.lastname, req.body.sender_addr])
-            if (validate.length > 0) {
+
+            const internal_exist = await db.query('SELECT * FROM UserAccount WHERE Account_ID = ?', [req.body.card_id])
+            let error = false
+            if(internal_exist.length === 1){
+                error = true
+            }
+            else{
+                result = {
+                    status: 500
+                }
+            }
+            if (validate.length > 0 && error === false) {
                 // To Internal
                 if (req.body.mode === 'internal') {
                     console.log('Internal transfer...')
