@@ -7,7 +7,7 @@
           <a-icon type="home" />
         </div>
         <a-row class="bordered background-white" type="flex" justify="space-between">
-          <a-col class="text-center" :span="12" :style="{ fontSize: '30px' }">
+          <a-col class="text-center" :span="12" :style="{ fontSize: '30px' }" @click="$router.push('/home/'+card_type+'/'+cNo+'/transaction')">
             <a-icon type="credit-card" />
           </a-col>
           <a-col class="text-center" :span="12" :style="{ fontSize: '30px' }" @click="$router.push('/home/profile')">
@@ -18,7 +18,19 @@
     </Footer>
   </div>
 </template>
-
+<script>
+export default {
+  computed: {
+    card_type () {
+      return this.$store.state.animate.cc_menu + 'card'
+    },
+    cNo () {
+      console.log(this.$store.state.select_card.no)
+      return this.$store.state.select_card.no
+    }
+  }
+}
+</script>
 <style scoped>
 .h-100vh{
   min-height: 100vh;

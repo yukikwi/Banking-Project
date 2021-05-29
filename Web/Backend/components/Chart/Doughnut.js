@@ -23,8 +23,8 @@ export default {
         datasets: [{
           data: [this.income, this.outcome],
           backgroundColor: [
-            'rgb(255, 99, 132)',
-            '#D4EBEC'
+            '#A40000',
+            '#26A400'
           ]
         }],
         labels: [
@@ -48,6 +48,7 @@ export default {
     this.textCenter(this.text)
     const m = new Date()
     const dateString = m.getUTCFullYear() + '-' + (m.getUTCMonth() + 1) + '-' + m.getUTCDate() + ' | ' + m.getUTCHours() + ':' + m.getUTCMinutes() + ':' + m.getUTCSeconds()
+    console.log(dateString)
     this.textCenter2(dateString)
   },
   methods: {
@@ -57,6 +58,8 @@ export default {
           const width = chart.chart.width
           const height = chart.chart.height
           const ctx = chart.chart.ctx
+          console.log(chart.chart.width)
+          ctx.clearRect(0, 0, chart.chart.width, chart.chart.height)
 
           ctx.restore()
           const fontSize = 3

@@ -79,6 +79,7 @@ export default {
       console.log('this card')
       console.log(this.card)
       this.$store.commit('animate/set', { stateName: 'cc_menu', value: this.card[this.card_index].type })
+      this.$store.commit('set_select_card', { stateName: 'no', value: this.card[this.card_index].address })
       this.balance = this.card[this.card_index].balance
       this.card_addr = this.card[this.card_index].address
       this.loading = false
@@ -99,6 +100,7 @@ export default {
     cardchange (e) {
       this.$store.commit('animate/set', { stateName: 'card_index', value: e.index })
       this.$store.commit('animate/set', { stateName: 'cc_menu', value: this.card[e.index].type })
+      this.$store.commit('set_select_card', { stateName: 'no', value: this.card[e.index].address })
       this.card_addr = this.card[e.index].address
       this.balance = this.card[e.index].balance
     }

@@ -165,7 +165,4 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
-.pb-80px{
-  padding-bottom: 80px;
-}
 </style>
