@@ -16,6 +16,11 @@
             :src="require(`~/assets/img/bank/brb.png`)"
           />
         </a-col>
+        <a-col :span="17">
+          <h2 class="text-bold mb-0">
+            {{ $route.params.card }}
+          </h2>
+        </a-col>
       </a-row>
       <a-row>
         <a-col :span="4">
