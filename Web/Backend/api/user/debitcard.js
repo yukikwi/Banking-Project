@@ -184,6 +184,7 @@ router.post('/transfer', async (req, res) => {
                         `User_Sender_External_AccountID`, \
                         `User_Target_Internal_AccountID`, \
                         `User_Target_External_AccountID`, \
+                        `User_Target_Bill_ID`, \
                         `Trans_Amount`, \
                         `Trans_Fee`, \
                         `Trans_DateTime`, \
@@ -196,6 +197,7 @@ router.post('/transfer', async (req, res) => {
                         NULL, \
                         ?, \
                         NULL, \
+                        \'notbill\', \
                         ?, \
                         ?, \
                         current_timestamp(), \
@@ -220,6 +222,7 @@ router.post('/transfer', async (req, res) => {
                         `User_Sender_External_AccountID`, \
                         `User_Target_Internal_AccountID`, \
                         `User_Target_External_AccountID`, \
+                        `User_Target_Bill_ID`, \
                         `Trans_Amount`, \
                         `Trans_Fee`, \
                         `Trans_DateTime`, \
@@ -232,6 +235,7 @@ router.post('/transfer', async (req, res) => {
                         NULL, \
                         NULL, \
                         ?, \
+                        \'notbill\', \
                         ?, \
                         ?, \
                         current_timestamp(), \
