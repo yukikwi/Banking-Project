@@ -18,6 +18,25 @@ function makeid(length) {
    return result.join('');
 }
 
+//transactionID
+router.post('/tracsactionbill', async (req, res) => {
+    //Initial
+    var result = {}
+    //Duplicate check
+    var duplicate_transaction_id = await db.query('SELECT Bill_ID FROM Bill WHERE Bill_ID LIKE ? ', [req.body.transaction_id])
+    if(duplicate_transaction_id.length > 0){
+        result = {
+            status: true//match
+        }
+    }
+    else{
+        result = {
+            status: false
+        }
+    }
+    res.json(result)
+})
+
 //Validate National ID
 router.post('/validate', async (req, res) => {
     //Initial
