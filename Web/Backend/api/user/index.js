@@ -6,6 +6,8 @@ const config = require('../config')
 const jwt = require('jsonwebtoken')
 const CapyCache = require('../capycache/index')
 const cache = new CapyCache()
+const multer = require('multer')
+const path = require('path')
 
 //REF: https://stackoverflow.com/a/1349426
 function makeid(length) {
@@ -408,6 +410,75 @@ router.post('/update', async (req, res) => {
             result = {
                 status: 500,
                 comment: "mysql error"
+            }
+        }
+        res.json(result)
+    })
+})
+
+const imageStorage = multer.diskStorage({
+    // Destination to store image
+    destination: __dirname+'/../upload/identity/',
+      filename: (req, file, cb) => {
+          cb(null, file.fieldname + '_' + Date.now()
+             + path.extname(file.originalname))
+            // file.fieldname is name of the field (image)
+            // path.extname get the uploaded file extension
+    }
+})
+
+const imageUpload = multer({
+    storage: imageStorage,
+    limits: {
+      fileSize: 20000000 // 20000000 Bytes = 20 MB
+    },
+    fileFilter(req, file, cb) {
+      if (!file.originalname.match(/\.(png|jpg)$/)) {
+         // upload only png and jpg format
+         return cb(new Error('Please upload a Image'))
+       }
+     cb(undefined, true)
+  }
+})
+
+router.post('/upload/validate', imageUpload.single('identiyFile'), async (req,res) => {
+
+    //Get user
+    var result = {}
+
+    //Split Token from Authorization header
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+
+    //If not login
+    if (token == null) return res.sendStatus(401)
+
+    await jwt.verify(token, config["jwtSecret"] , async (err, data) => {
+        if (err) return res.sendStatus(403)
+        let userid = await db.query('SELECT User.User_ID FROM User \
+        INNER JOIN JWT ON User.User_ID = JWT.User_ID \
+        WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ?', [data.token, data.firstname, data.lastname])
+        if(userid.length === 1){
+            try{
+                let status = await db.query('UPDATE User SET User_Active_Status = \'02\', User_Validate_File = ? WHERE User_ID = ?'
+                ,[req.file.filename, userid[0].User_ID])
+
+                cache.del('me.'+data.token+'.'+data.firstname+'.'+data.lastname)
+                result = {
+                    status: 200,
+                    data: status
+                }
+            }
+            catch(e){
+                console.log(e)
+                result = {
+                    status: 500
+                }
+            }
+        }
+        else {
+            result = {
+                status: 404
             }
         }
         res.json(result)
