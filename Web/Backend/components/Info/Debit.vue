@@ -49,7 +49,7 @@ export default {
     })
   },
   async mounted () {
-    const res = await this.$axios.get('api/user/debitcard/accountInfo')
+    const res = await this.$axios.get('api/user/accountInfo')
     this.data[1].title = res.data.data[0].Account_Type_Name
     this.accType = res.data.data[0].Account_Type_Name
     const accStatus = res.data.data[0].Account_Status
@@ -63,7 +63,7 @@ export default {
     async onChange (checked) {
       this.checked = checked
       console.log(`a-switch to ${checked}`)
-      await this.$axios.post('api/user/debitcard/status_debit', { checked })
+      await this.$axios.post('api/user/debitcard/status', { checked })
       if (checked) {
         this.check = true
       } else {

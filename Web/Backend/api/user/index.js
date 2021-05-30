@@ -484,6 +484,42 @@ router.post('/upload/validate', imageUpload.single('identiyFile'), async (req,re
         res.json(result)
     })
 })
+router.get('/accountInfo', async (req, res) => {
+    var result = {}
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    await jwt.verify(token, config["jwtSecret"] , async (err, data) => {
+        if (err) return res.sendStatus(403)
+        try{
+            var db_data = await db.query('SELECT UserAccount.*, AccountType.* ,User.User_FName, User.User_LName, UserCreditCard.*\
+            FROM JWT, UserAccount, AccountType, User, UserCreditCard \
+            WHERE JWT.User_ID = UserAccount.User_ID AND \
+            UserAccount.Account_Type = AccountType.Account_Type_ID AND \
+            UserAccount.User_ID = User.User_ID AND\
+            User.User_ID = UserCreditCard.User_ID AND\
+            JWT.accessToken = ?',[data.token])
+            if(db_data.length > 0){
+                result = {
+                    status: 200,
+                    data: db_data
+                }
+            }
+            else{
+                result = {
+                    status: 404,
+                    comment: "not found"
+                }
+            }
+        } catch(err) {
+            console.log(err)
+            result = {
+                status: 500,
+                comment: "mysql error"
+            }
+        }
+    })
+    res.json(result)
+})
 
 //Extends other under /user
 const creditcard = require('./creditcard.js')

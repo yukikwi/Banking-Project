@@ -151,7 +151,7 @@ export default {
     if (this.$route.params.bank !== 'BRB') {
       const bankdata = await this.$axios.get('api/bank/info/' + this.$route.params.bank)
       if (bankdata.data.status === 200) {
-        this.bankdata = bankdata.data
+        this.bankdata = bankdata.data.data
       } else {
         this.$router.replace('/home/debitcard/' + this.$route.params.card + '/transfer/select/' + this.$route.params.bank)
       }
