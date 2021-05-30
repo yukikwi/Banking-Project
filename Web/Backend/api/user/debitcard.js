@@ -385,9 +385,7 @@ router.post('/billpay', async (req, res) => {
         if (err) return res.sendStatus(403)
         try{
             console.log(req.body.sender_addr)
-            const fee_percentage = await db.query('SELECT Interest_Rate FROM UserAccount INNER JOIN AccountType ON UserAccount.Account_Type = AccountType.Account_Type_ID WHERE UserAccount.Account_ID LIKE ?', [req.body.sender_addr])
-            console.log(fee_percentage[0].Interest_Rate)
-            const fee = req.body.amount * (fee_percentage[0].Interest_Rate / 100)
+            const fee = 10
             let db_data = {}
             // Is account owner
             console.log('Validate start...')
@@ -439,7 +437,7 @@ router.post('/billpay', async (req, res) => {
                     req.body.sender_addr,
                     req.body.target_addr,
                     req.body.amount,
-                    fee,
+                    10,
                     req.body.note,
                     '00'
                 ])
