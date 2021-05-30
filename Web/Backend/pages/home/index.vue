@@ -76,7 +76,7 @@
 <script>
 export default {
   layout: 'User/homeLogin',
-  middleware: ['auth', 'isuserapprove'],
+  middleware: ['auth', 'is_member', 'isuserapprove'],
   data () {
     return ({
       card: [],
@@ -99,6 +99,12 @@ export default {
       console.log(this.card)
       this.$store.commit('animate/set', { stateName: 'cc_menu', value: this.card[this.card_index].type })
       this.$store.commit('set_select_card', { stateName: 'no', value: this.card[this.card_index].address })
+      if (this.card[this.card_index].type === 'credit') {
+        this.$store.commit('set_select_card', { stateName: 'status', value: this.card[this.card_index].Card_Status })
+      }
+      if (this.card[this.card_index].type === 'debit') {
+        this.$store.commit('set_select_card', { stateName: 'status', value: this.card[this.card_index].Account_Status })
+      }
       this.balance = this.card[this.card_index].balance
       this.card_addr = this.card[this.card_index].address
       this.loading = false

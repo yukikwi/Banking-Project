@@ -159,19 +159,38 @@ router.post('/login', async (req, res) => {
     console.log("Try to login User: "+req.body.username)
     // Get User Data from credential
     try{
-        var db_data = await db.query('SELECT User_ID, User_FName, User_LName FROM User WHERE User_Email = ? AND User_App_Password = ?', [req.body.username, hash_password])
-        if(db_data.length > 0){
-            //Create Token
-            do{
-                var token = makeid(128)
-                var is_token_exist = await db.query('SELECT accessToken FROM JWT WHERE accessToken = ? ', [token])
+        var db_member_data = await db.query('SELECT User_ID, User_FName, User_LName FROM User WHERE User_Email = ? AND User_App_Password = ?', [req.body.username, hash_password])
+        var db_staff_data = await db.query('SELECT Staff_ID, Staff_FName, Staff_LName FROM Staff WHERE Staff_ID = ? AND Staff_Password = ?', [req.body.username, hash_password])
+        if(db_member_data.length > 0 || db_staff_data.length > 0){
+            if(db_member_data.length > 0){
+                //Create Token
+                do{
+                    var token = makeid(128)
+                    var is_token_exist = await db.query('SELECT accessToken FROM JWT WHERE accessToken = ? ', [token])
+                }
+                while(is_token_exist.length != 0)
+                db.query('INSERT INTO `JWT` (`accessToken`, `User_ID`) VALUES (?, ?)', [token, db_member_data[0].User_ID])
+                var data = {
+                    firstname: db_member_data[0].User_FName,
+                    lastname: db_member_data[0].User_LName,
+                    token: token,
+                    staff: false
+                }
             }
-            while(is_token_exist.length != 0)
-            db.query('INSERT INTO `JWT` (`accessToken`, `User_ID`) VALUES (?, ?)', [token, db_data[0].User_ID])
-            var data = {
-                firstname: db_data[0].User_FName,
-                lastname: db_data[0].User_LName,
-                token: token
+            if(db_staff_data.length > 0){
+                //Create Token
+                do{
+                    var token = makeid(128)
+                    var is_token_exist = await db.query('SELECT accessToken FROM JWTAdmin WHERE accessToken = ? ', [token])
+                }
+                while(is_token_exist.length != 0)
+                db.query('INSERT INTO `JWTAdmin` (`accessToken`, `User_ID`) VALUES (?, ?)', [token, db_staff_data[0].Staff_ID])
+                var data = {
+                    firstname: db_staff_data[0].Staff_FName,
+                    lastname: db_staff_data[0].Staff_LName,
+                    token: token,
+                    staff: true
+                }
             }
             //Create JWT TOKEN
             const jwtData = jwt.sign(data, config["jwtSecret"]);
@@ -233,14 +252,26 @@ router.get('/me', async (req, res) => {
                     }
                 }
                 else{
-                    result = {
-                        status: 404,
-                        comment: "not found"
+                    db_data = await db.query('SELECT Staff_ID, Staff_FName, Staff_Lname FROM Staff \
+                    INNER JOIN JWTAdmin ON Staff.Staff_ID = JWTAdmin.User_ID \
+                    WHERE JWTAdmin.accessToken = ? AND Staff.Staff_FName = ? AND Staff.Staff_Lname = ?', [data.token, data.firstname, data.lastname])
+                    if (db_data.length > 0) {
+                        result = {
+                            status: 200,
+                            data: db_data[0],
+                            staff: true
+                        }
+                    } else {
+                        result = {
+                            status: 404,
+                            comment: "not found"
+                        }
                     }
                 }
                 cache.set('me.'+data.token+'.'+data.firstname+'.'+data.lastname, 5, JSON.stringify(result))
             }
             catch(err){
+                console.log(err)
                 result = {
                     status: 500,
                     comment: "mysql error"
@@ -315,7 +346,7 @@ router.get('/list', async (req, res) => {
             (\
                 SUM( case when (TransactionsHistory.User_Target_Internal_AccountID LIKE UserAccount.Account_ID) then TransactionsHistory.Trans_Amount else 0 end ) \
                 - \
-                SUM( case when (TransactionsHistory.User_Sender_Internal_AccountID LIKE UserAccount.Account_ID) then TransactionsHistory.Trans_Amount else 0 end ) \
+                SUM( case when (TransactionsHistory.User_Sender_Internal_AccountID LIKE UserAccount.Account_ID) then TransactionsHistory.Trans_Amount+TransactionsHistory.Trans_Fee else 0 end ) \
             ) balance, \
             UserAccount.Account_ID address FROM User \
             INNER JOIN UserAccount ON User.User_ID = UserAccount.User_ID \

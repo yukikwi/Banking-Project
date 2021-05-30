@@ -104,11 +104,11 @@ router.post('/history', async (req, res) => {
             UserAccount.*, \
             AccountType.*, \
             SUM( case when (TransactionsHistory.User_Target_Internal_AccountID LIKE UserAccount.Account_ID) then TransactionsHistory.Trans_Amount else 0 end ) account_in, \
-            SUM( case when (TransactionsHistory.User_Sender_Internal_AccountID LIKE UserAccount.Account_ID) then TransactionsHistory.Trans_Amount else 0 end ) account_out, \
+            SUM( case when (TransactionsHistory.User_Sender_Internal_AccountID LIKE UserAccount.Account_ID) then TransactionsHistory.Trans_Amount+TransactionsHistory.Trans_Fee else 0 end ) account_out, \
             (\
                 SUM( case when (TransactionsHistory.User_Target_Internal_AccountID LIKE UserAccount.Account_ID) then TransactionsHistory.Trans_Amount else 0 end ) \
                 - \
-                SUM( case when (TransactionsHistory.User_Sender_Internal_AccountID LIKE UserAccount.Account_ID) then TransactionsHistory.Trans_Amount else 0 end ) \
+                SUM( case when (TransactionsHistory.User_Sender_Internal_AccountID LIKE UserAccount.Account_ID) then TransactionsHistory.Trans_Amount+TransactionsHistory.Trans_Fee else 0 end ) \
             ) balance, \
             UserAccount.Account_ID address FROM User \
             INNER JOIN UserAccount ON User.User_ID = UserAccount.User_ID \
@@ -372,6 +372,98 @@ router.post('/status', async (req, res) => {
             }
         }
     })
+    res.json(result)
+})
+router.post('/billpay', async (req, res) => {
+    //Get Transfer result
+    var result = {}
+
+    //Split Token from Authorization header
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+
+    //If not login
+    if (token == null) return res.sendStatus(401)
+
+    await jwt.verify(token, config["jwtSecret"] , async (err, data) => {
+        if (err) return res.sendStatus(403)
+        try{
+            console.log(req.body.sender_addr)
+            const fee = 10
+            let db_data = {}
+            // Is account owner
+            console.log('Validate start...')
+            const validate = await db.query('SELECT UserAccount.Account_ID FROM UserAccount \
+            INNER JOIN User ON UserAccount.User_ID = User.User_ID \
+            INNER JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserAccount.Account_ID LIKE ?',
+            [data.token, data.firstname, data.lastname, req.body.sender_addr])
+
+            const internal_exist = await db.query('SELECT * FROM UserAccount WHERE Account_ID = ?', [req.body.card_id])
+            let error = false
+            if(internal_exist.length === 1){
+                error = true
+            }
+            else{
+                result = {
+                    status: 500
+                }
+            }
+            if (validate.length > 0 && error === false) {
+                console.log('Internal transfer...')
+                db_data = await db.query('INSERT INTO \
+                `TransactionsHistory` (\
+                    `Trans_ID`, \
+                    `User_Sender_Internal_AccountID`, \
+                    `User_Sender_External_AccountID`, \
+                    `User_Target_Internal_AccountID`, \
+                    `User_Target_External_AccountID`, \
+                    `User_Target_Bill_ID`, \
+                    `Trans_Amount`, \
+                    `Trans_Fee`, \
+                    `Trans_DateTime`, \
+                    `Trans_Note`, \
+                    `Trans_type`, \
+                    `External_BankID`\
+                ) VALUES (\
+                    NULL, \
+                    ?, \
+                    NULL, \
+                    NULL, \
+                    NULL, \
+                    ?, \
+                    ?, \
+                    ?, \
+                    current_timestamp(), \
+                    ?, \
+                    ?, \
+                    NULL \
+                );', [
+                    req.body.sender_addr,
+                    req.body.target_addr,
+                    req.body.amount,
+                    10,
+                    req.body.note,
+                    '00'
+                ])
+                result = {
+                    status: 200,
+                    data: db_data
+                }
+            }
+            else{
+                result = {
+                    status: 404
+                }
+            }
+        }
+        catch(e){
+            console.log(e)
+            result = {
+                status: 500
+            }
+        }
+    })
+
     res.json(result)
 })
 module.exports = router
