@@ -1,7 +1,7 @@
 <template>
   <div class="center">
     <h1 class="bold">
-      Account information
+      Credit cards information
     </h1>
     <a-Divider class="divider" />
     <a-list size="small" item-layout="horizontal" :data-source="data">
@@ -37,28 +37,34 @@ export default {
   data () {
     return ({
       check: true,
-      accType: 'loading',
       data: [
+        {
+          description: 'Name',
+          title: 'xxxxx xxxxx'
+        },
         {
           description: 'Card Name',
           title: 'O Debit'
         },
         {
-          description: 'Account Type',
-          title: this.accType
+          description: 'Card ID',
+          title: this.$route.params.card
         },
         {
-          description: 'Account ID',
-          title: this.$route.params.card
+          description: 'EXP Date',
+          title: 'xx/xxxx'
         }
       ]
     })
   },
   async mounted () {
     const res = await this.$axios.get('api/user/debitcard/accountInfo')
-    this.data[1].title = res.data.data[0].Account_Type_Name
-    this.accType = res.data.data[0].Account_Type_Name
-    const accStatus = res.data.data[0].Account_Status
+    console.log('accountInfo1 : ', res)
+    console.log('accountInfo2 : ', res.data.data)
+    const name = res.data.data[0].User_FName + ' ' + res.data.data[0].User_LName
+    this.data[0].title = name
+    this.data[3].title = res.data.data[0].Card_ExpireDate
+    const accStatus = res.data.data[0].Card_Status
     if (accStatus === '01') {
       this.check = true
     } else if (accStatus === '00') {
@@ -69,7 +75,7 @@ export default {
     async onChange (checked) {
       this.checked = checked
       console.log(`a-switch to ${checked}`)
-      await this.$axios.post('api/user/debitcard/status', { checked })
+      await this.$axios.post('api/user/debitcard/status_crebit', { checked })
       if (checked) {
         this.check = true
       } else {
@@ -97,9 +103,10 @@ export default {
 }
 .bold {
   font-weight: bold;
+  font-size: 23px;
 }
 .m-25 {
-  margin-bottom: -2.5%;
+  margin-bottom: -3.5%;
 }
 .divider {
   margin: 0%;

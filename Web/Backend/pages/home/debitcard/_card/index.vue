@@ -1,6 +1,6 @@
 <template>
   <div class="info-container">
-    <Header :showlogo="false" class="text-white text-large width-100p animated">
+    <Header :showlogo="false" class="text-white text-large width-100p animated mb-3">
       <a-row>
         <a-col :span="12">
           <a-icon type="left" @click.native="$router.back()" />
@@ -13,10 +13,10 @@
       </a-row>
     </Header>
 
-    <DebitcardV1 :c-no="card_addr" rotate="landspace" size="small" :middle="false" class="center" />
+    <DebitcardV1 :c-no="card_addr" rotate="landspace" size="small" :middle="false" class="center "  />
 
     <Footer class="animated" bg-color="white" >
-      <InfoCard :c-no="card_addr"/>
+      <InfoDebit />
     </Footer>
   </div>
 </template>
