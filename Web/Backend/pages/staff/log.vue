@@ -18,6 +18,7 @@
 <script>
 export default {
   layout: 'Staff/nav',
+  middleware: ['auth', 'is_staff'],
   data () {
     return {
       data: []
