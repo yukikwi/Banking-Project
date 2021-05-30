@@ -49,7 +49,9 @@ export default {
     })
   },
   async mounted () {
-    const res = await this.$axios.get('api/user/accountInfo')
+    const res = await this.$axios.post('api/user/debitcard/accountInfo', {
+      cardID: this.$route.params.card
+    })
     this.data[1].title = res.data.data[0].Account_Type_Name
     this.accType = res.data.data[0].Account_Type_Name
     const accStatus = res.data.data[0].Account_Status
