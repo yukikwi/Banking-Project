@@ -59,8 +59,6 @@ export default {
   },
   async mounted () {
     const res = await this.$axios.get('api/user/accountInfo')
-    console.log('accountInfo1 : ', res)
-    console.log('accountInfo2 : ', res.data.data)
     const name = res.data.data[0].User_FName + ' ' + res.data.data[0].User_LName
     this.data[0].title = name
     this.data[3].title = res.data.data[0].Card_ExpireDate
@@ -75,7 +73,10 @@ export default {
     async onChange (checked) {
       this.checked = checked
       console.log(`a-switch to ${checked}`)
-      await this.$axios.post('api/user/creditcard/status', { checked })
+      await this.$axios.post('api/user/creditcard/status', {
+        check: checked,
+        cardID: this.$route.params.card
+      })
       if (checked) {
         this.check = true
       } else {
