@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  middleware: ['auth', 'is_staff'],
-  layout: 'Staff/nav'
+  layout: 'Staff/nav',
+  middleware: ['auth', 'is_staff']
 }
 </script>
