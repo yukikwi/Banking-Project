@@ -85,7 +85,7 @@ export default {
     return {
       carddata: {},
       bankdata: {},
-      fee: 0,
+      fee: 10,
       mode: '',
       error: false,
       amount: null
@@ -103,11 +103,17 @@ export default {
     console.log('Amount', this.amount)
   },
   methods: {
-    submit () {
+    async submit () {
       this.$store.commit('bill/submit', { transaction_id: this.$store.state.bill.transaction_id, amount: this.amount, note: this.$store.state.bill.note })
       // console.log('ytyutyu', this.form)
       // console.log('bara', this.$store.state.bill)
-      this.$router.push('/home/debitcard/' + this.$route.params.card + '/bill/Bill_Slip')
+      const result = await this.$axios.post('api/user/debitcard/billpay', {
+        sender_addr: this.$route.params.card,
+        target_addr: this.$store.state.bill.transaction_id,
+        amount: this.$store.state.bill.amount,
+        note: this.$store.state.bill.note
+      })
+      this.$router.push('/home/debitcard/' + this.$route.params.card + '/bill/' + result.data.data.insertId)
     }
   }
 }
