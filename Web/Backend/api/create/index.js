@@ -77,13 +77,18 @@ router.post('/new', async (req, res) => {
                     (?, ?, ?, ?, ?)',
                     [accid, userid[0].User_ID, (('0' + (date.getMonth()+1)).slice(-2))+"/"+(date.getFullYear()+1), '10000.00', '01'])
                 }
+                result = {
+                    status: 200,
+                    desc: insert_result
+                }
             }
             catch(e){
                 console.log(e)
-            }
-            result = {
-                status: 200,
-                desc: insert_result
+                result = {
+                    status: 500,
+                    desc: e
+                }
+                alert('Error from server')
             }
         }
         else{

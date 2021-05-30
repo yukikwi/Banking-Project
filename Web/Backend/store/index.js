@@ -1,7 +1,8 @@
 export const state = () => ({
   loading: false,
   select_card: {
-    no: ''
+    no: '',
+    status: null
   }
 })
 export const mutations = {
