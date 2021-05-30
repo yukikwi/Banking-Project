@@ -46,7 +46,7 @@
           </a-select>
         </a-form-model-item>
 
-        <button class="mt-1 thspp-button" @click="submit">
+        <button class="mt-1 thspp-button">
           Finish
         </button>
       </a-form-model>
