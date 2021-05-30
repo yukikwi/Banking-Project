@@ -1,6 +1,7 @@
 import express from 'express'
 const Welcome = require('./welcome')
 const User = require('./user')
+const Staff = require('./staff')
 const Bank = require('./bank')
 const Gateway = require('./gateway')
 const TransferDebit = require('./transfer/debit')
@@ -20,6 +21,7 @@ app.all('*', function (req, res, next) {
 
 app.use('/welcome', Welcome)
 app.use('/user', User)
+app.use('/staff', Staff)
 app.use('/bank', Bank)
 app.use('/gateway', Gateway)
 app.use('/transfer/debit', TransferDebit)
