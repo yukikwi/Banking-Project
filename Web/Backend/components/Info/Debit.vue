@@ -17,7 +17,7 @@
     </a-list>
     <a-row class="mb-1" type="flex" justify="space-between">
       <a-col :span="8">
-        <h2>Enable/Disable</h2>
+        <h2>Disable/Enable</h2>
       </a-col>
       <a-col :span="8">
         <a-Switch :checked="check" @change="onChange" />
