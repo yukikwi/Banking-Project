@@ -144,6 +144,7 @@ export default {
         note: this.$store.state.transaction.note,
         target_bank: (this.mode === 'internal') ? null : this.bankdata.data.id
       })
+      console.log('ID', result)
       if (result.data.status === 200) {
         this.$router.push('/home/debitcard/' + this.$route.params.card + '/transfer/slip/' + result.data.data.insertId)
       } else if (result.data.status === 404) {
