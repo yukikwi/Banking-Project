@@ -21,11 +21,13 @@ function makeid(length) {
 }
 
 //BillPrice
-router.get('/billprice', async (req, res) => {
+router.post('/billprice', async (req, res) => {
     //Initial
     var result = {}
     //Duplicate check
+    console.log(req)
     var duplicate_bill_price = await db.query('SELECT Bill_Price FROM Bill WHERE Bill_ID LIKE ? ', [req.body.transaction_id])
+    console.log('billPriceBARA', duplicate_bill_price)
     if(duplicate_bill_price.length > 0){
         result = {
             status: true,//match
@@ -34,7 +36,8 @@ router.get('/billprice', async (req, res) => {
     }
     else{
         result = {
-            status: false
+            status: false,
+            data: duplicate_bill_price
         }
     }
     res.json(result)

@@ -47,7 +47,7 @@
           <span class="text-bold text-medium">Amount</span>
         </a-col>
         <a-col class="text-right" :span="17">
-          <span class="text-large text-bold">{{ amount }} THB</span>
+          <span v-if="amount !== null" class="text-large text-bold">{{ amount }} THB</span>
         </a-col>
       </a-row>
       <a-row>
@@ -89,6 +89,25 @@ export default {
       mode: '',
       error: false,
       amount: null
+    }
+  },
+  async mounted () {
+    const price = await this.$axios.post('api/user/billprice', {
+      transaction_id: this.$store.state.bill.transaction_id
+    })
+    console.log('priceBara', price)
+    console.log('statusBara', price.data.status)
+    if (price.data.status === true) {
+      this.amount = price.data.data[0].Bill_Price
+    }
+    console.log('Amount', this.amount)
+  },
+  methods: {
+    submit () {
+      this.$store.commit('bill/submit', { transaction_id: this.$store.state.bill.transaction_id, amount: this.amount, note: this.$store.state.bill.note })
+      // console.log('ytyutyu', this.form)
+      // console.log('bara', this.$store.state.bill)
+      this.$router.push('/home/debitcard/' + this.$route.params.card + '/bill/Bill_Slip')
     }
   }
 }

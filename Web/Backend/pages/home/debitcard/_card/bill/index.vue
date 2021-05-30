@@ -51,7 +51,7 @@
         >
           <a-form-model-item ref="transaction_id" label="Transaction ID" prop="transaction_id">
             <a-input
-              v-model="transaction_id"
+              v-model="form.transaction_id"
               class="bara-input"
               placeholder="Transaction ID"
               @change="bill_check"
@@ -122,7 +122,7 @@ export default {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           this.$store.commit('bill/submit', this.form)
-          // console.log('ytyutyu', this.form)
+          console.log('ytyutyu', this.form)
           // console.log('bara', this.$store.state.bill)
           this.$router.push(this.$route.path + '/reviewBill')
         } else {
@@ -131,14 +131,16 @@ export default {
       })
     },
     async bill_check (rule, value, callback) {
-      const res = await this.$axios.post('api/user/tracsactionbill', {
-        transaction_id: value
-      })
-      if (res.data.status === true) {
-        return true
+      if (this.form.transaction_id.length === 10) {
+        const res = await this.$axios.post('api/user/tracsactionbill', {
+          transaction_id: this.form.transaction_id
+        })
+        if (res.data.status === true) {
+          return true
+        }
+        callback(new Error('error'))
+        return false
       }
-      callback(new Error('error'))
-      return false
     }
   }
 }
