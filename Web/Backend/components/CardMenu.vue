@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="$store.state.select_card.status === '01'" class="mt-2">
+    <div v-if="$store.state.select_card.status === '01' || card_type === 'new'" class="mt-2">
       <transition name="slide-bottom">
         <a-row v-if="card_type === 'debit'" type="flex" justify="center" align="middle" class="text-center">
           <a-col :span="12">
@@ -67,22 +67,22 @@ export default {
       default: ''
     }
   },
-  mounted () {
-    console.log(this.$store.state.select_card)
+  computed: {
+    card_type () {
+      console.log(this.$store.state.animate.cc_menu)
+      return this.$store.state.animate.cc_menu
+    },
+    status () {
+      return this.$store.state.select_card.status
+    }
   },
   watch: {
     status () {
       console.log(status)
     }
   },
-  computed: {
-    card_type () {
-      console.log(this.$store.state.select_card)
-      return this.$store.state.animate.cc_menu
-    },
-    status () {
-      return this.$store.state.select_card.status
-    }
+  mounted () {
+    console.log(this.$store.state.select_card)
   }
 }
 </script>
