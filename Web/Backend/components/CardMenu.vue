@@ -1,47 +1,61 @@
 <template>
-  <div class="mt-2">
-    <transition name="slide-bottom">
-      <a-row v-if="card_type === 'debit'" type="flex" justify="center" align="middle" class="text-center">
-        <a-col :span="12">
-          <NuxtLink :to="'/home/debitcard/'+cNo+'/transfer/select'">
+  <div>
+    <div v-if="$store.state.select_card.status === '01'" class="mt-2">
+      <transition name="slide-bottom">
+        <a-row v-if="card_type === 'debit'" type="flex" justify="center" align="middle" class="text-center">
+          <a-col :span="12">
+            <NuxtLink :to="'/home/debitcard/'+cNo+'/transfer/select'">
+              <div class="btn-rounded">
+                <a-icon type="swap" />
+              </div>
+              <span class="text-black">Transfer</span>
+            </NuxtLink>
+          </a-col>
+          <a-col :span="12">
+            <NuxtLink :to="'/home/debitcard/'+cNo+'/bill'">
+              <div class="btn-rounded">
+                <a-icon type="wallet" />
+              </div>
+              <span class="text-black">Bill</span>
+            </NuxtLink>
+          </a-col>
+        </a-row>
+      </transition>
+      <a-row v-if="card_type !== 'new'" type="flex" justify="center" align="middle" class="text-center">
+        <a-col class="mt-2" :span="12">
+          <NuxtLink :to="(card_type === 'debit')? '/home/debitcard/'+cNo+'/transaction' : '/home/creditcard/'+cNo+'/transaction'">
             <div class="btn-rounded">
-              <a-icon type="swap" />
+              <a-icon type="file-text" />
             </div>
-            <span class="text-black">Transfer</span>
+            <span class="text-black">Transaction</span>
           </NuxtLink>
         </a-col>
-        <a-col :span="12">
-          <NuxtLink :to="'/home/debitcard/'+cNo+'/bill'">
+        <a-col class="mt-2" :span="12">
+          <NuxtLink :to="(card_type === 'debit')? '/home/debitcard/'+cNo : '/home/creditcard/'+cNo">
             <div class="btn-rounded">
-              <a-icon type="wallet" />
+              <a-icon type="setting" />
             </div>
-            <span class="text-black">Bill</span>
+            <span class="text-black">Setting</span>
           </NuxtLink>
         </a-col>
       </a-row>
-    </transition>
-    <a-row v-if="card_type !== 'new'" type="flex" justify="center" align="middle" class="text-center">
-      <a-col class="mt-2" :span="12">
-        <NuxtLink :to="(card_type === 'debit')? '/home/debitcard/'+cNo+'/transaction' : '/home/creditcard/'+cNo+'/transaction'">
-          <div class="btn-rounded">
-            <a-icon type="file-text" />
-          </div>
-          <span class="text-black">Transaction</span>
-        </NuxtLink>
-      </a-col>
-      <a-col class="mt-2" :span="12">
-        <NuxtLink :to="(card_type === 'debit')? '/home/debitcard/'+cNo : '/home/creditcard/'+cNo">
-          <div class="btn-rounded">
-            <a-icon type="setting" />
-          </div>
-          <span class="text-black">Setting</span>
-        </NuxtLink>
-      </a-col>
-    </a-row>
 
-    <button v-else class="mt-1 thspp-button" @click="$router.push('/home/createcard')">
-      Create
-    </button>
+      <button v-else class="mt-1 thspp-button" @click="$router.push('/home/createcard')">
+        Create
+      </button>
+    </div>
+    <div v-else-if="$store.state.select_card.status === '00'" class="mt-2">
+      <a-row v-if="card_type !== 'new'" type="flex" justify="center" align="middle" class="text-center">
+        <a-col class="mt-2" :span="24">
+          <NuxtLink :to="(card_type === 'debit')? '/home/debitcard/'+cNo : '/home/creditcard/'+cNo">
+            <div class="btn-rounded">
+              <a-icon type="setting" />
+            </div>
+            <span class="text-black">Setting</span>
+          </NuxtLink>
+        </a-col>
+      </a-row>
+    </div>
   </div>
 </template>
 
@@ -53,9 +67,21 @@ export default {
       default: ''
     }
   },
+  mounted () {
+    console.log(this.$store.state.select_card)
+  },
+  watch: {
+    status () {
+      console.log(status)
+    }
+  },
   computed: {
     card_type () {
+      console.log(this.$store.state.select_card)
       return this.$store.state.animate.cc_menu
+    },
+    status () {
+      return this.$store.state.select_card.status
     }
   }
 }

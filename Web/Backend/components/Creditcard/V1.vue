@@ -7,6 +7,15 @@
       <h3 :class="['name']">
         {{ (cNo == '')? 'xxx-x-xxxxx-x': cNo }}
       </h3>
+      <a-tag class="status" v-if="status === '00'" color="orange">
+        Disabled
+      </a-tag>
+      <a-tag class="status" v-if="status === '01'" color="green">
+        Enabled
+      </a-tag>
+      <a-tag class="status" v-if="status === '99'" color="red">
+        Blacklist
+      </a-tag>
     </div>
   </div>
 </template>
@@ -33,6 +42,9 @@ export default {
     shadow: {
       default: false,
       type: Boolean
+    },
+    status: {
+      type: String
     }
   },
   data () {
@@ -133,7 +145,11 @@ export default {
   animation-name:spin;
   animation-fill-mode: forwards;
 }
-
+.status{
+  position: absolute;
+  top: 0;
+  right: 20px;
+}
 @keyframes spin {
   100% {
     transform:rotate(0deg) scale(0.67,0.67) translateY(-100%) translateX(-50%);

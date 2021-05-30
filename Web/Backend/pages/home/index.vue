@@ -46,12 +46,25 @@
           @change="cardchange"
         >
           <div v-for="(item, index) in card" :key="index">
-            <DebitcardV1 v-if="item.type == 'debit'" rotate="landspace" size="auto" :middle="false" :c-no="item.address" />
-            <CreditcardV1 v-if="item.type == 'credit'" rotate="landspace" size="auto" :middle="false" :c-no="item.address" />
+            <DebitcardV1
+              v-if="item.type == 'debit'"
+              rotate="landspace"
+              size="auto"
+              :middle="false"
+              :c-no="item.address"
+              :status="item.Account_Status"
+            />
+            <CreditcardV1
+              v-if="item.type == 'credit'"
+              rotate="landspace"
+              size="auto"
+              :middle="false"
+              :c-no="item.address"
+              :status="item.Card_Status"
+            />
             <NewCard v-if="item.type == 'new'" rotate="landspace" size="auto" :middle="false" />
           </div>
         </flicking>
-
         <client-only>
           <CardMenu :c-no="card_addr" />
         </client-only>
@@ -105,6 +118,12 @@ export default {
       this.$store.commit('animate/set', { stateName: 'card_index', value: e.index })
       this.$store.commit('animate/set', { stateName: 'cc_menu', value: this.card[e.index].type })
       this.$store.commit('set_select_card', { stateName: 'no', value: this.card[e.index].address })
+      if (this.card[e.index].type === 'credit') {
+        this.$store.commit('set_select_card', { stateName: 'status', value: this.card[e.index].Card_Status })
+      }
+      if (this.card[e.index].type === 'debit') {
+        this.$store.commit('set_select_card', { stateName: 'status', value: this.card[e.index].Account_Status })
+      }
       this.card_addr = this.card[e.index].address
       this.balance = this.card[e.index].balance
     }
