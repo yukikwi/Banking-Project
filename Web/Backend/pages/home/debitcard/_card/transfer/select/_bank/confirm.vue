@@ -112,7 +112,12 @@ export default {
     })
     if (carddata.data.status === 200) {
       this.carddata = carddata.data
-      this.fee = this.$store.state.transaction.amount * (this.carddata.data.Interest_Rate / 100)
+      if (this.carddata.data.Interest_Rate === 1) {
+        this.fee = 15
+      } else {
+        this.fee = 0
+      }
+      // this.fee = this.$store.state.transaction.amount * (this.carddata.data.Interest_Rate / 100)
       this.loading = false
     } else {
       this.$router.replace('/home')
