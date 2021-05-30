@@ -1,17 +1,16 @@
 <template>
-  <div class="verticle-middle text-center">
-    <Logo size="large" class="child-center" />
-    <div class="mt-2">
-      <Nuxt />
+  <div class="vh100 background-main">
+    <div class="verticle-middle text-center">
+      <Logo size="large" class="child-center" />
+      <div class="mt-2">
+        <Nuxt />
+      </div>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  mounted () {
-    document.body.classList = ''
-    document.body.classList.add('background-main')
-  }
+<style scoped>
+.vh100{
+  min-height: 100vh;
 }
-</script>
+</style>
