@@ -111,6 +111,12 @@ export default {
       this.card.push({
         type: 'new'
       })
+    } else if (carddata.data.status === 404) {
+      this.card.push({
+        type: 'new'
+      })
+      this.$store.commit('animate/set', { stateName: 'cc_menu', value: this.card[0].type })
+      this.loading = false
     }
   },
   updated () {
