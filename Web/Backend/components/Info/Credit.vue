@@ -58,7 +58,10 @@ export default {
     })
   },
   async mounted () {
-    const res = await this.$axios.get('api/user/accountInfo')
+    const res = await this.$axios.post('api/user/creditcard/accountInfo', {
+      cardID: this.$route.params.card
+    })
+    console.log(res.data.data)
     const name = res.data.data[0].User_FName + ' ' + res.data.data[0].User_LName
     this.data[0].title = name
     this.data[3].title = res.data.data[0].Card_ExpireDate

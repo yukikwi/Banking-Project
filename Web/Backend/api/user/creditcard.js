@@ -161,5 +161,42 @@ router.post('/status', async (req, res) => {
     })
     res.json(result)
 })
+router.post('/accountInfo', async (req, res) => {
+    var result = {}
+    console.log(req.body)
+    var cardID = req.body.cardID
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    await jwt.verify(token, config["jwtSecret"] , async (err, data) => {
+        if (err) return res.sendStatus(403)
+        try{
+            var db_data = await db.query('SELECT User.User_FName, User.User_LName, UserCreditCard.*\
+            FROM JWT, User, UserCreditCard\
+            WHERE JWT.User_ID = UserCreditCard.User_ID AND\
+            UserCreditCard.Card_ID = ? AND\
+            User.User_ID = UserCreditCard.User_ID AND\
+            JWT.accessToken = ?',[cardID, data.token])
+            if(db_data.length > 0){
+                result = {
+                    status: 200,
+                    data: db_data
+                }
+            }
+            else{
+                result = {
+                    status: 404,
+                    comment: "not found"
+                }
+            }
+        } catch(err) {
+            console.log(err)
+            result = {
+                status: 500,
+                comment: "mysql error"
+            }
+        }
+    })
+    res.json(result)
+})
 
 module.exports = router
