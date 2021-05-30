@@ -1,11 +1,8 @@
 <template>
   <div :class="[($store.state.animate.cc_animate === true)? 'animated': '', middle? 'middle':'unmiddle', rotate]">
-    <div :class="['background-blue', 'cc', size, shadow? 'shadow':'']">
+    <div :class="['background-white', 'border-blue', 'cc', size, shadow? 'shadow':'']">
       <h3 class="cardName">
-        O dedit
-      </h3>
-      <h3 :class="['name']">
-        {{ (cNo == '')? 'xxxx-xxxx-xxxx-xxxx': cNo }}
+        <a-icon type="plus-circle" />
       </h3>
     </div>
   </div>
@@ -26,10 +23,6 @@ export default {
       default: true,
       type: Boolean
     },
-    cNo: {
-      default: 'xxxx-xxxx-xxxx-xxxx',
-      type: String
-    },
     shadow: {
       default: false,
       type: Boolean
@@ -45,8 +38,8 @@ export default {
 </script>
 
 <style scoped>
-.background-blue{
-  background: rgb(29,53,88);
+.border-blue{
+  border: 3px rgb(29,53,88) solid;
 }
 .cc{
   padding: 20px 20px;
@@ -94,8 +87,9 @@ export default {
   position: absolute;
   font-size: 35px;
   font-weight: 700;
-  left: 35px;
-  top: 25px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 .small .name{
   color: #fff;
@@ -109,8 +103,9 @@ export default {
   position: absolute;
   font-size: calc(35px / 1.5);
   font-weight: 700;
-  left: calc(35px / 1.5 );
-  top: calc(25px / 1.5 );
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 .auto .name{
   color: #fff;
@@ -120,12 +115,13 @@ export default {
   bottom: calc(25px / 1.5 );
 }
 .auto .cardName{
-  color: #fff;
+  color: rgb(29,53,88);
   position: absolute;
   font-size: calc(35px / 1.5);
   font-weight: 700;
-  left: calc(35px / 1.5 );
-  top: calc(25px / 1.5 );
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 .animated{
   animation-duration: 2s;

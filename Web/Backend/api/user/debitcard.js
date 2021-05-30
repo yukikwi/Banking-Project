@@ -342,46 +342,12 @@ router.post('/status', async (req, res) => {
     const token = authHeader && authHeader.split(' ')[1]
     await jwt.verify(token, config["jwtSecret"] , async (err, data) => {
         if (err) return res.sendStatus(403)
-        console.log('data :=',data)
         try{
             var db_data = await db.query('UPDATE UserAccount \
             SET Account_Status = ?\
             WHERE User_ID = (SELECT UserAccount.User_ID\
             FROM JWT, UserAccount  \
             WHERE JWT.User_ID = UserAccount.User_ID AND JWT.accessToken = ?)',[checked,data.token])
-            if(db_data.length > 0){
-                result = {
-                    status: 200,
-                    data: db_data
-                }
-            }
-            else{
-                result = {
-                    status: 404,
-                    comment: "not found"
-                }
-            }
-        } catch(err) {
-            console.log(err)
-            result = {
-                status: 500,
-                comment: "mysql error"
-            }
-        }
-    })
-    res.json(result)
-})
-router.get('/accountInfo', async (req, res) => {
-    var result = {}
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1]
-    await jwt.verify(token, config["jwtSecret"] , async (err, data) => {
-        if (err) return res.sendStatus(403)
-        console.log('data :=',data)
-        try{
-            var db_data = await db.query('SELECT UserAccount.*,AccountType.*\
-            FROM JWT, UserAccount, AccountType\
-            WHERE JWT.User_ID = UserAccount.User_ID AND UserAccount.Account_Type = AccountType.Account_Type_ID AND JWT.accessToken = ?',[data.token])
             if(db_data.length > 0){
                 result = {
                     status: 200,

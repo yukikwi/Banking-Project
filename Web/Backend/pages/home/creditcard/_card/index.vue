@@ -1,6 +1,6 @@
 <template>
   <div class="info-container">
-    <Header :showlogo="false" class="text-white text-large width-100p animated">
+    <Header :showlogo="false" class="text-white text-large width-100p animated mb-3">
       <a-row>
         <a-col :span="12">
           <a-icon type="left" @click.native="$router.back()" />
@@ -15,23 +15,8 @@
 
     <CreditcardV1 rotate="landspace" size="small" :middle="false" class="center" />
 
-    <a-row class="mt-1 animated" type="flex" justify="space-around" align="middle">
-      <a-col :span="10">
-        <button class="thspp-button-white w-100p">
-          Overview
-        </button>
-      </a-col>
-      <a-col :span="10">
-        <button class="thspp-button-white w-100p">
-          Overdue Balance
-        </button>
-      </a-col>
-    </a-row>
-
     <Footer class="animated" bg-color="white">
-      <DarkRectangle />
-      <TransactionCard />
-      <TransactionCard />
+      <InfoCredit />
     </Footer>
   </div>
 </template>

@@ -20,7 +20,7 @@
         </a-col>
       </a-row>
     </transition>
-    <a-row type="flex" justify="center" align="middle" class="text-center">
+    <a-row v-if="card_type !== 'new'" type="flex" justify="center" align="middle" class="text-center">
       <a-col class="mt-2" :span="12">
         <NuxtLink :to="(card_type === 'debit')? '/home/debitcard/'+cNo+'/transaction' : '/home/creditcard/'+cNo+'/transaction'">
           <div class="btn-rounded">
@@ -38,6 +38,10 @@
         </NuxtLink>
       </a-col>
     </a-row>
+
+    <button v-else class="mt-1 thspp-button" @click="$router.push('/home/createcard')">
+      Create
+    </button>
   </div>
 </template>
 
@@ -70,5 +74,10 @@ export default {
   text-align: center;
   margin: auto;
   color: #000;
+}
+.thspp-button{
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }
 </style>

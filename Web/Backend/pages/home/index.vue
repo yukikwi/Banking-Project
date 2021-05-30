@@ -17,11 +17,11 @@
               <a-icon slot="indicator" type="loading" style="font-size: 36px" spin />
             </a-spin>
           </div>
-          <div v-else>
+          <div v-else-if="$store.state.animate.cc_menu !== 'new'">
             {{ (balance === null)? 0 : balance.toLocaleString() }} ฿
           </div>
         </h2>
-        <span class="text-small display-block">Your balance</span>
+        <span v-if="$store.state.animate.cc_menu !== 'new'" class="text-small display-block">Your balance</span>
       </div>
     </div>
 
@@ -48,6 +48,7 @@
           <div v-for="(item, index) in card" :key="index">
             <DebitcardV1 v-if="item.type == 'debit'" rotate="landspace" size="auto" :middle="false" :c-no="item.address" />
             <CreditcardV1 v-if="item.type == 'credit'" rotate="landspace" size="auto" :middle="false" :c-no="item.address" />
+            <NewCard v-if="item.type == 'new'" rotate="landspace" size="auto" :middle="false" />
           </div>
         </flicking>
 
@@ -71,6 +72,11 @@ export default {
       card_addr: ''
     })
   },
+  computed: {
+    card_index () {
+      return this.$store.state.animate.card_index
+    }
+  },
   async mounted () {
     console.log(this.card_index)
     const carddata = await this.$axios.get('api/user/list')
@@ -83,15 +89,13 @@ export default {
       this.balance = this.card[this.card_index].balance
       this.card_addr = this.card[this.card_index].address
       this.loading = false
+      this.card.push({
+        type: 'new'
+      })
     }
   },
   updated () {
     this.$refs.cardslide.resize()
-  },
-  computed: {
-    card_index () {
-      return this.$store.state.animate.card_index
-    }
   },
   methods: {
     async logout () {

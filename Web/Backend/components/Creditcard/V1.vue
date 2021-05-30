@@ -1,5 +1,5 @@
 <template>
-  <div :class="[($store.state.animate.cc_animate === true)? 'animated': '', middle? 'middle':'unmiddle', rotate]" >
+  <div :class="[($store.state.animate.cc_animate === true)? 'animated': '', middle? 'middle':'unmiddle', rotate]">
     <div :class="['background-dark', 'cc', size, shadow? 'shadow':'']">
       <h3 class="cardName">
         Bara Credit
@@ -52,7 +52,10 @@ export default {
   padding: 20px 20px;
 }
 .middle{
-  margin-top: 30%;
+  position: relative;
+}
+.middle > div{
+  display: block;
   margin: auto;
 }
 .unmiddle{
