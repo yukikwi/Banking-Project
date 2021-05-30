@@ -4,6 +4,7 @@ const User = require('./user')
 const Bank = require('./bank')
 const Gateway = require('./gateway')
 const TransferDebit = require('./transfer/debit')
+const Create = require('./create')
 const config = require('./config')
 const app = express()
 
@@ -22,6 +23,7 @@ app.use('/user', User)
 app.use('/bank', Bank)
 app.use('/gateway', Gateway)
 app.use('/transfer/debit', TransferDebit)
+app.use('/create', Create)
 /*
 * logic for our api will go here
 */
