@@ -17,7 +17,7 @@
         </a-col>
         <a-col :span="12">
           <h2 class="money red">
-            - {{ transactionData.Trans_Amount }}
+            - {{ transactionData.Trans_Amount + transactionData.Trans_Fee }}
           </h2>
         </a-col>
       </a-row>
