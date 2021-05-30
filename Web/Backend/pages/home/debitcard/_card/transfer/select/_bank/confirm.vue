@@ -100,8 +100,9 @@ export default {
     }
   },
   async mounted () {
+    console.log('Mounted')
     if (this.$route.params.bank === 'BRB') {
-      console.log('DOGE')
+      console.log('BRB DEtected')
       const internalTargetExist = await this.$axios.post('api/transfer/debit/exist', {
         card_id: this.$store.state.transaction.account_no
       })
@@ -111,6 +112,7 @@ export default {
       card_id: this.$route.params.card
     })
     if (carddata.data.status === 200) {
+      console.log('200')
       this.carddata = carddata.data
       if (this.carddata.data.Interest_Rate === 1) {
         this.fee = 15

@@ -56,6 +56,7 @@
         </a-row>
         <a-divider class="mt-1 mb-1" />
         <a-form-model
+          v-if="loading === false"
           ref="ruleForm"
           :model="form"
           :rules="rules"
@@ -77,12 +78,13 @@
           <a-row type="flex">
             <a-col flex="20">
               <a-form-model-item ref="amount" prop="amount">
-                <a-input-number
+                <a-input
+                  type="number"
                   v-model="form.amount"
                   class="bara-input amount-input"
                   size="large"
                   :min="1"
-                  :max="carddata.data.balance"
+                  :max="max"
                 />
               </a-form-model-item>
             </a-col>
@@ -103,9 +105,11 @@
             </a-form-model-item>
           </h2>
           <a-divider class="mt-1 mb-1" />
-          <button class="mt-1 center thspp-button" @click="submit">
-            Next
-          </button>
+          <a-form-model-item>
+            <button class="mt-1 center thspp-button" html-type="submit">
+              Next
+            </button>
+          </a-form-model-item>
         </a-form-model>
       </div>
     </div>
@@ -126,6 +130,7 @@ export default {
         amount: null,
         account_no: null
       },
+      fee: 0,
       rules: {
         account_no: [
           { pattern: '^[0-9.-]*$', message: 'Account no. must be number', trigger: 'blur' },
@@ -144,6 +149,11 @@ export default {
     })
     if (carddata.data.status === 200) {
       this.carddata = carddata.data
+      if (this.carddata.data.Interest_Rate === 1) {
+        this.fee = 15
+      } else {
+        this.fee = 0
+      }
     } else {
       this.$router.replace('/home')
     }
@@ -160,6 +170,7 @@ export default {
         title: 'Bara Bank'
       }
     }
+    this.max = this.carddata.data.balance - this.fee
     this.loading = false
   },
   methods: {
