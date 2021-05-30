@@ -141,18 +141,41 @@ router.get('/age/:mode', async (req, res) => {
             if(req.params.mode === 'mean') {
                 db_data = await db.query('SELECT AVG(DATEDIFF(CURRENT_DATE, User_DOB)/365) data FROM User')
                 console.log(db_data)
+                result = {
+                    status: 200,
+                    data: db_data[0].data
+                }
             }
             if(req.params.mode === 'max') {
                 db_data = await db.query('SELECT MAX(DATEDIFF(CURRENT_DATE, User_DOB)/365) data FROM User')
                 console.log(db_data)
+                result = {
+                    status: 200,
+                    data: db_data[0].data
+                }
             }
             if(req.params.mode === 'min') {
                 db_data = await db.query('SELECT MIN(DATEDIFF(CURRENT_DATE, User_DOB)/365) data FROM User')
                 console.log(db_data)
+                result = {
+                    status: 200,
+                    data: db_data[0].data
+                }
             }
-            result = {
-                status: 200,
-                data: db_data[0].data
+            if(req.params.mode === 'summary') {
+                db_data_l20 = await db.query('SELECT COUNT(*) count FROM User WHERE DATEDIFF(CURRENT_DATE, User_DOB)/365 <= 20')
+                db_data_2140 = await db.query('SELECT COUNT(*) count FROM User WHERE DATEDIFF(CURRENT_DATE, User_DOB)/365 >= 20 AND DATEDIFF(CURRENT_DATE, User_DOB)/365 <= 40')
+                db_data_4160 = await db.query('SELECT COUNT(*) count FROM User WHERE DATEDIFF(CURRENT_DATE, User_DOB)/365 >= 41 AND DATEDIFF(CURRENT_DATE, User_DOB)/365 <= 60')
+                db_data_m61 = await db.query('SELECT COUNT(*) count FROM User WHERE DATEDIFF(CURRENT_DATE, User_DOB)/365 >= 61')
+                result = {
+                    status: 200,
+                    data: {
+                        l20: db_data_l20[0].count,
+                        f21t40: db_data_2140[0].count,
+                        f41t60: db_data_4160[0].count,
+                        m61: db_data_m61[0].count
+                    }
+                }
             }
         }
         else{
