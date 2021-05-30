@@ -158,7 +158,7 @@ router.post('/transfer', async (req, res) => {
     //Split Token from Authorization header
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
-
+    let fee = 0
     //If not login
     if (token == null) return res.sendStatus(401)
 
@@ -167,8 +167,12 @@ router.post('/transfer', async (req, res) => {
         try{
             console.log(req.body.sender_addr)
             const fee_percentage = await db.query('SELECT Interest_Rate FROM UserAccount INNER JOIN AccountType ON UserAccount.Account_Type = AccountType.Account_Type_ID WHERE UserAccount.Account_ID LIKE ?', [req.body.sender_addr])
-            console.log(fee_percentage[0].Interest_Rate)
-            const fee = req.body.amount * (fee_percentage[0].Interest_Rate / 100)
+            console.log('testbara', fee_percentage[0].Interest_Rate)
+            if (fee_percentage[0].Interest_Rate === 1) {
+                fee = 15
+            } else {
+                fee = 0
+            }
             let db_data = {}
             // Is account owner
             console.log('Validate start...')
@@ -278,7 +282,7 @@ router.post('/transfer', async (req, res) => {
             }
         }
         catch(e){
-            console.log(e)
+            console.log('log e', e)
             result = {
                 status: 500
             }
