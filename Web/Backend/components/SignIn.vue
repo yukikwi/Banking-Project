@@ -10,9 +10,9 @@
             'username',
             { rules: [{ required: true, message: 'Please input your email!' }] },
           ]"
-          placeholder="Email"
+          placeholder="Email/ID"
         >
-          <a-icon slot="prefix" type="mail" style="color: rgba(0,0,0,.25)" />
+          <a-icon slot="prefix" type="user" style="color: rgba(0,0,0,.25)" />
         </a-input>
       </a-form-item>
       <a-form-item>
@@ -70,7 +70,12 @@ export default {
           }
           const response = await this.$auth.loginWith('local', payload)
           if (response.data.status === 200) {
-            this.$router.push('/home')
+            if (response.data.staff === false) {
+              this.$router.push('/home')
+            }
+            if (response.data.staff === true) {
+              this.$router.push('/staff')
+            }
           } else if (response.data.status === 404) {
             // Wrong Credential
             this.error = 'wrong_credential'
