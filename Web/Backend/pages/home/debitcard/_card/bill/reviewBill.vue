@@ -17,6 +17,7 @@
           />
         </a-col>
         <a-col :span="17">
+          <span class="text-muted">Account No</span>
           <h2 class="text-bold mb-0">
             {{ $route.params.card }}
           </h2>
@@ -32,46 +33,46 @@
           />
         </a-col>
         <a-col :span="17">
-          <span class="text-muted">{{ bankdata.title }}</span>
+          <span class="text-muted">Transaction ID</span>
           <h2 class="text-bold mb-0">
             {{ $store.state.bill.transaction_id }}
           </h2>
         </a-col>
       </a-row>
 
-        <a-divider class="background-main" />
+      <a-divider class="background-main" />
 
-        <a-row>
-          <a-col :span="7">
-            <span class="text-bold text-medium">Amount</span>
-          </a-col>
-          <a-col class="text-right" :span="17">
-            <span class="text-large text-bold">{{ amount }} THB</span>
-          </a-col>
-        </a-row>
-        <a-row>
-          <a-col :span="7">
-            <span class="text-bold text-medium">Fee</span>
-          </a-col>
-          <a-col class="text-right" :span="17">
-            <span class="text-large text-bold">{{ fee }} THB</span>
-          </a-col>
-        </a-row>
+      <a-row>
+        <a-col :span="7">
+          <span class="text-bold text-medium">Amount</span>
+        </a-col>
+        <a-col class="text-right" :span="17">
+          <span class="text-large text-bold">{{ amount }} THB</span>
+        </a-col>
+      </a-row>
+      <a-row>
+        <a-col :span="7">
+          <span class="text-bold text-medium">Fee</span>
+        </a-col>
+        <a-col class="text-right" :span="17">
+          <span class="text-large text-bold">{{ fee }} THB</span>
+        </a-col>
+      </a-row>
 
-        <a-divider class="background-main" />
-        <a-row>
-          <a-col :span="7">
-            <span class="text-bold text-medium">Note</span>
-          </a-col>
-        </a-row>
-        <div class="note mt-1 p-1">
-          {{ $store.state.bill.note }}
-        </div>
+      <a-divider class="background-main" />
+      <a-row>
+        <a-col :span="7">
+          <span class="text-bold text-medium">Note</span>
+        </a-col>
+      </a-row>
+      <div class="note mt-1 p-1">
+        {{ $store.state.bill.note }}
+      </div>
 
-        <button v-if="error === false" class="mt-1 v-center thspp-button" @click="submit">
-          Confirm
-        </button>
-        <a-alert v-else class="mt-1" message="Target account not found" type="error" show-icon />
+      <button v-if="error === false" class="mt-1 v-center thspp-button" @click="submit">
+        Confirm
+      </button>
+      <a-alert v-else class="mt-1" message="Target account not found" type="error" show-icon />
     </div>
   </div>
 </template>

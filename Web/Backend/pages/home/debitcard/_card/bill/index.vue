@@ -51,13 +51,12 @@
         >
           <a-form-model-item ref="transaction_id" label="Transaction ID" prop="transaction_id">
             <a-input
-              v-model="form.transaction_id"
+              v-model="transaction_id"
               class="bara-input"
               placeholder="Transaction ID"
               @change="bill_check"
             />
           </a-form-model-item>
-          <a-divider class="mt-1 mb-1" />
           <a-divider class="mt-1 mb-1" />
           <h2 class="text-main mb-0">
             Note (Optional)
@@ -123,8 +122,8 @@ export default {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           this.$store.commit('bill/submit', this.form)
-          console.log('ytyutyu', this.form)
-          console.log('bara', this.$store.state.bill)
+          // console.log('ytyutyu', this.form)
+          // console.log('bara', this.$store.state.bill)
           this.$router.push(this.$route.path + '/reviewBill')
         } else {
           return false
