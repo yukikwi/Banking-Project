@@ -115,7 +115,9 @@ router.post('/history', async (req, res) => {
 })
 router.post('/status', async (req, res) => {
     var result = {}
-    var checked = req.body['checked']
+    console.log(req)
+    var checked = req.body.check
+    var cardID = req.body.cardID
     if (checked){
         checked = '01'
     }else {
@@ -127,11 +129,15 @@ router.post('/status', async (req, res) => {
     await jwt.verify(token, config["jwtSecret"] , async (err, data) => {
         if (err) return res.sendStatus(403)
         try{
+            console.log('token : ', data.token)
             var db_data = await db.query('UPDATE UserCreditCard \
-            SET Card_Status = ?\
-            WHERE User_ID = (SELECT UserAccount.User_ID\
-            FROM JWT, UserAccount  \
-            WHERE JWT.User_ID = UserAccount.User_ID AND JWT.accessToken = ?)',[checked,data.token])
+            SET Card_Status = ? \
+            WHERE Card_ID = ? AND \
+            User_ID IN \
+            (SELECT UserAccount.User_ID \
+            FROM JWT, UserAccount \
+            WHERE JWT.User_ID = UserAccount.User_ID AND JWT.accessToken = ?)',
+            [checked, cardID, data.token])
             if(db_data.length > 0){
                 result = {
                     status: 200,
@@ -141,7 +147,8 @@ router.post('/status', async (req, res) => {
             else{
                 result = {
                     status: 404,
-                    comment: "not found"
+                    comment: "not found",
+                    data: db_data
                 }
             }
         } catch(err) {

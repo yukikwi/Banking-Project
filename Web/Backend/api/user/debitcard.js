@@ -331,7 +331,8 @@ router.post('/slip', async (req, res) => {
 })
 router.post('/status', async (req, res) => {
     var result = {}
-    var checked = req.body['checked']
+    var checked = req.body.check
+    var cardID = req.body.cardID
     if (checked){
         checked = '01'
     }else {
@@ -345,9 +346,12 @@ router.post('/status', async (req, res) => {
         try{
             var db_data = await db.query('UPDATE UserAccount \
             SET Account_Status = ?\
-            WHERE User_ID = (SELECT UserAccount.User_ID\
+            WHERE Account_ID = ? AND \
+            User_ID IN \
+            (SELECT UserAccount.User_ID\
             FROM JWT, UserAccount  \
-            WHERE JWT.User_ID = UserAccount.User_ID AND JWT.accessToken = ?)',[checked,data.token])
+            WHERE JWT.User_ID = UserAccount.User_ID AND JWT.accessToken = ?)',
+            [checked,cardID,data.token])
             if(db_data.length > 0){
                 result = {
                     status: 200,

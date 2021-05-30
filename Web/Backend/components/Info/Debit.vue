@@ -63,7 +63,10 @@ export default {
     async onChange (checked) {
       this.checked = checked
       console.log(`a-switch to ${checked}`)
-      await this.$axios.post('api/user/debitcard/status', { checked })
+      await this.$axios.post('api/user/debitcard/status', {
+        check: checked,
+        cardID: this.$route.params.card
+      })
       if (checked) {
         this.check = true
       } else {
