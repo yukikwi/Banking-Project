@@ -13,9 +13,9 @@
       </a-row>
     </Header>
 
-    <DebitcardV1 :c-no="card_addr" rotate="landspace" size="small" :middle="false" class="center "  />
+    <DebitcardV1 :c-no="card_addr" rotate="landspace" size="small" :middle="false" class="center" />
 
-    <Footer class="animated" bg-color="white" >
+    <Footer class="animated" bg-color="white">
       <InfoDebit />
     </Footer>
   </div>

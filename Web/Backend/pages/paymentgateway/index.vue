@@ -65,7 +65,7 @@
             :label-col="{span: 9}"
             :wrapper-col="{span: 15}"
           >
-            <a-select :default-value="shopList[0]" @change="setShopID" style="width: 120px" >
+            <a-select :default-value="shopList[0]" style="width: 120px" @change="setShopID">
               <a-select-option v-for="data in shopList" :key="data.Target_ID" :value="data.Target_ID">
                 {{ data.Target_Name }}
               </a-select-option>
@@ -96,11 +96,9 @@
               required
             />
           </a-form-item>
-
           <a-button class="w-100p" html-type="submit" type="primary">
             Submit
           </a-button>
-
         </a-form-model>
       </a-card>
     </div>

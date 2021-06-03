@@ -22,7 +22,9 @@
       <div class="w-60p">
         <ChartBar v-if="carddata !== null" :label="carddata.stat.label" :chartdata="carddata.stat.data" />
       </div>
-      <h2 class="text-bold">Transaction</h2>
+      <h2 class="text-bold">
+        Transaction
+      </h2>
 
       <div v-for="item in date" :key="item">
         <h3>{{ $moment(item).fromNow() }}</h3>
