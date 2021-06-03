@@ -84,11 +84,11 @@ router.post('/pay', async (req, res) => {
         if(data.length == 1){
             // Found
             console.log('Card Found')
-            if ((data[0].Card_Amount === null && data[0].Card_MaxAmount >= req.body.amount) || data[0].Card_Amount >=req.body.amount) {
+            if ((data[0].Card_Amount === null && data[0].Card_MaxAmount >= (req.body.amount+30)) || data[0].Card_Amount >=(req.body.amount+30)) {
                 console.log('Credit Enough')
                 try{
-                    const amount = req.body.amount * 0.97
-                    const fee = req.body.amount * 0.03
+                    const amount = req.body.amount
+                    const fee = 30
                     console.log(amount)
                     console.log(fee)
                     const insert_result = await db.query('INSERT INTO `CreditCardHistory` (`CardHistory_ID`, `Card_ID`, `Target_ID`, `CardHistory_Amount`, `CardHistory_Datetime`, `CardHistory_Fee`) \

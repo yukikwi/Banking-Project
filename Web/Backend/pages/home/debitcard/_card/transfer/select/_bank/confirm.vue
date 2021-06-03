@@ -88,7 +88,7 @@
 <script>
 export default {
   layout: 'User/homeLogin',
-  middleware: ['auth', 'isuserapprove', 'is_debitcard_exist', 'validate_transaction'],
+  middleware: ['auth', 'is_member', 'isuserapprove', 'is_debitcard_exist', 'validate_transaction'],
   data () {
     return {
       loading: true,
@@ -100,9 +100,9 @@ export default {
     }
   },
   async mounted () {
-    console.log('Mounted')
+    // console.log('Mounted')
     if (this.$route.params.bank === 'BRB') {
-      console.log('BRB DEtected')
+      // console.log('BRB DEtected')
       const internalTargetExist = await this.$axios.post('api/transfer/debit/exist', {
         card_id: this.$store.state.transaction.account_no
       })
@@ -112,7 +112,7 @@ export default {
       card_id: this.$route.params.card
     })
     if (carddata.data.status === 200) {
-      console.log('200')
+      // console.log('200')
       this.carddata = carddata.data
       if (this.carddata.data.Interest_Rate === 1) {
         this.fee = 15
@@ -151,7 +151,7 @@ export default {
         note: this.$store.state.transaction.note,
         target_bank: (this.mode === 'internal') ? null : this.bankdata.data.id
       })
-      console.log('ID', result)
+      // console.log('ID', result)
       if (result.data.status === 200) {
         this.$router.push('/home/debitcard/' + this.$route.params.card + '/transfer/slip/' + result.data.data.insertId)
       } else if (result.data.status === 404) {

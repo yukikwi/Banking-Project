@@ -26,7 +26,7 @@ export default {
   },
   async mounted () {
     this.data = (await this.$axios.get('/api/staff/list/log')).data.data
-    console.log(this.data)
+    // console.log(this.data)
   }
 }
 </script>

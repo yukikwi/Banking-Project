@@ -87,7 +87,7 @@ export default {
             this.error = 'error_unknow'
           }
         } else {
-          console.log('Sth wrong')
+          // console.log('Sth wrong')
         }
       })
     }

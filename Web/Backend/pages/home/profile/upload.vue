@@ -34,7 +34,7 @@
 <script>
 export default {
   layout: 'User/homeLogin',
-  middleware: ['auth'],
+  middleware: ['auth', 'is_member'],
   data () {
     return ({
       url: '',

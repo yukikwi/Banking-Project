@@ -24,7 +24,7 @@
 <script>
 export default {
   layout: 'User/creditcard',
-  middleware: ['auth', 'isuserapprove'],
+  middleware: ['auth', 'is_member', 'isuserapprove', 'is_creditcard_exist'],
   transition (to, from) {
     if (from.name === 'home-creditcard') {
       return 'delay'

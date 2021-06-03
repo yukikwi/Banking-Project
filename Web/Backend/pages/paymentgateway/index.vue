@@ -111,7 +111,7 @@
 function ccformat (value) {
   let v = value.match(/\d+/g)
   if (v === null) {
-    console.log(v)
+    // console.log(v)
     return ''
   } else {
     v = v.join('')
@@ -175,7 +175,7 @@ export default {
       })
       if (validatestatus.data.status === 200) {
         // Create transaction
-        console.log(this.form.shop)
+        // console.log(this.form.shop)
         const checkout = await this.$axios.post('api/gateway/pay', {
           cardNumber: this.form.cc,
           expire: this.form.expire,
@@ -196,7 +196,7 @@ export default {
         if (checkout.data.status === 500) {
           this.error = 'Database error'
         }
-        console.log(checkout)
+        // console.log(checkout)
       } else {
         // Show result
         this.error = 'Please check your creditcard info'
@@ -211,7 +211,7 @@ export default {
       }
     },
     setShopID (value) {
-      console.log(value)
+      // console.log(value)
       this.form.shop = value
     }
   }

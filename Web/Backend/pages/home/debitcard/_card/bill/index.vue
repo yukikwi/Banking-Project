@@ -82,7 +82,7 @@
 <script>
 export default {
   layout: 'User/homeLogin',
-  middleware: ['auth', 'isuserapprove', 'is_debitcard_exist'],
+  middleware: ['auth', 'is_member', 'isuserapprove', 'is_debitcard_exist'],
   data () {
     return {
       carddata: null,
@@ -122,8 +122,8 @@ export default {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           this.$store.commit('bill/submit', this.form)
-          console.log('ytyutyu', this.form)
-          // console.log('bara', this.$store.state.bill)
+          // console.log('ytyutyu', this.form)
+          // // console.log('bara', this.$store.state.bill)
           this.$router.push(this.$route.path + '/reviewBill')
         } else {
           return false

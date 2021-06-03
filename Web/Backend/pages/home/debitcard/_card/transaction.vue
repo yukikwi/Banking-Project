@@ -25,7 +25,7 @@
 <script>
 export default {
   layout: 'User/homeLogin',
-  middleware: ['auth', 'isuserapprove', 'is_debitcard_exist'],
+  middleware: ['auth', 'is_member', 'isuserapprove', 'is_debitcard_exist'],
   data () {
     return ({
       carddata: null,
@@ -34,7 +34,7 @@ export default {
     })
   },
   async mounted () {
-    console.log(this.$route.params.card)
+    // console.log(this.$route.params.card)
     const carddata = await this.$axios.post('api/user/debitcard/history', {
       card_id: this.$route.params.card
     })
@@ -47,7 +47,7 @@ export default {
           this.date.push(item.Date)
         }
       }
-      console.log(this.date)
+      // console.log(this.date)
     }
   }
 }

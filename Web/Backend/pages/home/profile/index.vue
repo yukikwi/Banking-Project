@@ -76,7 +76,7 @@
 
 export default {
   layout: 'User/homeLogin',
-  middleware: ['auth'],
+  middleware: ['auth', 'is_member'],
   data () {
     return ({
       data: [
@@ -128,7 +128,7 @@ export default {
     if (carddata.data.status === 404) {
       this.loading = false
     }
-    console.log(this.loading)
+    // console.log(this.loading)
   },
   methods: {
     edit (value) {
@@ -136,7 +136,7 @@ export default {
       this.edit_mode = value.key
     },
     async save () {
-      console.log(this.form)
+      // console.log(this.form)
       await this.$axios.post('/api/user/update', this.form)
       this.form = {}
       this.edit_mode = null

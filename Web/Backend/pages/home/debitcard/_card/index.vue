@@ -24,7 +24,7 @@
 <script>
 export default {
   layout: 'User/creditcard',
-  middleware: ['auth', 'isuserapprove', 'is_debitcard_exist'],
+  middleware: ['auth', 'is_member', 'isuserapprove', 'is_debitcard_exist'],
   data () {
     return ({
       card_addr: '',
@@ -37,10 +37,10 @@ export default {
     })
     if (carddata.data.status === 200) {
       this.carddata = carddata.data.data
-      console.log('========== carddata =============')
-      console.log(this.carddata)
+      // console.log('========== carddata =============')
+      // console.log(this.carddata)
       this.card_addr = this.carddata.Account_ID
-      console.log(this.card_addr)
+      // console.log(this.card_addr)
     }
   }
 }

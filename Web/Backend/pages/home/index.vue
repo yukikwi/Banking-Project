@@ -91,12 +91,12 @@ export default {
     }
   },
   async mounted () {
-    console.log(this.card_index)
+    // console.log(this.card_index)
     const carddata = await this.$axios.get('api/user/list')
     if (carddata.data.status === 200) {
       this.card = carddata.data.data
-      console.log('this card')
-      console.log(this.card)
+      // console.log('this card')
+      // console.log(this.card)
       this.$store.commit('animate/set', { stateName: 'cc_menu', value: this.card[this.card_index].type })
       this.$store.commit('set_select_card', { stateName: 'no', value: this.card[this.card_index].address })
       if (this.card[this.card_index].type === 'credit') {

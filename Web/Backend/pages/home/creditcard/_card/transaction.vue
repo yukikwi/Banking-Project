@@ -37,6 +37,7 @@
 <script>
 export default {
   layout: 'User/homeLogin',
+  middleware: ['auth', 'is_member', 'isuserapprove', 'is_creditcard_exist'],
   data () {
     return ({
       carddata: null,
@@ -56,7 +57,7 @@ export default {
           this.date.push(item.date)
         }
       }
-      console.log(this.carddata)
+      // console.log(this.carddata)
     }
   }
 }

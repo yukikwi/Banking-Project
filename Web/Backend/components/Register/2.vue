@@ -48,7 +48,7 @@ export default {
   methods: {
     register (e) {
       this.alert = false
-      console.log('HOOK')
+      // console.log('HOOK')
       // Prevent form action
       e.preventDefault()
       // Validating Data
@@ -58,10 +58,10 @@ export default {
             this.alert = 'Password not match!'
           } else {
             // If pass
-            console.log('Pass')
+            // console.log('Pass')
             this.$store.commit('register/addData', values)
             // Validate here but soon
-            console.log(this.$store.state.register.form)
+            // console.log(this.$store.state.register.form)
             const res = await this.$axios.post('api/user/signup', {
               address: this.$store.state.register.form.address,
               email: this.$store.state.register.form.email,
@@ -76,7 +76,7 @@ export default {
               zipcode: this.$store.state.register.form.zipcode,
               dob: this.$store.state.register.form.dob
             })
-            console.log(res)
+            // console.log(res)
             if (res.data.status === 200) {
               alert('Register Success')
               this.$store.commit('register/clear')
@@ -88,12 +88,12 @@ export default {
             }
           }
         } else {
-          console.log('Sth wrong')
+          // console.log('Sth wrong')
         }
       })
     },
     async validateEmail (rule, value, callback) {
-      console.log(value.length)
+      // console.log(value.length)
       const res = await this.$axios.post('api/user/validateEmail', {
         email: value
       })
@@ -104,7 +104,7 @@ export default {
       return false
     },
     dateofbirth (date, dateString) {
-      console.log(date, dateString)
+      // console.log(date, dateString)
     }
   }
 }

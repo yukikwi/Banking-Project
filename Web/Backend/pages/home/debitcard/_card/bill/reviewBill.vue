@@ -80,7 +80,7 @@
 <script>
 export default {
   layout: 'User/homeLogin',
-  middleware: ['auth', 'isuserapprove', 'is_debitcard_exist'],
+  middleware: ['auth', 'is_member', 'isuserapprove', 'is_debitcard_exist'],
   data () {
     return {
       carddata: {},
@@ -95,18 +95,18 @@ export default {
     const price = await this.$axios.post('api/user/billprice', {
       transaction_id: this.$store.state.bill.transaction_id
     })
-    console.log('priceBara', price)
-    console.log('statusBara', price.data.status)
+    // console.log('priceBara', price)
+    // console.log('statusBara', price.data.status)
     if (price.data.status === true) {
       this.amount = price.data.data[0].Bill_Price
     }
-    console.log('Amount', this.amount)
+    // console.log('Amount', this.amount)
   },
   methods: {
     async submit () {
       this.$store.commit('bill/submit', { transaction_id: this.$store.state.bill.transaction_id, amount: this.amount, note: this.$store.state.bill.note })
-      // console.log('ytyutyu', this.form)
-      // console.log('bara', this.$store.state.bill)
+      // // console.log('ytyutyu', this.form)
+      // // console.log('bara', this.$store.state.bill)
       const result = await this.$axios.post('api/user/debitcard/billpay', {
         sender_addr: this.$route.params.card,
         target_addr: this.$store.state.bill.transaction_id,

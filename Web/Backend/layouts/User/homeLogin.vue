@@ -25,7 +25,7 @@ export default {
       return this.$store.state.animate.cc_menu + 'card'
     },
     cNo () {
-      console.log(this.$store.state.select_card.no)
+      // console.log(this.$store.state.select_card.no)
       return this.$store.state.select_card.no
     }
   }

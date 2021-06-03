@@ -46,6 +46,43 @@ router.get('/list', async (req, res) => {
     res.json(result)
 })
 
+router.post('/exist', async (req, res) => {
+    // Split Token from Authorization header
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    // If not login
+    if (token == null) return res.sendStatus(401)
+    let result = {
+        status: 500,
+        comment: "internal error"
+    }
+    await jwt.verify(token, config["jwtSecret"] , async (err, data) => {
+        if (err) return res.sendStatus(403)
+        try{
+            var db_data = await db.query('SELECT * FROM UserCreditCard \
+            INNER JOIN User ON UserCreditCard.User_ID = User.User_ID \
+            INNER JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserCreditCard.Card_ID = ?'
+            , [data.token, data.firstname, data.lastname, req.body.card_id])
+            if(db_data.length > 0){
+                result = {
+                    status: true
+                }
+            }
+            else{
+                result = {
+                    status: false
+                }
+            }
+        } catch(err) {
+            console.log(err)
+            result = {
+                status: false
+            }
+        }
+        res.json(result)
+    })
+})
+
 router.post('/history', async (req, res) => {
     //Get user
     var result = {}

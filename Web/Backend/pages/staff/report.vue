@@ -37,9 +37,9 @@ export default {
       f41t60: chartdata.data.data.f41t60,
       m61: chartdata.data.data.m61
     }
-    console.log(mean)
-    console.log(min)
-    console.log(max)
+    // console.log(mean)
+    // console.log(min)
+    // console.log(max)
     this.data = [
       {
         mode: 'Mean',

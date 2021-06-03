@@ -125,7 +125,7 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           // If pass
-          console.log('Pass')
+          // console.log('Pass')
           values.datebirth = this.dob
           values.subdistrict = this.subdistrict
           values.district = this.district
@@ -134,7 +134,7 @@ export default {
           this.$store.commit('register/addData', values)
           this.$router.push('/register/2')
         } else {
-          console.log('Sth wrong')
+          // console.log('Sth wrong')
         }
       })
     },
@@ -142,7 +142,7 @@ export default {
       this.form.dob = dateString
     },
     async validateNationalID (rule, value, callback) {
-      console.log(value.length)
+      // console.log(value.length)
       if (value.length === 13) {
         const res = await this.$axios.post('api/user/validate', {
           national_id: value
@@ -156,7 +156,7 @@ export default {
       return false
     },
     validateTel (rule, value, callback) {
-      console.log(value.length)
+      // console.log(value.length)
       if (value.length === 10) {
         return true
       }

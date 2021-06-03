@@ -69,7 +69,7 @@ export default {
   },
   computed: {
     card_type () {
-      console.log(this.$store.state.animate.cc_menu)
+      // console.log(this.$store.state.animate.cc_menu)
       return this.$store.state.animate.cc_menu
     },
     status () {
@@ -78,11 +78,11 @@ export default {
   },
   watch: {
     status () {
-      console.log(status)
+      // console.log(status)
     }
   },
   mounted () {
-    console.log(this.$store.state.select_card)
+    // console.log(this.$store.state.select_card)
   }
 }
 </script>

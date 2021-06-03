@@ -124,7 +124,7 @@
 <script>
 export default {
   layout: 'User/creditcard',
-  middleware: ['auth', 'isuserapprove', 'is_debitcard_exist'],
+  middleware: ['auth', 'is_member', 'isuserapprove', 'is_debitcard_exist'],
   data () {
     return {
       slipdata: {},

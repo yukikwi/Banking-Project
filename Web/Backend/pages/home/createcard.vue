@@ -57,6 +57,7 @@
 <script>
 export default {
   layout: 'User/homeLogin',
+  middleware: ['auth', 'is_member', 'isuserapprove'],
   data () {
     return {
       form: {

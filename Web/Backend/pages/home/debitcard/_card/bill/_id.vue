@@ -86,6 +86,7 @@
 <script>
 export default {
   layout: 'User/creditcard',
+  middleware: ['auth', 'is_member', 'isuserapprove', 'is_debitcard_exist'],
   data () {
     return {
       slipdata: {},

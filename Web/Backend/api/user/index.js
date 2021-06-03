@@ -41,7 +41,6 @@ router.post('/billprice', async (req, res) => {
         }
     }
     res.json(result)
-    res.json(result)
 })
 
 //transactionID
