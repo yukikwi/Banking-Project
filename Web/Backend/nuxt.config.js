@@ -22,13 +22,18 @@ export default {
   plugins: [
     '@/plugins/antd-ui',
     '@/plugins/vue-thailand-address',
-    '@/plugins/vue-carousel'
+    '@/plugins/vue-carousel',
+    '@/plugins/axios-host.js'
   ],
 
   //Middleware
   serverMiddleware: [
     '~/api/index.js'
   ],
+
+  server: {
+    host: '0.0.0.0'
+  },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
