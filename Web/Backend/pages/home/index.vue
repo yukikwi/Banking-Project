@@ -82,7 +82,9 @@ export default {
       card: [],
       loading: true,
       balance: 0,
-      card_addr: ''
+      card_addr: '',
+      ismobile: false,
+      doresize: false
     })
   },
   computed: {
@@ -90,8 +92,22 @@ export default {
       return this.$store.state.animate.card_index
     }
   },
+  watch: {
+    doresize: {
+      handler () {
+        this.isMobile()
+      }
+    }
+  },
   async mounted () {
-    // console.log(this.card_index)
+    window.addEventListener('resize', () => {
+      this.doresize = !this.doresize
+    })
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      this.ismobile = true
+    } else {
+      this.ismobile = false
+    }
     const carddata = await this.$axios.get('api/user/list')
     if (carddata.data.status === 200) {
       this.card = carddata.data.data
@@ -122,6 +138,11 @@ export default {
   updated () {
     this.$refs.cardslide.resize()
   },
+  unmounted () {
+    window.removeEventListener('resize', () => {
+      this.doresize = !this.doresize
+    })
+  },
   methods: {
     async logout () {
       await this.$auth.logout()
@@ -138,6 +159,15 @@ export default {
       }
       this.card_addr = this.card[e.index].address
       this.balance = this.card[e.index].balance
+    },
+    isMobile () {
+      if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        if (this.ismobile === false) {
+          this.$router.go(this.$router.currentRoute)
+        }
+      } else if (this.ismobile === true) {
+        this.$router.go(this.$router.currentRoute)
+      }
     }
   }
 }
