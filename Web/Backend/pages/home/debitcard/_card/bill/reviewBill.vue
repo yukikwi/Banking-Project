@@ -72,7 +72,7 @@
       <button v-if="error === false" class="mt-1 v-center thspp-button" @click="submit">
         Confirm
       </button>
-      <a-alert v-else class="mt-1" message="Target account not found" type="error" show-icon />
+      <a-alert v-else class="mt-1" message="Not Enough Money!!" type="error" show-icon />
     </div>
   </div>
 </template>
@@ -95,10 +95,16 @@ export default {
     const price = await this.$axios.post('api/user/billprice', {
       transaction_id: this.$store.state.bill.transaction_id
     })
-    // console.log('priceBara', price)
+    const debitdata = await this.$axios.post('api/user/debitcard/history', {
+      card_id: this.$route.params.card
+    })
+    console.log('debitBara', debitdata.data.data.balance)
     // console.log('statusBara', price.data.status)
     if (price.data.status === true) {
       this.amount = price.data.data[0].Bill_Price
+      if (price.data.data[0].Bill_Price + this.fee > debitdata.data.data.balance) {
+        this.error = true
+      }
     }
     // console.log('Amount', this.amount)
   },
