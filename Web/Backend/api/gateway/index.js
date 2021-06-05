@@ -38,7 +38,7 @@ router.post('/validate', async (req, res) => {
 router.get('/target/list', async (req, res) => {
     let result = {}
     try{
-        const data = await db.query('SELECT Target_ID, Target_Name FROM Target')
+        const data = await db.query('SELECT Target_ID, Target_Name FROM Target WHERE Target_ID != 0')
         if(data.length > 0){
             result = {
                 status: 200,
