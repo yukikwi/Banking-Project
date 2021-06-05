@@ -135,7 +135,8 @@ export default {
         account_no: [
           { pattern: '^[0-9.-]*$', message: 'Account no. must be number', trigger: 'blur' },
           { required: true, message: 'Please input target account no.', trigger: 'blur' },
-          { min: 13, max: 13, message: 'Length should be 10', trigger: 'blur' }
+          { min: 13, max: 13, message: 'Length should be 10', trigger: 'blur' },
+          { validator: this.validateAccount, message: 'Cannot transfer to sender account', trigger: 'blur' }
         ],
         amount: [
           { required: true, message: 'Please input target account no.', trigger: 'blur' }
@@ -188,6 +189,13 @@ export default {
     },
     account_no () {
       this.form.account_no = this.form.account_no.replace(/(\d{3})(\d{1})(\d{5})(\d{1})/, '$1-$2-$3-$4')
+    },
+    validateAccount (rule, value, callback) {
+      if (value !== this.carddata.data.Account_ID || this.$route.params.bank !== 'BRB') {
+        return true
+      }
+      callback(new Error('error'))
+      return false
     }
   }
 }

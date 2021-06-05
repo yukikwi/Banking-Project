@@ -9,6 +9,9 @@
           <h2 v-else-if="transactionData['User_Target_Internal_AccountID'] !== null">
             {{ transactionData['User_Target_Internal_AccountID'] }}
           </h2>
+          <h2 v-else-if="transactionData['User_Target_Bill_ID'] !== null">
+            Bill {{ transactionData['User_Target_Bill_ID'] }}
+          </h2>
           <h2 v-else>
             Unknow
           </h2>

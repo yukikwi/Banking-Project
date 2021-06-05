@@ -49,7 +49,7 @@
           @submit="submit"
           @submit.native.prevent
         >
-          <a-form-model-item ref="transaction_id" label="Transaction ID" prop="transaction_id">
+          <a-form-model-item ref="transaction_id" label="Bill ID" prop="transaction_id">
             <a-input
               v-model="form.transaction_id"
               class="bara-input"

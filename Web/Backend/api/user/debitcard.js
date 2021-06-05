@@ -167,7 +167,6 @@ router.post('/transfer', async (req, res) => {
         try{
             console.log(req.body.sender_addr)
             const fee_percentage = await db.query('SELECT Interest_Rate FROM UserAccount INNER JOIN AccountType ON UserAccount.Account_Type = AccountType.Account_Type_ID WHERE UserAccount.Account_ID LIKE ?', [req.body.sender_addr])
-            console.log('testbara', fee_percentage[0].Interest_Rate)
             if (fee_percentage[0].Interest_Rate === 1) {
                 fee = 15
             } else {
@@ -181,14 +180,16 @@ router.post('/transfer', async (req, res) => {
             INNER JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserAccount.Account_ID LIKE ?',
             [data.token, data.firstname, data.lastname, req.body.sender_addr])
 
-            const internal_exist = await db.query('SELECT * FROM UserAccount WHERE Account_ID = ?', [req.body.card_id])
+            const internal_exist = await db.query('SELECT * FROM UserAccount WHERE Account_ID = ?', [req.body.target_addr])
             let error = false
             if(internal_exist.length === 1){
-                error = true
+                if (req.body.mode === 'internal' && req.body.sender_addr === req.body.target_addr) {
+                    error = true
+                }
             }
             else{
-                result = {
-                    status: 500
+                if (req.body.mode === 'internal'){
+                    error = true
                 }
             }
             if (validate.length > 0 && error === false) {
@@ -305,12 +306,13 @@ router.post('/slip', async (req, res) => {
 
     await jwt.verify(token, config["jwtSecret"] , async (err, data) => {
         try{
-            const db_data = await db.query('SELECT TransactionsHistory.*, ExternalBank.* FROM TransactionsHistory \
-            LEFT JOIN UserAccount ON TransactionsHistory.User_Sender_Internal_AccountID = UserAccount.Account_ID  OR TransactionsHistory.User_Target_Internal_AccountID = UserAccount.Account_ID \
+            const db_data = await db.query('SELECT DISTINCT TransactionsHistory.*, ExternalBank.* FROM TransactionsHistory \
+            INNER JOIN UserAccount ON TransactionsHistory.User_Sender_Internal_AccountID = UserAccount.Account_ID  OR TransactionsHistory.User_Target_Internal_AccountID = UserAccount.Account_ID \
             LEFT JOIN ExternalBank ON TransactionsHistory.External_BankID = ExternalBank.External_BankID \
             INNER JOIN User ON UserAccount.User_ID = User.User_ID \
             INNER JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND TransactionsHistory.Trans_ID = ?',
             [data.token, data.firstname, data.lastname, req.body.transaction])
+            console.log(db_data)
             if(db_data.length == 1){
                 result = {
                     status: 200,
