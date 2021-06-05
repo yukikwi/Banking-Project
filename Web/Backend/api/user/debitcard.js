@@ -125,7 +125,7 @@ router.post('/history', async (req, res) => {
                 TIME(TransactionsHistory.Trans_DateTime) Time \
                 FROM User \
                 INNER JOIN UserAccount ON User.User_ID = UserAccount.User_ID \
-                LEFT JOIN TransactionsHistory ON UserAccount.Account_ID = TransactionsHistory.User_Target_Internal_AccountID OR UserAccount.Account_ID = TransactionsHistory.User_Sender_Internal_AccountID \
+                INNER JOIN TransactionsHistory ON UserAccount.Account_ID = TransactionsHistory.User_Target_Internal_AccountID OR UserAccount.Account_ID = TransactionsHistory.User_Sender_Internal_AccountID \
                 INNER JOIN JWT ON User.User_ID = JWT.User_ID WHERE JWT.accessToken = ? AND User.User_FName = ? AND User.User_LName = ? AND UserAccount.Account_ID = ? ORDER BY TransactionsHistory.Trans_ID DESC',
                 [data.token, data.firstname, data.lastname, req.body.card_id])
                 result = {
