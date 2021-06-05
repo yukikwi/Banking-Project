@@ -93,6 +93,9 @@ export default {
   async mounted () {
     // console.log(this.card_index)
     const carddata = await this.$axios.get('api/user/list')
+    this.card.push({
+      type: 'new'
+    })
     if (carddata.data.status === 200) {
       this.card = carddata.data.data
       // console.log('this card')
@@ -108,13 +111,7 @@ export default {
       this.balance = this.card[this.card_index].balance
       this.card_addr = this.card[this.card_index].address
       this.loading = false
-      this.card.push({
-        type: 'new'
-      })
     } else if (carddata.data.status === 404) {
-      this.card.push({
-        type: 'new'
-      })
       this.$store.commit('animate/set', { stateName: 'cc_menu', value: this.card[0].type })
       this.loading = false
     }
