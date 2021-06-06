@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="vh100 background-register">
     <div class="mt-1 font-header">
       <a-icon type="left" @click="$router.replace('/')" />
       Create Account
@@ -10,11 +10,8 @@
   </div>
 </template>
 
-<script>
-export default {
-  mounted () {
-    document.body.classList = ''
-    document.body.classList.add('background-register')
-  }
+<style scoped>
+.vh100{
+  min-height: 100vh;
 }
-</script>
+</style>
