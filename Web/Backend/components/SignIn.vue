@@ -32,10 +32,6 @@
         Sign in
       </a-button>
       <div class="text-center mt-1">
-        <a class="text-white" href="#forget">
-          Forgot password
-        </a>
-        <br>
         <a class="text-white" @click="$router.push('/register')">
           Sign up
         </a>
